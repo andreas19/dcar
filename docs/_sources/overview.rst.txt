@@ -1,0 +1,29 @@
+Overview
+========
+
+Low level, pure Python D-Bus implementation for message bus clients.
+
+Installation
+------------
+
+.. highlight:: none
+
+::
+
+# pip install dcar
+
+
+Dependencies
+------------
+
+.. include:: dependencies.txt
+
+
+Links
+-----
+
+- PyPI: https://pypi.org/project/dcar/
+- GitHub: https://github.com/andreas19/dcar/
+
+
+.. include:: ../../CHANGELOG.md

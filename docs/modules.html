@@ -1,0 +1,2151 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Modules &#8212; D-Car 0.0.4 documentation</title>
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="shortcut icon" href="_static/favicon.ico"/>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="License" href="license.html" />
+    <link rel="prev" title="API Reference" href="api.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  <div class="document">
+    
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="index.html">D-Car</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="overview.html">Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="introduction.html">Introduction</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="api.html">API Reference</a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Modules</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="license.html">License</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+  <li><a href="api.html">API Reference</a><ul>
+      <li>Previous: <a href="api.html" title="previous chapter">API Reference</a></li>
+      <li>Next: <a href="license.html" title="next chapter">License</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="modules">
+<h1>Modules<a class="headerlink" href="#modules" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="module-dcar.address">
+<span id="dcar-address"></span><h2>dcar.address<a class="headerlink" href="#module-dcar.address" title="Permalink to this headline">¶</a></h2>
+<p>Server Addresses.</p>
+<dl class="class">
+<dt id="dcar.address.Address">
+<em class="property">class </em><code class="descclassname">dcar.address.</code><code class="descname">Address</code><span class="sig-paren">(</span><em>address='session'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dcar/address.html#Address"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dcar.address.Address" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<p>This class represents addresses of a message bus.</p>
+<p>See also:</p>
+<ul class="simple">
+<li><a class="reference external" href="https://dbus.freedesktop.org/doc/dbus-specification.html#addresses">server addresses</a></li>
+<li><a class="reference external" href="https://dbus.freedesktop.org/doc/dbus-specification.html#message-bus-types">well-known message bus instances</a></li>
+<li><a class="reference external" href="https://dbus.freedesktop.org/doc/dbus-specification.html#message-bus-starting-services">starting services</a></li>
+</ul>
+<p>An <code class="docutils literal notranslate"><span class="pre">Address</span></code> object can be used as an iterator which yields tuples
+with the first element being the name of a transport and the second
+a dict with the parameters.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>address</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a>) – can be one of the case-insensitive names
+<code class="docutils literal notranslate"><span class="pre">'system'</span></code>, <code class="docutils literal notranslate"><span class="pre">'session'</span></code> , or <code class="docutils literal notranslate"><span class="pre">'starter'</span></code>
+or a valid D-Bus server address</td>
+</tr>
+</tbody>
+</table>
+<dl class="attribute">
+<dt id="dcar.address.Address.bus_type">
+<code class="descname">bus_type</code><a class="headerlink" href="#dcar.address.Address.bus_type" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the bus type: <code class="docutils literal notranslate"><span class="pre">'system'</span></code>, <code class="docutils literal notranslate"><span class="pre">'session'</span></code> , or <code class="docutils literal notranslate"><span class="pre">None</span></code>.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-dcar.auth">
+<span id="dcar-auth"></span><h2>dcar.auth<a class="headerlink" href="#module-dcar.auth" title="Permalink to this headline">¶</a></h2>
+<p>Authentication to a message bus.</p>
+<p>Supported mechanisms:</p>
+<ul class="simple">
+<li>EXTERNAL</li>
+<li>DBUS_COOKIE_SHA1</li>
+<li>ANONYMOUS</li>
+</ul>
+<p>See: <a class="reference external" href="https://dbus.freedesktop.org/doc/dbus-specification.html#auth-protocol">Authentication Protocol</a></p>
+<dl class="function">
+<dt id="dcar.auth.authenticate">
+<code class="descclassname">dcar.auth.</code><code class="descname">authenticate</code><span class="sig-paren">(</span><em>sock</em>, <em>unix_fds</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dcar/auth.html#authenticate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dcar.auth.authenticate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Authenticate to a message bus.</p>
+<p>The passing of unix file descriptors will only be negotiated if <code class="docutils literal notranslate"><span class="pre">unix_fds</span></code>
+is <code class="docutils literal notranslate"><span class="pre">True</span></code>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>sock</strong> (<em>socket</em>) – a connected socket</li>
+<li><strong>unix_fds</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.7)"><em>bool</em></a>) – if the current <a class="reference internal" href="#dcar.transports.Transport" title="dcar.transports.Transport"><code class="xref py py-class docutils literal notranslate"><span class="pre">Transport</span></code></a>
+supports the passing of unix file descriptors this
+must be <code class="docutils literal notranslate"><span class="pre">True</span></code></li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">the GUID of the server and a <a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a> that indicates whether
+unix file descriptor passing is possible (<code class="docutils literal notranslate"><span class="pre">True</span></code>)
+or not (<code class="docutils literal notranslate"><span class="pre">False</span></code>)</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)">str</a>, <a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.7)">bool</a></p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><p class="first last"><a class="reference internal" href="api.html#dcar.AuthenticationError" title="dcar.AuthenticationError"><strong>AuthenticationError</strong></a> – if authentication failed</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+<div class="section" id="module-dcar.bus">
+<span id="dcar-bus"></span><h2>dcar.bus<a class="headerlink" href="#module-dcar.bus" title="Permalink to this headline">¶</a></h2>
+<p>Connection to message bus.</p>
+<dl class="class">
+<dt id="dcar.bus.Bus">
+<em class="property">class </em><code class="descclassname">dcar.bus.</code><code class="descname">Bus</code><span class="sig-paren">(</span><em>address='session'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dcar/bus.html#Bus"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dcar.bus.Bus" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<p>Representation of a client’s connection to a message bus.</p>
+<p>An instance of this class is the central point for a client to interact
+with a message bus.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>address</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a><em> or </em><a class="reference internal" href="#dcar.address.Address" title="dcar.address.Address"><em>Address</em></a>) – same as for <a class="reference internal" href="#dcar.address.Address" title="dcar.address.Address"><code class="xref py py-class docutils literal notranslate"><span class="pre">Address</span></code></a> or an
+<a class="reference internal" href="#dcar.address.Address" title="dcar.address.Address"><code class="xref py py-class docutils literal notranslate"><span class="pre">Address</span></code></a> object</td>
+</tr>
+</tbody>
+</table>
+<dl class="attribute">
+<dt id="dcar.bus.Bus.address">
+<code class="descname">address</code><a class="headerlink" href="#dcar.bus.Bus.address" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the actual address the client is connected to.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="dcar.bus.Bus.connected">
+<code class="descname">connected</code><a class="headerlink" href="#dcar.bus.Bus.connected" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return whether the client is connected.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="dcar.bus.Bus.unique_name">
+<code class="descname">unique_name</code><a class="headerlink" href="#dcar.bus.Bus.unique_name" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the unique name of the client’s connection.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="dcar.bus.Bus.guid">
+<code class="descname">guid</code><a class="headerlink" href="#dcar.bus.Bus.guid" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the GUID of the server.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="dcar.bus.Bus.unix_fds_enabled">
+<code class="descname">unix_fds_enabled</code><a class="headerlink" href="#dcar.bus.Bus.unix_fds_enabled" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return whether passing of unix file descriptors is enabled.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="dcar.bus.Bus.error">
+<code class="descname">error</code><a class="headerlink" href="#dcar.bus.Bus.error" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return transport error or  <code class="docutils literal notranslate"><span class="pre">None</span></code>.</p>
+<p>This error is set when the client loses the connection to the message
+bus because of this error.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="dcar.bus.Bus.raise_on_error">
+<code class="descname">raise_on_error</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/dcar/bus.html#Bus.raise_on_error"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dcar.bus.Bus.raise_on_error" title="Permalink to this definition">¶</a></dt>
+<dd><p>Re-raises the <a class="reference internal" href="#dcar.bus.Bus.error" title="dcar.bus.Bus.error"><code class="xref py py-attr docutils literal notranslate"><span class="pre">error</span></code></a> or does nothing.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="dcar.bus.Bus.connect">
+<code class="descname">connect</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/dcar/bus.html#Bus.connect"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dcar.bus.Bus.connect" title="Permalink to this definition">¶</a></dt>
+<dd><p>Connect to message bus.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><ul class="first last simple">
+<li><a class="reference internal" href="api.html#dcar.AuthenticationError" title="dcar.AuthenticationError"><strong>AuthenticationError</strong></a> – if authentication failed</li>
+<li><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#OSError" title="(in Python v3.7)"><strong>OSError</strong></a> – if connection failed</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="dcar.bus.Bus.disconnect">
+<code class="descname">disconnect</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/dcar/bus.html#Bus.disconnect"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dcar.bus.Bus.disconnect" title="Permalink to this definition">¶</a></dt>
+<dd><p>Disconnect the client.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="dcar.bus.Bus.block">
+<code class="descname">block</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/dcar/bus.html#Bus.block"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dcar.bus.Bus.block" title="Permalink to this definition">¶</a></dt>
+<dd><p>Blocks until <code class="docutils literal notranslate"><span class="pre">send-loop</span></code> and <code class="docutils literal notranslate"><span class="pre">recv-loop</span></code> are finished.</p>
+<p>These threads are started with
+<a class="reference internal" href="#dcar.transports.Transport.start_loops" title="dcar.transports.Transport.start_loops"><code class="xref py py-meth docutils literal notranslate"><span class="pre">dcar.transports.Transport.start_loops()</span></code></a>.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="dcar.bus.Bus.send_message">
+<code class="descname">send_message</code><span class="sig-paren">(</span><em>msg</em>, <em>timeout=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dcar/bus.html#Bus.send_message"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dcar.bus.Bus.send_message" title="Permalink to this definition">¶</a></dt>
+<dd><p>Send a message.</p>
+<p>Normally <a class="reference internal" href="#dcar.bus.Bus.method_call" title="dcar.bus.Bus.method_call"><code class="xref py py-meth docutils literal notranslate"><span class="pre">method_call()</span></code></a>, <a class="reference internal" href="#dcar.bus.Bus.method_return" title="dcar.bus.Bus.method_return"><code class="xref py py-meth docutils literal notranslate"><span class="pre">method_return()</span></code></a>, <a class="reference internal" href="#dcar.bus.Bus.send_error" title="dcar.bus.Bus.send_error"><code class="xref py py-meth docutils literal notranslate"><span class="pre">send_error()</span></code></a>
+or <a class="reference internal" href="#dcar.bus.Bus.emit_signal" title="dcar.bus.Bus.emit_signal"><code class="xref py py-meth docutils literal notranslate"><span class="pre">emit_signal()</span></code></a> should be used.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>msg</strong> (<a class="reference internal" href="#dcar.message.Message" title="dcar.message.Message"><em>Message</em></a>) – the message</li>
+<li><strong>timeout</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.7)"><em>float</em></a>) – <code class="docutils literal notranslate"><span class="pre">None</span></code> = no timeout, <code class="docutils literal notranslate"><span class="pre">0</span></code> = no reply expected
+and <code class="docutils literal notranslate"><span class="pre">&gt;</span> <span class="pre">0</span></code> = timeout in seconds</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><p class="first last"><a class="reference internal" href="api.html#dcar.TransportError" title="dcar.TransportError"><strong>TransportError</strong></a> – if the message could not be sent</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="dcar.bus.Bus.method_call">
+<code class="descname">method_call</code><span class="sig-paren">(</span><em>object_path</em>, <em>interface</em>, <em>method_name</em>, <em>destination</em>, <em>*</em>, <em>sender=None</em>, <em>signature=None</em>, <em>args=()</em>, <em>timeout=25.0</em>, <em>no_auto_start=False</em>, <em>allow_interactive_authorization=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dcar/bus.html#Bus.method_call"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dcar.bus.Bus.method_call" title="Permalink to this definition">¶</a></dt>
+<dd><p>Send a message of type METHOD_CALL.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>object_path</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a>) – object path (required)</li>
+<li><strong>interface</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a>) – interface name</li>
+<li><strong>method_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a>) – method name (required)</li>
+<li><strong>destination</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a>) – name of the destination’s connection</li>
+<li><strong>sender</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a>) – name of the sender’s connection</li>
+<li><strong>signature</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a>) – D-Bus type signatures of the IN arguments</li>
+<li><strong>args</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.7)"><em>tuple</em></a>) – the IN arguments</li>
+<li><strong>timeout</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.7)"><em>float</em></a>) – timeout in seconds</li>
+<li><strong>no_auto_start</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.7)"><em>bool</em></a>) – header flag</li>
+<li><strong>allow_interactive_authorization</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.7)"><em>bool</em></a>) – header flag</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><p class="first last"><a class="reference internal" href="api.html#dcar.TransportError" title="dcar.TransportError"><strong>TransportError</strong></a> – if the message could not be sent</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="dcar.bus.Bus.method_return">
+<code class="descname">method_return</code><span class="sig-paren">(</span><em>reply_serial</em>, <em>destination</em>, <em>*</em>, <em>sender=None</em>, <em>signature=None</em>, <em>args=()</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dcar/bus.html#Bus.method_return"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dcar.bus.Bus.method_return" title="Permalink to this definition">¶</a></dt>
+<dd><p>Send a message of type METHOD_RETURN.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>reply_serial</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.7)"><em>int</em></a>) – serial of the message for which this is
+a reply (required)</li>
+<li><strong>destination</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a>) – name of the destination’s connection</li>
+<li><strong>sender</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a>) – name of the sender’s connection</li>
+<li><strong>signature</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a>) – D-Bus type signatures of the OUT arguments of
+the called method</li>
+<li><strong>args</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.7)"><em>tuple</em></a>) – the OUT arguments of the called method</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><p class="first last"><a class="reference internal" href="api.html#dcar.TransportError" title="dcar.TransportError"><strong>TransportError</strong></a> – if the message could not be sent</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="dcar.bus.Bus.send_error">
+<code class="descname">send_error</code><span class="sig-paren">(</span><em>error_name</em>, <em>reply_serial</em>, <em>destination</em>, <em>*</em>, <em>sender=None</em>, <em>signature=None</em>, <em>args=()</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dcar/bus.html#Bus.send_error"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dcar.bus.Bus.send_error" title="Permalink to this definition">¶</a></dt>
+<dd><p>Send a message of type ERROR.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>error_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a>) – error name (required)</li>
+<li><strong>reply_serial</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.7)"><em>int</em></a>) – serial of the message for which this is
+a reply (required)</li>
+<li><strong>destination</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a>) – name of the destination’s connection</li>
+<li><strong>sender</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a>) – name of the sender’s connection</li>
+<li><strong>signature</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a>) – D-Bus type signatures of the arguments</li>
+<li><strong>args</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.7)"><em>tuple</em></a>) – the arguments</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><p class="first last"><a class="reference internal" href="api.html#dcar.TransportError" title="dcar.TransportError"><strong>TransportError</strong></a> – if the message could not be sent</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="dcar.bus.Bus.emit_signal">
+<code class="descname">emit_signal</code><span class="sig-paren">(</span><em>object_path</em>, <em>interface</em>, <em>signal_name</em>, <em>destination=None</em>, <em>*</em>, <em>sender=None</em>, <em>signature=None</em>, <em>args=()</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dcar/bus.html#Bus.emit_signal"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dcar.bus.Bus.emit_signal" title="Permalink to this definition">¶</a></dt>
+<dd><p>Send a message of type SIGNAL.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>object_path</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a>) – object path (required)</li>
+<li><strong>interface</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a>) – interface name (required)</li>
+<li><strong>signal_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a>) – signal name (required)</li>
+<li><strong>destination</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a>) – name of the destination’s connection</li>
+<li><strong>sender</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a>) – name of the sender’s connection</li>
+<li><strong>signature</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a>) – D-Bus type signatures of the arguments</li>
+<li><strong>args</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.7)"><em>tuple</em></a>) – the arguments</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><p class="first last"><a class="reference internal" href="api.html#dcar.TransportError" title="dcar.TransportError"><strong>TransportError</strong></a> – if the message could not be sent</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="dcar.bus.Bus.register_signal">
+<code class="descname">register_signal</code><span class="sig-paren">(</span><em>rule</em>, <em>handler</em>, <em>timeout=25.0</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dcar/bus.html#Bus.register_signal"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dcar.bus.Bus.register_signal" title="Permalink to this definition">¶</a></dt>
+<dd><p>Register a signal.</p>
+<p>The handler function must take one parameter:
+a <a class="reference internal" href="#dcar.message.MessageInfo" title="dcar.message.MessageInfo"><code class="xref py py-class docutils literal notranslate"><span class="pre">MessageInfo</span></code></a> object.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>rule</strong> (<a class="reference internal" href="api.html#dcar.MatchRule" title="dcar.MatchRule"><em>MatchRule</em></a>) – the match rule</li>
+<li><strong>handler</strong> (<em>callable</em>) – handler function for the signal</li>
+<li><strong>timeout</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.7)"><em>float</em></a>) – timeout in seconds</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">ID of the signal</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.7)">int</a></p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><ul class="first last simple">
+<li><a class="reference internal" href="api.html#dcar.RegisterError" title="dcar.RegisterError"><strong>RegisterError</strong></a> – if the signal could not be registered</li>
+<li><a class="reference internal" href="api.html#dcar.TransportError" title="dcar.TransportError"><strong>TransportError</strong></a> – if AddMatch message could not be sent</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="dcar.bus.Bus.unregister_signal">
+<code class="descname">unregister_signal</code><span class="sig-paren">(</span><em>reg_id</em>, <em>timeout=25.0</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dcar/bus.html#Bus.unregister_signal"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dcar.bus.Bus.unregister_signal" title="Permalink to this definition">¶</a></dt>
+<dd><p>Unregister a signal.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>reg_id</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.7)"><em>int</em></a>) – ID returned by <a class="reference internal" href="#dcar.bus.Bus.register_signal" title="dcar.bus.Bus.register_signal"><code class="xref py py-meth docutils literal notranslate"><span class="pre">register_signal()</span></code></a></li>
+<li><strong>timeout</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.7)"><em>float</em></a>) – timeout in seconds</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><p class="first last"><a class="reference internal" href="api.html#dcar.TransportError" title="dcar.TransportError"><strong>TransportError</strong></a> – if RemoveMatch message could not be sent</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="dcar.bus.Bus.register_method">
+<code class="descname">register_method</code><span class="sig-paren">(</span><em>object_path</em>, <em>interface</em>, <em>method_name</em>, <em>handler</em>, <em>signature=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dcar/bus.html#Bus.register_method"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dcar.bus.Bus.register_method" title="Permalink to this definition">¶</a></dt>
+<dd><p>Register a method.</p>
+<p>The handler function must take two parameters:
+a <a class="reference internal" href="#dcar.bus.Bus" title="dcar.bus.Bus"><code class="xref py py-class docutils literal notranslate"><span class="pre">Bus</span></code></a> object and
+a <a class="reference internal" href="#dcar.message.MessageInfo" title="dcar.message.MessageInfo"><code class="xref py py-class docutils literal notranslate"><span class="pre">MessageInfo</span></code></a> object.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>object_path</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a>) – object path</li>
+<li><strong>interface</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a>) – interface name</li>
+<li><strong>method_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a>) – method name</li>
+<li><strong>signature</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a>) – D-Bus type signatures of the arguments</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">ID of the method</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.7)">int</a></p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><p class="first last"><a class="reference internal" href="api.html#dcar.RegisterError" title="dcar.RegisterError"><strong>RegisterError</strong></a> – if the method could not be registered</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="dcar.bus.Bus.unregister_method">
+<code class="descname">unregister_method</code><span class="sig-paren">(</span><em>meth_id</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dcar/bus.html#Bus.unregister_method"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dcar.bus.Bus.unregister_method" title="Permalink to this definition">¶</a></dt>
+<dd><p>Unregister a method.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>meth_id</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.7)"><em>int</em></a>) – ID returned by <a class="reference internal" href="#dcar.bus.Bus.register_method" title="dcar.bus.Bus.register_method"><code class="xref py py-meth docutils literal notranslate"><span class="pre">register_method()</span></code></a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-dcar.const">
+<span id="dcar-const"></span><h2>dcar.const<a class="headerlink" href="#module-dcar.const" title="Permalink to this headline">¶</a></h2>
+<p>Some constants from dbus source files.</p>
+<dl class="data">
+<dt id="dcar.const.MAJOR_PROTOCOL_VERSION">
+<code class="descclassname">dcar.const.</code><code class="descname">MAJOR_PROTOCOL_VERSION</code><em class="property"> = b'\x01'</em><a class="headerlink" href="#dcar.const.MAJOR_PROTOCOL_VERSION" title="Permalink to this definition">¶</a></dt>
+<dd><p>Major protocol version</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="dcar.const.MIN_HEADER_SIZE">
+<code class="descclassname">dcar.const.</code><code class="descname">MIN_HEADER_SIZE</code><em class="property"> = 16</em><a class="headerlink" href="#dcar.const.MIN_HEADER_SIZE" title="Permalink to this definition">¶</a></dt>
+<dd><p>Minimum header size</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="dcar.const.MAX_MESSAGE_LEN">
+<code class="descclassname">dcar.const.</code><code class="descname">MAX_MESSAGE_LEN</code><em class="property"> = 134217728</em><a class="headerlink" href="#dcar.const.MAX_MESSAGE_LEN" title="Permalink to this definition">¶</a></dt>
+<dd><p>Maximum message length</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="dcar.const.MAX_ARRAY_LEN">
+<code class="descclassname">dcar.const.</code><code class="descname">MAX_ARRAY_LEN</code><em class="property"> = 67108864</em><a class="headerlink" href="#dcar.const.MAX_ARRAY_LEN" title="Permalink to this definition">¶</a></dt>
+<dd><p>Maximum array length</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="dcar.const.MAX_NAME_LEN">
+<code class="descclassname">dcar.const.</code><code class="descname">MAX_NAME_LEN</code><em class="property"> = 255</em><a class="headerlink" href="#dcar.const.MAX_NAME_LEN" title="Permalink to this definition">¶</a></dt>
+<dd><p>Maximum name length</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="dcar.const.MAX_SIGNATURE_LEN">
+<code class="descclassname">dcar.const.</code><code class="descname">MAX_SIGNATURE_LEN</code><em class="property"> = 255</em><a class="headerlink" href="#dcar.const.MAX_SIGNATURE_LEN" title="Permalink to this definition">¶</a></dt>
+<dd><p>Maximum signature length</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="dcar.const.MAX_MATCH_RULE_LEN">
+<code class="descclassname">dcar.const.</code><code class="descname">MAX_MATCH_RULE_LEN</code><em class="property"> = 1024</em><a class="headerlink" href="#dcar.const.MAX_MATCH_RULE_LEN" title="Permalink to this definition">¶</a></dt>
+<dd><p>Maximum match rule length</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="dcar.const.MAX_MATCH_RULE_ARG_NUM">
+<code class="descclassname">dcar.const.</code><code class="descname">MAX_MATCH_RULE_ARG_NUM</code><em class="property"> = 63</em><a class="headerlink" href="#dcar.const.MAX_MATCH_RULE_ARG_NUM" title="Permalink to this definition">¶</a></dt>
+<dd><p>Maximum number of match rule arguments</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="dcar.const.MAX_NESTING_DEPTH">
+<code class="descclassname">dcar.const.</code><code class="descname">MAX_NESTING_DEPTH</code><em class="property"> = 32</em><a class="headerlink" href="#dcar.const.MAX_NESTING_DEPTH" title="Permalink to this definition">¶</a></dt>
+<dd><p>Maximum nesting depth of arrays and structs</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="dcar.const.MAX_VARIANT_NESTING_DEPTH">
+<code class="descclassname">dcar.const.</code><code class="descname">MAX_VARIANT_NESTING_DEPTH</code><em class="property"> = 64</em><a class="headerlink" href="#dcar.const.MAX_VARIANT_NESTING_DEPTH" title="Permalink to this definition">¶</a></dt>
+<dd><p>Maximum nesting depth of variants</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="dcar.const.MAX_MSG_UNIX_FDS">
+<code class="descclassname">dcar.const.</code><code class="descname">MAX_MSG_UNIX_FDS</code><em class="property"> = 33554432</em><a class="headerlink" href="#dcar.const.MAX_MSG_UNIX_FDS" title="Permalink to this definition">¶</a></dt>
+<dd><p>Maximum number of unix file descriptors</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="dcar.const.LOCAL_PATH">
+<code class="descclassname">dcar.const.</code><code class="descname">LOCAL_PATH</code><em class="property"> = '/org/freedesktop/DBus/Local'</em><a class="headerlink" href="#dcar.const.LOCAL_PATH" title="Permalink to this definition">¶</a></dt>
+<dd><p>Reserved local path</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="dcar.const.LOCAL_INTERFACE">
+<code class="descclassname">dcar.const.</code><code class="descname">LOCAL_INTERFACE</code><em class="property"> = 'org.freedesktop.DBus.Local'</em><a class="headerlink" href="#dcar.const.LOCAL_INTERFACE" title="Permalink to this definition">¶</a></dt>
+<dd><p>Reserved local interface</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="dcar.const.DEFAULT_TIMEOUT_VALUE">
+<code class="descclassname">dcar.const.</code><code class="descname">DEFAULT_TIMEOUT_VALUE</code><em class="property"> = 25.0</em><a class="headerlink" href="#dcar.const.DEFAULT_TIMEOUT_VALUE" title="Permalink to this definition">¶</a></dt>
+<dd><p>Default timeout when waiting for a reply</p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-dcar.errors">
+<span id="dcar-errors"></span><h2>dcar.errors<a class="headerlink" href="#module-dcar.errors" title="Permalink to this headline">¶</a></h2>
+<p>Errors module.</p>
+<dl class="exception">
+<dt id="dcar.errors.Error">
+<em class="property">exception </em><code class="descclassname">dcar.errors.</code><code class="descname">Error</code><a class="reference internal" href="_modules/dcar/errors.html#Error"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dcar.errors.Error" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/exceptions.html#Exception" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Exception</span></code></a></p>
+<p>Base class.</p>
+</dd></dl>
+
+<dl class="exception">
+<dt id="dcar.errors.AddressError">
+<em class="property">exception </em><code class="descclassname">dcar.errors.</code><code class="descname">AddressError</code><a class="reference internal" href="_modules/dcar/errors.html#AddressError"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dcar.errors.AddressError" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#dcar.errors.Error" title="dcar.errors.Error"><code class="xref py py-class docutils literal notranslate"><span class="pre">dcar.errors.Error</span></code></a></p>
+<p>Raised for errors in server addresses.</p>
+</dd></dl>
+
+<dl class="exception">
+<dt id="dcar.errors.AuthenticationError">
+<em class="property">exception </em><code class="descclassname">dcar.errors.</code><code class="descname">AuthenticationError</code><a class="reference internal" href="_modules/dcar/errors.html#AuthenticationError"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dcar.errors.AuthenticationError" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#dcar.errors.Error" title="dcar.errors.Error"><code class="xref py py-class docutils literal notranslate"><span class="pre">dcar.errors.Error</span></code></a></p>
+<p>Raised when authentication failed.</p>
+</dd></dl>
+
+<dl class="exception">
+<dt id="dcar.errors.TransportError">
+<em class="property">exception </em><code class="descclassname">dcar.errors.</code><code class="descname">TransportError</code><a class="reference internal" href="_modules/dcar/errors.html#TransportError"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dcar.errors.TransportError" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#dcar.errors.Error" title="dcar.errors.Error"><code class="xref py py-class docutils literal notranslate"><span class="pre">dcar.errors.Error</span></code></a></p>
+<p>Raised for transport related errors.</p>
+</dd></dl>
+
+<dl class="exception">
+<dt id="dcar.errors.ValidationError">
+<em class="property">exception </em><code class="descclassname">dcar.errors.</code><code class="descname">ValidationError</code><a class="reference internal" href="_modules/dcar/errors.html#ValidationError"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dcar.errors.ValidationError" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#dcar.errors.Error" title="dcar.errors.Error"><code class="xref py py-class docutils literal notranslate"><span class="pre">dcar.errors.Error</span></code></a></p>
+<p>Raised when validation failed.</p>
+</dd></dl>
+
+<dl class="exception">
+<dt id="dcar.errors.RegisterError">
+<em class="property">exception </em><code class="descclassname">dcar.errors.</code><code class="descname">RegisterError</code><a class="reference internal" href="_modules/dcar/errors.html#RegisterError"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dcar.errors.RegisterError" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#dcar.errors.Error" title="dcar.errors.Error"><code class="xref py py-class docutils literal notranslate"><span class="pre">dcar.errors.Error</span></code></a></p>
+<p>Raised when a signal or method could not be registered.</p>
+</dd></dl>
+
+<dl class="exception">
+<dt id="dcar.errors.MessageError">
+<em class="property">exception </em><code class="descclassname">dcar.errors.</code><code class="descname">MessageError</code><a class="reference internal" href="_modules/dcar/errors.html#MessageError"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dcar.errors.MessageError" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#dcar.errors.Error" title="dcar.errors.Error"><code class="xref py py-class docutils literal notranslate"><span class="pre">dcar.errors.Error</span></code></a></p>
+<p>Raised for errors in messages.</p>
+</dd></dl>
+
+<dl class="exception">
+<dt id="dcar.errors.DBusError">
+<em class="property">exception </em><code class="descclassname">dcar.errors.</code><code class="descname">DBusError</code><a class="reference internal" href="_modules/dcar/errors.html#DBusError"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dcar.errors.DBusError" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#dcar.errors.MessageError" title="dcar.errors.MessageError"><code class="xref py py-class docutils literal notranslate"><span class="pre">dcar.errors.MessageError</span></code></a></p>
+<p>Raised for errors from ERROR messages.</p>
+</dd></dl>
+
+<dl class="exception">
+<dt id="dcar.errors.SignatureError">
+<em class="property">exception </em><code class="descclassname">dcar.errors.</code><code class="descname">SignatureError</code><a class="reference internal" href="_modules/dcar/errors.html#SignatureError"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dcar.errors.SignatureError" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#dcar.errors.MessageError" title="dcar.errors.MessageError"><code class="xref py py-class docutils literal notranslate"><span class="pre">dcar.errors.MessageError</span></code></a></p>
+<p>Raised for errors in signatures.</p>
+</dd></dl>
+
+<dl class="exception">
+<dt id="dcar.errors.TooLongError">
+<em class="property">exception </em><code class="descclassname">dcar.errors.</code><code class="descname">TooLongError</code><a class="reference internal" href="_modules/dcar/errors.html#TooLongError"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dcar.errors.TooLongError" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#dcar.errors.MessageError" title="dcar.errors.MessageError"><code class="xref py py-class docutils literal notranslate"><span class="pre">dcar.errors.MessageError</span></code></a></p>
+<p>Raised when a message, an array, a name etc. is too long.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-dcar.marshal">
+<span id="dcar-marshal"></span><h2>dcar.marshal<a class="headerlink" href="#module-dcar.marshal" title="Permalink to this headline">¶</a></h2>
+<p>Marshal/unmarshal D-Bus Messages.</p>
+<p id="ref-types-table">Types:</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="28%" />
+<col width="40%" />
+<col width="32%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">D-Bus</th>
+<th class="head">Python IN</th>
+<th class="head">Python OUT</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>a</td>
+<td>list, array.array</td>
+<td>list</td>
+</tr>
+<tr class="row-odd"><td>()</td>
+<td>tuple</td>
+<td>tuple</td>
+</tr>
+<tr class="row-even"><td>a{}</td>
+<td>dict</td>
+<td>dict</td>
+</tr>
+<tr class="row-odd"><td>v</td>
+<td>bus.Variant,
+2-tuple (sig,value)</td>
+<td>value</td>
+</tr>
+<tr class="row-even"><td>s,o,g</td>
+<td>str</td>
+<td>str</td>
+</tr>
+<tr class="row-odd"><td>d</td>
+<td>float</td>
+<td>float</td>
+</tr>
+<tr class="row-even"><td>b</td>
+<td>bool</td>
+<td>bool</td>
+</tr>
+<tr class="row-odd"><td>y,n,q,i,u,x,t</td>
+<td>int</td>
+<td>int</td>
+</tr>
+<tr class="row-even"><td>h</td>
+<td>bus.UnixFD,
+obj with fileno(),
+file descriptor</td>
+<td>file descriptor</td>
+</tr>
+</tbody>
+</table>
+<p>See:</p>
+<ul class="simple">
+<li><a class="reference external" href="https://dbus.freedesktop.org/doc/dbus-specification.html#idm487">Summary of types</a></li>
+<li><a class="reference external" href="https://dbus.freedesktop.org/doc/dbus-specification.html#message-protocol-marshaling">Marshalling (Wire Format)</a></li>
+</ul>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Instances of the type classes should be used through the
+<a class="reference internal" href="#dcar.marshal.types" title="dcar.marshal.types"><code class="xref py py-data docutils literal notranslate"><span class="pre">types</span></code></a> mapping which uses D-Bus type codes as keys.</p>
+</div>
+<dl class="data">
+<dt id="dcar.marshal.types">
+<code class="descclassname">dcar.marshal.</code><code class="descname">types</code><a class="headerlink" href="#dcar.marshal.types" title="Permalink to this definition">¶</a></dt>
+<dd><p>Mapping of D-Bus type codes to type class instances</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="dcar.marshal.Type">
+<em class="property">class </em><code class="descclassname">dcar.marshal.</code><code class="descname">Type</code><span class="sig-paren">(</span><em>name</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dcar/marshal.html#Type"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dcar.marshal.Type" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<p>Base class.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a>) – type name</td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="dcar.marshal.Type.marshal">
+<code class="descname">marshal</code><span class="sig-paren">(</span><em>raw</em>, <em>data</em>, <em>signature=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dcar/marshal.html#Type.marshal"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dcar.marshal.Type.marshal" title="Permalink to this definition">¶</a></dt>
+<dd><p>Marshal an object of this type.</p>
+<p>The data must be of an appropriate type according
+to the column <em>Python IN</em> in the <a class="reference internal" href="#ref-types-table"><span class="std std-ref">table above</span></a>.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">signature</span></code> parameter is only used in the classes
+<a class="reference internal" href="#dcar.marshal.Array" title="dcar.marshal.Array"><code class="xref py py-class docutils literal notranslate"><span class="pre">Array</span></code></a>, <a class="reference internal" href="#dcar.marshal.Struct" title="dcar.marshal.Struct"><code class="xref py py-class docutils literal notranslate"><span class="pre">Struct</span></code></a>, and <a class="reference internal" href="#dcar.marshal.DictEntry" title="dcar.marshal.DictEntry"><code class="xref py py-class docutils literal notranslate"><span class="pre">DictEntry</span></code></a>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>raw</strong> (<a class="reference internal" href="#dcar.raw.RawData" title="dcar.raw.RawData"><em>RawData</em></a>) – raw message data</li>
+<li><strong>data</strong> – data to be marshalled</li>
+<li><strong>signature</strong> – see <a class="reference internal" href="#dcar.signature.Signature" title="dcar.signature.Signature"><code class="xref py py-class docutils literal notranslate"><span class="pre">Signature</span></code></a></li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><p class="first last"><a class="reference internal" href="api.html#dcar.MessageError" title="dcar.MessageError"><strong>MessageError</strong></a> – if the data could not be marshalled</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="dcar.marshal.Type.unmarshal">
+<code class="descname">unmarshal</code><span class="sig-paren">(</span><em>raw</em>, <em>signature=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dcar/marshal.html#Type.unmarshal"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dcar.marshal.Type.unmarshal" title="Permalink to this definition">¶</a></dt>
+<dd><p>Unmarshal an object of this type.</p>
+<p>The returned data will be of a type according
+to the column <em>Python OUT</em> in the <a class="reference internal" href="#ref-types-table"><span class="std std-ref">table above</span></a>.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">signature</span></code> parameter is only used in the classes
+<a class="reference internal" href="#dcar.marshal.Array" title="dcar.marshal.Array"><code class="xref py py-class docutils literal notranslate"><span class="pre">Array</span></code></a>, <a class="reference internal" href="#dcar.marshal.Struct" title="dcar.marshal.Struct"><code class="xref py py-class docutils literal notranslate"><span class="pre">Struct</span></code></a>, and <a class="reference internal" href="#dcar.marshal.DictEntry" title="dcar.marshal.DictEntry"><code class="xref py py-class docutils literal notranslate"><span class="pre">DictEntry</span></code></a>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>raw</strong> (<a class="reference internal" href="#dcar.raw.RawData" title="dcar.raw.RawData"><em>RawData</em></a>) – raw message data</li>
+<li><strong>signature</strong> – see <a class="reference internal" href="#dcar.signature.Signature" title="dcar.signature.Signature"><code class="xref py py-class docutils literal notranslate"><span class="pre">Signature</span></code></a></li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">unmarshalled data</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><p class="first last"><a class="reference internal" href="api.html#dcar.MessageError" title="dcar.MessageError"><strong>MessageError</strong></a> – if the data could not be unmarshalled</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="dcar.marshal.Fixed">
+<em class="property">class </em><code class="descclassname">dcar.marshal.</code><code class="descname">Fixed</code><span class="sig-paren">(</span><em>name</em>, <em>struct_code</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dcar/marshal.html#Fixed"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dcar.marshal.Fixed" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#dcar.marshal.Type" title="dcar.marshal.Type"><code class="xref py py-class docutils literal notranslate"><span class="pre">dcar.marshal.Type</span></code></a></p>
+<p>Class for fixed types.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a>) – type name</li>
+<li><strong>struct_code</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a>) – code from <a class="reference external" href="https://docs.python.org/3/library/struct.html#module-struct" title="(in Python v3.7)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">struct</span></code></a> module</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="dcar.marshal.Fixed.marshal">
+<code class="descname">marshal</code><span class="sig-paren">(</span><em>raw</em>, <em>data</em>, <em>signature=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dcar/marshal.html#Fixed.marshal"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dcar.marshal.Fixed.marshal" title="Permalink to this definition">¶</a></dt>
+<dd><p>Marshal an object of this type.</p>
+<p>The data must be of an appropriate type according
+to the column <em>Python IN</em> in the <a class="reference internal" href="#ref-types-table"><span class="std std-ref">table above</span></a>.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">signature</span></code> parameter is only used in the classes
+<a class="reference internal" href="#dcar.marshal.Array" title="dcar.marshal.Array"><code class="xref py py-class docutils literal notranslate"><span class="pre">Array</span></code></a>, <a class="reference internal" href="#dcar.marshal.Struct" title="dcar.marshal.Struct"><code class="xref py py-class docutils literal notranslate"><span class="pre">Struct</span></code></a>, and <a class="reference internal" href="#dcar.marshal.DictEntry" title="dcar.marshal.DictEntry"><code class="xref py py-class docutils literal notranslate"><span class="pre">DictEntry</span></code></a>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>raw</strong> (<a class="reference internal" href="#dcar.raw.RawData" title="dcar.raw.RawData"><em>RawData</em></a>) – raw message data</li>
+<li><strong>data</strong> – data to be marshalled</li>
+<li><strong>signature</strong> – see <a class="reference internal" href="#dcar.signature.Signature" title="dcar.signature.Signature"><code class="xref py py-class docutils literal notranslate"><span class="pre">Signature</span></code></a></li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><p class="first last"><a class="reference internal" href="api.html#dcar.MessageError" title="dcar.MessageError"><strong>MessageError</strong></a> – if the data could not be marshalled</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="dcar.marshal.Fixed.unmarshal">
+<code class="descname">unmarshal</code><span class="sig-paren">(</span><em>raw</em>, <em>signature=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dcar/marshal.html#Fixed.unmarshal"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dcar.marshal.Fixed.unmarshal" title="Permalink to this definition">¶</a></dt>
+<dd><p>Unmarshal an object of this type.</p>
+<p>The returned data will be of a type according
+to the column <em>Python OUT</em> in the <a class="reference internal" href="#ref-types-table"><span class="std std-ref">table above</span></a>.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">signature</span></code> parameter is only used in the classes
+<a class="reference internal" href="#dcar.marshal.Array" title="dcar.marshal.Array"><code class="xref py py-class docutils literal notranslate"><span class="pre">Array</span></code></a>, <a class="reference internal" href="#dcar.marshal.Struct" title="dcar.marshal.Struct"><code class="xref py py-class docutils literal notranslate"><span class="pre">Struct</span></code></a>, and <a class="reference internal" href="#dcar.marshal.DictEntry" title="dcar.marshal.DictEntry"><code class="xref py py-class docutils literal notranslate"><span class="pre">DictEntry</span></code></a>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>raw</strong> (<a class="reference internal" href="#dcar.raw.RawData" title="dcar.raw.RawData"><em>RawData</em></a>) – raw message data</li>
+<li><strong>signature</strong> – see <a class="reference internal" href="#dcar.signature.Signature" title="dcar.signature.Signature"><code class="xref py py-class docutils literal notranslate"><span class="pre">Signature</span></code></a></li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">unmarshalled data</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><p class="first last"><a class="reference internal" href="api.html#dcar.MessageError" title="dcar.MessageError"><strong>MessageError</strong></a> – if the data could not be unmarshalled</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="dcar.marshal.Boolean">
+<em class="property">class </em><code class="descclassname">dcar.marshal.</code><code class="descname">Boolean</code><a class="reference internal" href="_modules/dcar/marshal.html#Boolean"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dcar.marshal.Boolean" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#dcar.marshal.Fixed" title="dcar.marshal.Fixed"><code class="xref py py-class docutils literal notranslate"><span class="pre">dcar.marshal.Fixed</span></code></a></p>
+<p>Class for booleans.</p>
+<dl class="method">
+<dt id="dcar.marshal.Boolean.marshal">
+<code class="descname">marshal</code><span class="sig-paren">(</span><em>raw</em>, <em>data</em>, <em>signature=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dcar/marshal.html#Boolean.marshal"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dcar.marshal.Boolean.marshal" title="Permalink to this definition">¶</a></dt>
+<dd><p>Marshal an object of this type.</p>
+<p>The data must be of an appropriate type according
+to the column <em>Python IN</em> in the <a class="reference internal" href="#ref-types-table"><span class="std std-ref">table above</span></a>.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">signature</span></code> parameter is only used in the classes
+<a class="reference internal" href="#dcar.marshal.Array" title="dcar.marshal.Array"><code class="xref py py-class docutils literal notranslate"><span class="pre">Array</span></code></a>, <a class="reference internal" href="#dcar.marshal.Struct" title="dcar.marshal.Struct"><code class="xref py py-class docutils literal notranslate"><span class="pre">Struct</span></code></a>, and <a class="reference internal" href="#dcar.marshal.DictEntry" title="dcar.marshal.DictEntry"><code class="xref py py-class docutils literal notranslate"><span class="pre">DictEntry</span></code></a>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>raw</strong> (<a class="reference internal" href="#dcar.raw.RawData" title="dcar.raw.RawData"><em>RawData</em></a>) – raw message data</li>
+<li><strong>data</strong> – data to be marshalled</li>
+<li><strong>signature</strong> – see <a class="reference internal" href="#dcar.signature.Signature" title="dcar.signature.Signature"><code class="xref py py-class docutils literal notranslate"><span class="pre">Signature</span></code></a></li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><p class="first last"><a class="reference internal" href="api.html#dcar.MessageError" title="dcar.MessageError"><strong>MessageError</strong></a> – if the data could not be marshalled</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="dcar.marshal.Boolean.unmarshal">
+<code class="descname">unmarshal</code><span class="sig-paren">(</span><em>raw</em>, <em>signature=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dcar/marshal.html#Boolean.unmarshal"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dcar.marshal.Boolean.unmarshal" title="Permalink to this definition">¶</a></dt>
+<dd><p>Unmarshal an object of this type.</p>
+<p>The returned data will be of a type according
+to the column <em>Python OUT</em> in the <a class="reference internal" href="#ref-types-table"><span class="std std-ref">table above</span></a>.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">signature</span></code> parameter is only used in the classes
+<a class="reference internal" href="#dcar.marshal.Array" title="dcar.marshal.Array"><code class="xref py py-class docutils literal notranslate"><span class="pre">Array</span></code></a>, <a class="reference internal" href="#dcar.marshal.Struct" title="dcar.marshal.Struct"><code class="xref py py-class docutils literal notranslate"><span class="pre">Struct</span></code></a>, and <a class="reference internal" href="#dcar.marshal.DictEntry" title="dcar.marshal.DictEntry"><code class="xref py py-class docutils literal notranslate"><span class="pre">DictEntry</span></code></a>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>raw</strong> (<a class="reference internal" href="#dcar.raw.RawData" title="dcar.raw.RawData"><em>RawData</em></a>) – raw message data</li>
+<li><strong>signature</strong> – see <a class="reference internal" href="#dcar.signature.Signature" title="dcar.signature.Signature"><code class="xref py py-class docutils literal notranslate"><span class="pre">Signature</span></code></a></li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">unmarshalled data</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><p class="first last"><a class="reference internal" href="api.html#dcar.MessageError" title="dcar.MessageError"><strong>MessageError</strong></a> – if the data could not be unmarshalled</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="dcar.marshal.UnixFd">
+<em class="property">class </em><code class="descclassname">dcar.marshal.</code><code class="descname">UnixFd</code><a class="reference internal" href="_modules/dcar/marshal.html#UnixFd"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dcar.marshal.UnixFd" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#dcar.marshal.Fixed" title="dcar.marshal.Fixed"><code class="xref py py-class docutils literal notranslate"><span class="pre">dcar.marshal.Fixed</span></code></a></p>
+<p>Class for unix file descriptors.</p>
+<dl class="method">
+<dt id="dcar.marshal.UnixFd.marshal">
+<code class="descname">marshal</code><span class="sig-paren">(</span><em>raw</em>, <em>data</em>, <em>signature=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dcar/marshal.html#UnixFd.marshal"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dcar.marshal.UnixFd.marshal" title="Permalink to this definition">¶</a></dt>
+<dd><p>Marshal an object of this type.</p>
+<p>The data must be of an appropriate type according
+to the column <em>Python IN</em> in the <a class="reference internal" href="#ref-types-table"><span class="std std-ref">table above</span></a>.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">signature</span></code> parameter is only used in the classes
+<a class="reference internal" href="#dcar.marshal.Array" title="dcar.marshal.Array"><code class="xref py py-class docutils literal notranslate"><span class="pre">Array</span></code></a>, <a class="reference internal" href="#dcar.marshal.Struct" title="dcar.marshal.Struct"><code class="xref py py-class docutils literal notranslate"><span class="pre">Struct</span></code></a>, and <a class="reference internal" href="#dcar.marshal.DictEntry" title="dcar.marshal.DictEntry"><code class="xref py py-class docutils literal notranslate"><span class="pre">DictEntry</span></code></a>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>raw</strong> (<a class="reference internal" href="#dcar.raw.RawData" title="dcar.raw.RawData"><em>RawData</em></a>) – raw message data</li>
+<li><strong>data</strong> – data to be marshalled</li>
+<li><strong>signature</strong> – see <a class="reference internal" href="#dcar.signature.Signature" title="dcar.signature.Signature"><code class="xref py py-class docutils literal notranslate"><span class="pre">Signature</span></code></a></li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><p class="first last"><a class="reference internal" href="api.html#dcar.MessageError" title="dcar.MessageError"><strong>MessageError</strong></a> – if the data could not be marshalled</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="dcar.marshal.UnixFd.unmarshal">
+<code class="descname">unmarshal</code><span class="sig-paren">(</span><em>raw</em>, <em>signature=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dcar/marshal.html#UnixFd.unmarshal"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dcar.marshal.UnixFd.unmarshal" title="Permalink to this definition">¶</a></dt>
+<dd><p>Unmarshal an object of this type.</p>
+<p>The returned data will be of a type according
+to the column <em>Python OUT</em> in the <a class="reference internal" href="#ref-types-table"><span class="std std-ref">table above</span></a>.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">signature</span></code> parameter is only used in the classes
+<a class="reference internal" href="#dcar.marshal.Array" title="dcar.marshal.Array"><code class="xref py py-class docutils literal notranslate"><span class="pre">Array</span></code></a>, <a class="reference internal" href="#dcar.marshal.Struct" title="dcar.marshal.Struct"><code class="xref py py-class docutils literal notranslate"><span class="pre">Struct</span></code></a>, and <a class="reference internal" href="#dcar.marshal.DictEntry" title="dcar.marshal.DictEntry"><code class="xref py py-class docutils literal notranslate"><span class="pre">DictEntry</span></code></a>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>raw</strong> (<a class="reference internal" href="#dcar.raw.RawData" title="dcar.raw.RawData"><em>RawData</em></a>) – raw message data</li>
+<li><strong>signature</strong> – see <a class="reference internal" href="#dcar.signature.Signature" title="dcar.signature.Signature"><code class="xref py py-class docutils literal notranslate"><span class="pre">Signature</span></code></a></li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">unmarshalled data</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><p class="first last"><a class="reference internal" href="api.html#dcar.MessageError" title="dcar.MessageError"><strong>MessageError</strong></a> – if the data could not be unmarshalled</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="dcar.marshal.StringLike">
+<em class="property">class </em><code class="descclassname">dcar.marshal.</code><code class="descname">StringLike</code><span class="sig-paren">(</span><em>name</em>, <em>len_type</em>, <em>validate_func</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dcar/marshal.html#StringLike"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dcar.marshal.StringLike" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#dcar.marshal.Type" title="dcar.marshal.Type"><code class="xref py py-class docutils literal notranslate"><span class="pre">dcar.marshal.Type</span></code></a></p>
+<p>Class for string like types.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a>) – type name</li>
+<li><strong>len_type</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a>) – D-Bus type code for the length field</li>
+<li><strong>validate_func</strong> – a <code class="docutils literal notranslate"><span class="pre">validate_*</span></code> function from the
+<code class="xref py py-mod docutils literal notranslate"><span class="pre">validate</span></code> module or <code class="docutils literal notranslate"><span class="pre">None</span></code></li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="dcar.marshal.StringLike.marshal">
+<code class="descname">marshal</code><span class="sig-paren">(</span><em>raw</em>, <em>data</em>, <em>signature=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dcar/marshal.html#StringLike.marshal"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dcar.marshal.StringLike.marshal" title="Permalink to this definition">¶</a></dt>
+<dd><p>Marshal an object of this type.</p>
+<p>The data must be of an appropriate type according
+to the column <em>Python IN</em> in the <a class="reference internal" href="#ref-types-table"><span class="std std-ref">table above</span></a>.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">signature</span></code> parameter is only used in the classes
+<a class="reference internal" href="#dcar.marshal.Array" title="dcar.marshal.Array"><code class="xref py py-class docutils literal notranslate"><span class="pre">Array</span></code></a>, <a class="reference internal" href="#dcar.marshal.Struct" title="dcar.marshal.Struct"><code class="xref py py-class docutils literal notranslate"><span class="pre">Struct</span></code></a>, and <a class="reference internal" href="#dcar.marshal.DictEntry" title="dcar.marshal.DictEntry"><code class="xref py py-class docutils literal notranslate"><span class="pre">DictEntry</span></code></a>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>raw</strong> (<a class="reference internal" href="#dcar.raw.RawData" title="dcar.raw.RawData"><em>RawData</em></a>) – raw message data</li>
+<li><strong>data</strong> – data to be marshalled</li>
+<li><strong>signature</strong> – see <a class="reference internal" href="#dcar.signature.Signature" title="dcar.signature.Signature"><code class="xref py py-class docutils literal notranslate"><span class="pre">Signature</span></code></a></li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><p class="first last"><a class="reference internal" href="api.html#dcar.MessageError" title="dcar.MessageError"><strong>MessageError</strong></a> – if the data could not be marshalled</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="dcar.marshal.StringLike.unmarshal">
+<code class="descname">unmarshal</code><span class="sig-paren">(</span><em>raw</em>, <em>signature=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dcar/marshal.html#StringLike.unmarshal"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dcar.marshal.StringLike.unmarshal" title="Permalink to this definition">¶</a></dt>
+<dd><p>Unmarshal an object of this type.</p>
+<p>The returned data will be of a type according
+to the column <em>Python OUT</em> in the <a class="reference internal" href="#ref-types-table"><span class="std std-ref">table above</span></a>.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">signature</span></code> parameter is only used in the classes
+<a class="reference internal" href="#dcar.marshal.Array" title="dcar.marshal.Array"><code class="xref py py-class docutils literal notranslate"><span class="pre">Array</span></code></a>, <a class="reference internal" href="#dcar.marshal.Struct" title="dcar.marshal.Struct"><code class="xref py py-class docutils literal notranslate"><span class="pre">Struct</span></code></a>, and <a class="reference internal" href="#dcar.marshal.DictEntry" title="dcar.marshal.DictEntry"><code class="xref py py-class docutils literal notranslate"><span class="pre">DictEntry</span></code></a>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>raw</strong> (<a class="reference internal" href="#dcar.raw.RawData" title="dcar.raw.RawData"><em>RawData</em></a>) – raw message data</li>
+<li><strong>signature</strong> – see <a class="reference internal" href="#dcar.signature.Signature" title="dcar.signature.Signature"><code class="xref py py-class docutils literal notranslate"><span class="pre">Signature</span></code></a></li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">unmarshalled data</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><p class="first last"><a class="reference internal" href="api.html#dcar.MessageError" title="dcar.MessageError"><strong>MessageError</strong></a> – if the data could not be unmarshalled</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="dcar.marshal.Container">
+<em class="property">class </em><code class="descclassname">dcar.marshal.</code><code class="descname">Container</code><span class="sig-paren">(</span><em>name</em>, <em>alignment</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dcar/marshal.html#Container"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dcar.marshal.Container" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#dcar.marshal.Type" title="dcar.marshal.Type"><code class="xref py py-class docutils literal notranslate"><span class="pre">dcar.marshal.Type</span></code></a></p>
+<p>Base class for container types.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a>) – type name</li>
+<li><strong>alignment</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.7)"><em>int</em></a>) – the type’s alignment</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="class">
+<dt id="dcar.marshal.Variant">
+<em class="property">class </em><code class="descclassname">dcar.marshal.</code><code class="descname">Variant</code><a class="reference internal" href="_modules/dcar/marshal.html#Variant"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dcar.marshal.Variant" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#dcar.marshal.Container" title="dcar.marshal.Container"><code class="xref py py-class docutils literal notranslate"><span class="pre">dcar.marshal.Container</span></code></a></p>
+<p>Class for a D-Bus Variant.</p>
+<dl class="method">
+<dt id="dcar.marshal.Variant.marshal">
+<code class="descname">marshal</code><span class="sig-paren">(</span><em>raw</em>, <em>data</em>, <em>signature=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dcar/marshal.html#Variant.marshal"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dcar.marshal.Variant.marshal" title="Permalink to this definition">¶</a></dt>
+<dd><p>Marshal an object of this type.</p>
+<p>The data must be of an appropriate type according
+to the column <em>Python IN</em> in the <a class="reference internal" href="#ref-types-table"><span class="std std-ref">table above</span></a>.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">signature</span></code> parameter is only used in the classes
+<a class="reference internal" href="#dcar.marshal.Array" title="dcar.marshal.Array"><code class="xref py py-class docutils literal notranslate"><span class="pre">Array</span></code></a>, <a class="reference internal" href="#dcar.marshal.Struct" title="dcar.marshal.Struct"><code class="xref py py-class docutils literal notranslate"><span class="pre">Struct</span></code></a>, and <a class="reference internal" href="#dcar.marshal.DictEntry" title="dcar.marshal.DictEntry"><code class="xref py py-class docutils literal notranslate"><span class="pre">DictEntry</span></code></a>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>raw</strong> (<a class="reference internal" href="#dcar.raw.RawData" title="dcar.raw.RawData"><em>RawData</em></a>) – raw message data</li>
+<li><strong>data</strong> – data to be marshalled</li>
+<li><strong>signature</strong> – see <a class="reference internal" href="#dcar.signature.Signature" title="dcar.signature.Signature"><code class="xref py py-class docutils literal notranslate"><span class="pre">Signature</span></code></a></li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><p class="first last"><a class="reference internal" href="api.html#dcar.MessageError" title="dcar.MessageError"><strong>MessageError</strong></a> – if the data could not be marshalled</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="dcar.marshal.Variant.unmarshal">
+<code class="descname">unmarshal</code><span class="sig-paren">(</span><em>raw</em>, <em>signature=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dcar/marshal.html#Variant.unmarshal"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dcar.marshal.Variant.unmarshal" title="Permalink to this definition">¶</a></dt>
+<dd><p>Unmarshal an object of this type.</p>
+<p>The returned data will be of a type according
+to the column <em>Python OUT</em> in the <a class="reference internal" href="#ref-types-table"><span class="std std-ref">table above</span></a>.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">signature</span></code> parameter is only used in the classes
+<a class="reference internal" href="#dcar.marshal.Array" title="dcar.marshal.Array"><code class="xref py py-class docutils literal notranslate"><span class="pre">Array</span></code></a>, <a class="reference internal" href="#dcar.marshal.Struct" title="dcar.marshal.Struct"><code class="xref py py-class docutils literal notranslate"><span class="pre">Struct</span></code></a>, and <a class="reference internal" href="#dcar.marshal.DictEntry" title="dcar.marshal.DictEntry"><code class="xref py py-class docutils literal notranslate"><span class="pre">DictEntry</span></code></a>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>raw</strong> (<a class="reference internal" href="#dcar.raw.RawData" title="dcar.raw.RawData"><em>RawData</em></a>) – raw message data</li>
+<li><strong>signature</strong> – see <a class="reference internal" href="#dcar.signature.Signature" title="dcar.signature.Signature"><code class="xref py py-class docutils literal notranslate"><span class="pre">Signature</span></code></a></li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">unmarshalled data</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><p class="first last"><a class="reference internal" href="api.html#dcar.MessageError" title="dcar.MessageError"><strong>MessageError</strong></a> – if the data could not be unmarshalled</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="dcar.marshal.Array">
+<em class="property">class </em><code class="descclassname">dcar.marshal.</code><code class="descname">Array</code><a class="reference internal" href="_modules/dcar/marshal.html#Array"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dcar.marshal.Array" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#dcar.marshal.Container" title="dcar.marshal.Container"><code class="xref py py-class docutils literal notranslate"><span class="pre">dcar.marshal.Container</span></code></a></p>
+<p>Class for a D-Bus Array.</p>
+<dl class="method">
+<dt id="dcar.marshal.Array.marshal">
+<code class="descname">marshal</code><span class="sig-paren">(</span><em>raw</em>, <em>data</em>, <em>signature</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dcar/marshal.html#Array.marshal"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dcar.marshal.Array.marshal" title="Permalink to this definition">¶</a></dt>
+<dd><p>Marshal an object of this type.</p>
+<p>The data must be of an appropriate type according
+to the column <em>Python IN</em> in the <a class="reference internal" href="#ref-types-table"><span class="std std-ref">table above</span></a>.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">signature</span></code> parameter is only used in the classes
+<a class="reference internal" href="#dcar.marshal.Array" title="dcar.marshal.Array"><code class="xref py py-class docutils literal notranslate"><span class="pre">Array</span></code></a>, <a class="reference internal" href="#dcar.marshal.Struct" title="dcar.marshal.Struct"><code class="xref py py-class docutils literal notranslate"><span class="pre">Struct</span></code></a>, and <a class="reference internal" href="#dcar.marshal.DictEntry" title="dcar.marshal.DictEntry"><code class="xref py py-class docutils literal notranslate"><span class="pre">DictEntry</span></code></a>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>raw</strong> (<a class="reference internal" href="#dcar.raw.RawData" title="dcar.raw.RawData"><em>RawData</em></a>) – raw message data</li>
+<li><strong>data</strong> – data to be marshalled</li>
+<li><strong>signature</strong> – see <a class="reference internal" href="#dcar.signature.Signature" title="dcar.signature.Signature"><code class="xref py py-class docutils literal notranslate"><span class="pre">Signature</span></code></a></li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><p class="first last"><a class="reference internal" href="api.html#dcar.MessageError" title="dcar.MessageError"><strong>MessageError</strong></a> – if the data could not be marshalled</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="dcar.marshal.Array.unmarshal">
+<code class="descname">unmarshal</code><span class="sig-paren">(</span><em>raw</em>, <em>signature</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dcar/marshal.html#Array.unmarshal"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dcar.marshal.Array.unmarshal" title="Permalink to this definition">¶</a></dt>
+<dd><p>Unmarshal an object of this type.</p>
+<p>The returned data will be of a type according
+to the column <em>Python OUT</em> in the <a class="reference internal" href="#ref-types-table"><span class="std std-ref">table above</span></a>.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">signature</span></code> parameter is only used in the classes
+<a class="reference internal" href="#dcar.marshal.Array" title="dcar.marshal.Array"><code class="xref py py-class docutils literal notranslate"><span class="pre">Array</span></code></a>, <a class="reference internal" href="#dcar.marshal.Struct" title="dcar.marshal.Struct"><code class="xref py py-class docutils literal notranslate"><span class="pre">Struct</span></code></a>, and <a class="reference internal" href="#dcar.marshal.DictEntry" title="dcar.marshal.DictEntry"><code class="xref py py-class docutils literal notranslate"><span class="pre">DictEntry</span></code></a>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>raw</strong> (<a class="reference internal" href="#dcar.raw.RawData" title="dcar.raw.RawData"><em>RawData</em></a>) – raw message data</li>
+<li><strong>signature</strong> – see <a class="reference internal" href="#dcar.signature.Signature" title="dcar.signature.Signature"><code class="xref py py-class docutils literal notranslate"><span class="pre">Signature</span></code></a></li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">unmarshalled data</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><p class="first last"><a class="reference internal" href="api.html#dcar.MessageError" title="dcar.MessageError"><strong>MessageError</strong></a> – if the data could not be unmarshalled</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="dcar.marshal.Struct">
+<em class="property">class </em><code class="descclassname">dcar.marshal.</code><code class="descname">Struct</code><span class="sig-paren">(</span><em>name='STRUCT'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dcar/marshal.html#Struct"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dcar.marshal.Struct" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#dcar.marshal.Container" title="dcar.marshal.Container"><code class="xref py py-class docutils literal notranslate"><span class="pre">dcar.marshal.Container</span></code></a></p>
+<p>Class for a D-Bus Struct.</p>
+<dl class="method">
+<dt id="dcar.marshal.Struct.marshal">
+<code class="descname">marshal</code><span class="sig-paren">(</span><em>raw</em>, <em>data</em>, <em>signature</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dcar/marshal.html#Struct.marshal"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dcar.marshal.Struct.marshal" title="Permalink to this definition">¶</a></dt>
+<dd><p>Marshal an object of this type.</p>
+<p>The data must be of an appropriate type according
+to the column <em>Python IN</em> in the <a class="reference internal" href="#ref-types-table"><span class="std std-ref">table above</span></a>.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">signature</span></code> parameter is only used in the classes
+<a class="reference internal" href="#dcar.marshal.Array" title="dcar.marshal.Array"><code class="xref py py-class docutils literal notranslate"><span class="pre">Array</span></code></a>, <a class="reference internal" href="#dcar.marshal.Struct" title="dcar.marshal.Struct"><code class="xref py py-class docutils literal notranslate"><span class="pre">Struct</span></code></a>, and <a class="reference internal" href="#dcar.marshal.DictEntry" title="dcar.marshal.DictEntry"><code class="xref py py-class docutils literal notranslate"><span class="pre">DictEntry</span></code></a>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>raw</strong> (<a class="reference internal" href="#dcar.raw.RawData" title="dcar.raw.RawData"><em>RawData</em></a>) – raw message data</li>
+<li><strong>data</strong> – data to be marshalled</li>
+<li><strong>signature</strong> – see <a class="reference internal" href="#dcar.signature.Signature" title="dcar.signature.Signature"><code class="xref py py-class docutils literal notranslate"><span class="pre">Signature</span></code></a></li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><p class="first last"><a class="reference internal" href="api.html#dcar.MessageError" title="dcar.MessageError"><strong>MessageError</strong></a> – if the data could not be marshalled</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="dcar.marshal.Struct.unmarshal">
+<code class="descname">unmarshal</code><span class="sig-paren">(</span><em>raw</em>, <em>signature</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dcar/marshal.html#Struct.unmarshal"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dcar.marshal.Struct.unmarshal" title="Permalink to this definition">¶</a></dt>
+<dd><p>Unmarshal an object of this type.</p>
+<p>The returned data will be of a type according
+to the column <em>Python OUT</em> in the <a class="reference internal" href="#ref-types-table"><span class="std std-ref">table above</span></a>.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">signature</span></code> parameter is only used in the classes
+<a class="reference internal" href="#dcar.marshal.Array" title="dcar.marshal.Array"><code class="xref py py-class docutils literal notranslate"><span class="pre">Array</span></code></a>, <a class="reference internal" href="#dcar.marshal.Struct" title="dcar.marshal.Struct"><code class="xref py py-class docutils literal notranslate"><span class="pre">Struct</span></code></a>, and <a class="reference internal" href="#dcar.marshal.DictEntry" title="dcar.marshal.DictEntry"><code class="xref py py-class docutils literal notranslate"><span class="pre">DictEntry</span></code></a>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>raw</strong> (<a class="reference internal" href="#dcar.raw.RawData" title="dcar.raw.RawData"><em>RawData</em></a>) – raw message data</li>
+<li><strong>signature</strong> – see <a class="reference internal" href="#dcar.signature.Signature" title="dcar.signature.Signature"><code class="xref py py-class docutils literal notranslate"><span class="pre">Signature</span></code></a></li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">unmarshalled data</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><p class="first last"><a class="reference internal" href="api.html#dcar.MessageError" title="dcar.MessageError"><strong>MessageError</strong></a> – if the data could not be unmarshalled</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="dcar.marshal.DictEntry">
+<em class="property">class </em><code class="descclassname">dcar.marshal.</code><code class="descname">DictEntry</code><a class="reference internal" href="_modules/dcar/marshal.html#DictEntry"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dcar.marshal.DictEntry" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#dcar.marshal.Struct" title="dcar.marshal.Struct"><code class="xref py py-class docutils literal notranslate"><span class="pre">dcar.marshal.Struct</span></code></a></p>
+<p>Class for a D-Bus DictEntry.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="dcar.marshal.marshal">
+<code class="descclassname">dcar.marshal.</code><code class="descname">marshal</code><span class="sig-paren">(</span><em>raw</em>, <em>data</em>, <em>signature</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dcar/marshal.html#marshal"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dcar.marshal.marshal" title="Permalink to this definition">¶</a></dt>
+<dd><p>Marshal objects.</p>
+<p>The elements of the data tuple must be of appropriate types according
+to the column <em>Python IN</em> in the <a class="reference internal" href="#ref-types-table"><span class="std std-ref">table above</span></a>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>raw</strong> (<a class="reference internal" href="#dcar.raw.RawData" title="dcar.raw.RawData"><em>RawData</em></a>) – raw message data</li>
+<li><strong>data</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.7)"><em>tuple</em></a>) – tuple of data to be marshalled</li>
+<li><strong>signature</strong> – see <a class="reference internal" href="#dcar.signature.Signature" title="dcar.signature.Signature"><code class="xref py py-class docutils literal notranslate"><span class="pre">Signature</span></code></a></li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><p class="first last"><a class="reference internal" href="api.html#dcar.MessageError" title="dcar.MessageError"><strong>MessageError</strong></a> – if the data could not be marshalled</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="dcar.marshal.unmarshal">
+<code class="descclassname">dcar.marshal.</code><code class="descname">unmarshal</code><span class="sig-paren">(</span><em>raw</em>, <em>signature</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dcar/marshal.html#unmarshal"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dcar.marshal.unmarshal" title="Permalink to this definition">¶</a></dt>
+<dd><p>Unmarshal objects.</p>
+<p>The elements of the returned tuple will be of types according
+to the column <em>Python OUT</em> in the <a class="reference internal" href="#ref-types-table"><span class="std std-ref">table above</span></a>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>raw</strong> (<a class="reference internal" href="#dcar.raw.RawData" title="dcar.raw.RawData"><em>RawData</em></a>) – raw message data</li>
+<li><strong>signature</strong> – see <a class="reference internal" href="#dcar.signature.Signature" title="dcar.signature.Signature"><code class="xref py py-class docutils literal notranslate"><span class="pre">Signature</span></code></a></li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">tuple of unmarshalled data</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.7)">tuple</a></p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><p class="first last"><a class="reference internal" href="api.html#dcar.MessageError" title="dcar.MessageError"><strong>MessageError</strong></a> – if the data could not be unmarshalled</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+<div class="section" id="module-dcar.message">
+<span id="dcar-message"></span><h2>dcar.message<a class="headerlink" href="#module-dcar.message" title="Permalink to this headline">¶</a></h2>
+<p>D-Bus Message.</p>
+<p>See: <a class="reference external" href="https://dbus.freedesktop.org/doc/dbus-specification.html#message-protocol">Message Protocol</a></p>
+<dl class="class">
+<dt id="dcar.message.Byteorder">
+<em class="property">class </em><code class="descclassname">dcar.message.</code><code class="descname">Byteorder</code><a class="reference internal" href="_modules/dcar/message.html#Byteorder"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dcar.message.Byteorder" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">dcar.message.EnumReprMixin</span></code>, <a class="reference external" href="https://docs.python.org/3/library/enum.html#enum.Enum" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">enum.Enum</span></code></a></p>
+<p>Enumeration of byteorders.</p>
+<dl class="attribute">
+<dt id="dcar.message.Byteorder.LITTLE">
+<code class="descname">LITTLE</code><em class="property"> = b'l'</em><a class="headerlink" href="#dcar.message.Byteorder.LITTLE" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="dcar.message.Byteorder.BIG">
+<code class="descname">BIG</code><em class="property"> = b'B'</em><a class="headerlink" href="#dcar.message.Byteorder.BIG" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="dcar.message.Byteorder.NATIVE">
+<code class="descname">NATIVE</code><em class="property"> = b'l'</em><a class="headerlink" href="#dcar.message.Byteorder.NATIVE" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="dcar.message.MessageType">
+<em class="property">class </em><code class="descclassname">dcar.message.</code><code class="descname">MessageType</code><a class="reference internal" href="_modules/dcar/message.html#MessageType"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dcar.message.MessageType" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">dcar.message.EnumReprMixin</span></code>, <a class="reference external" href="https://docs.python.org/3/library/enum.html#enum.Enum" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">enum.Enum</span></code></a></p>
+<p>Enumeration of message types.</p>
+<dl class="attribute">
+<dt id="dcar.message.MessageType.INVALID">
+<code class="descname">INVALID</code><em class="property"> = b'\x00'</em><a class="headerlink" href="#dcar.message.MessageType.INVALID" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="dcar.message.MessageType.METHOD_CALL">
+<code class="descname">METHOD_CALL</code><em class="property"> = b'\x01'</em><a class="headerlink" href="#dcar.message.MessageType.METHOD_CALL" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="dcar.message.MessageType.METHOD_RETURN">
+<code class="descname">METHOD_RETURN</code><em class="property"> = b'\x02'</em><a class="headerlink" href="#dcar.message.MessageType.METHOD_RETURN" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="dcar.message.MessageType.ERROR">
+<code class="descname">ERROR</code><em class="property"> = b'\x03'</em><a class="headerlink" href="#dcar.message.MessageType.ERROR" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="dcar.message.MessageType.SIGNAL">
+<code class="descname">SIGNAL</code><em class="property"> = b'\x04'</em><a class="headerlink" href="#dcar.message.MessageType.SIGNAL" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="dcar.message.HeaderFlag">
+<em class="property">class </em><code class="descclassname">dcar.message.</code><code class="descname">HeaderFlag</code><a class="reference internal" href="_modules/dcar/message.html#HeaderFlag"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dcar.message.HeaderFlag" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/enum.html#enum.IntFlag" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">enum.IntFlag</span></code></a></p>
+<p>Enumeration of header flags.</p>
+<dl class="attribute">
+<dt id="dcar.message.HeaderFlag.NONE">
+<code class="descname">NONE</code><em class="property"> = 0</em><a class="headerlink" href="#dcar.message.HeaderFlag.NONE" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="dcar.message.HeaderFlag.NO_REPLY_EXPECTED">
+<code class="descname">NO_REPLY_EXPECTED</code><em class="property"> = 1</em><a class="headerlink" href="#dcar.message.HeaderFlag.NO_REPLY_EXPECTED" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="dcar.message.HeaderFlag.NO_AUTO_START">
+<code class="descname">NO_AUTO_START</code><em class="property"> = 2</em><a class="headerlink" href="#dcar.message.HeaderFlag.NO_AUTO_START" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="dcar.message.HeaderFlag.ALLOW_INTERACTIVE_AUTHORIZATION">
+<code class="descname">ALLOW_INTERACTIVE_AUTHORIZATION</code><em class="property"> = 4</em><a class="headerlink" href="#dcar.message.HeaderFlag.ALLOW_INTERACTIVE_AUTHORIZATION" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="dcar.message.HeaderFlag.from_byte">
+<code class="descname">from_byte</code><em class="property"> = &lt;bound method HeaderFlag.from_byte of &lt;enum 'HeaderFlag'&gt;&gt;</em><a class="reference internal" href="_modules/dcar/message.html#HeaderFlag.from_byte"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dcar.message.HeaderFlag.from_byte" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="dcar.message.HeaderFlag.to_byte">
+<code class="descname">to_byte</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/dcar/message.html#HeaderFlag.to_byte"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dcar.message.HeaderFlag.to_byte" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convert header flag to a byte.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="dcar.message.HeaderField">
+<em class="property">class </em><code class="descclassname">dcar.message.</code><code class="descname">HeaderField</code><a class="reference internal" href="_modules/dcar/message.html#HeaderField"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dcar.message.HeaderField" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">dcar.message.EnumReprMixin</span></code>, <a class="reference external" href="https://docs.python.org/3/library/enum.html#enum.Enum" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">enum.Enum</span></code></a></p>
+<p>Enumeration of header fields.</p>
+<dl class="attribute">
+<dt id="dcar.message.HeaderField.PATH">
+<code class="descname">PATH</code><em class="property"> = 1</em><a class="headerlink" href="#dcar.message.HeaderField.PATH" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="dcar.message.HeaderField.INTERFACE">
+<code class="descname">INTERFACE</code><em class="property"> = 2</em><a class="headerlink" href="#dcar.message.HeaderField.INTERFACE" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="dcar.message.HeaderField.MEMBER">
+<code class="descname">MEMBER</code><em class="property"> = 3</em><a class="headerlink" href="#dcar.message.HeaderField.MEMBER" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="dcar.message.HeaderField.ERROR_NAME">
+<code class="descname">ERROR_NAME</code><em class="property"> = 4</em><a class="headerlink" href="#dcar.message.HeaderField.ERROR_NAME" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="dcar.message.HeaderField.REPLY_SERIAL">
+<code class="descname">REPLY_SERIAL</code><em class="property"> = 5</em><a class="headerlink" href="#dcar.message.HeaderField.REPLY_SERIAL" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="dcar.message.HeaderField.DESTINATION">
+<code class="descname">DESTINATION</code><em class="property"> = 6</em><a class="headerlink" href="#dcar.message.HeaderField.DESTINATION" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="dcar.message.HeaderField.SENDER">
+<code class="descname">SENDER</code><em class="property"> = 7</em><a class="headerlink" href="#dcar.message.HeaderField.SENDER" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="dcar.message.HeaderField.SIGNATURE">
+<code class="descname">SIGNATURE</code><em class="property"> = 8</em><a class="headerlink" href="#dcar.message.HeaderField.SIGNATURE" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="dcar.message.HeaderField.UNIX_FDS">
+<code class="descname">UNIX_FDS</code><em class="property"> = 9</em><a class="headerlink" href="#dcar.message.HeaderField.UNIX_FDS" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="dcar.message.HeaderFields">
+<em class="property">class </em><code class="descclassname">dcar.message.</code><code class="descname">HeaderFields</code><a class="reference internal" href="_modules/dcar/message.html#HeaderFields"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dcar.message.HeaderFields" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<p>Fields in a message header.</p>
+<dl class="attribute">
+<dt id="dcar.message.HeaderFields.signature">
+<code class="descname">signature</code><em class="property"> = 'a(yv)'</em><a class="headerlink" href="#dcar.message.HeaderFields.signature" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="dcar.message.HeaderFields.to_list">
+<code class="descname">to_list</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/dcar/message.html#HeaderFields.to_list"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dcar.message.HeaderFields.to_list" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convert the internal dict representation to a list.</p>
+</dd></dl>
+
+<dl class="classmethod">
+<dt id="dcar.message.HeaderFields.from_list">
+<em class="property">classmethod </em><code class="descname">from_list</code><span class="sig-paren">(</span><em>lst</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dcar/message.html#HeaderFields.from_list"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dcar.message.HeaderFields.from_list" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convert a list to the internal dict representation.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="dcar.message.HeaderFields.check">
+<code class="descname">check</code><span class="sig-paren">(</span><em>message_type</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dcar/message.html#HeaderFields.check"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dcar.message.HeaderFields.check" title="Permalink to this definition">¶</a></dt>
+<dd><p>Check if required header fields are present and validate them.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>message_type</strong> (<a class="reference internal" href="#dcar.message.MessageType" title="dcar.message.MessageType"><em>MessageType</em></a>) – the message type</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><ul class="first last simple">
+<li><a class="reference internal" href="api.html#dcar.ValidationError" title="dcar.ValidationError"><strong>ValidationError</strong></a> – if validation failed</li>
+<li><a class="reference internal" href="api.html#dcar.MessageError" title="dcar.MessageError"><strong>MessageError</strong></a> – if required fields are missing</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="dcar.message.MessageInfo">
+<em class="property">class </em><code class="descclassname">dcar.message.</code><code class="descname">MessageInfo</code><span class="sig-paren">(</span><em>serial</em>, <em>args</em>, <em>path</em>, <em>interface</em>, <em>member</em>, <em>sender</em>, <em>no_reply_expected</em>, <em>allow_interactive_authorization</em><span class="sig-paren">)</span><a class="headerlink" href="#dcar.message.MessageInfo" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">tuple</span></code></a></p>
+<p>Objects of this type will be passed to handler functions registered with <a class="reference internal" href="api.html#dcar.Bus.register_signal" title="dcar.Bus.register_signal"><code class="xref py py-meth docutils literal notranslate"><span class="pre">register_signal()</span></code></a> and <a class="reference internal" href="api.html#dcar.Bus.register_method" title="dcar.Bus.register_method"><code class="xref py py-meth docutils literal notranslate"><span class="pre">register_method()</span></code></a>.</p>
+<dl class="attribute">
+<dt id="dcar.message.MessageInfo.allow_interactive_authorization">
+<code class="descname">allow_interactive_authorization</code><a class="headerlink" href="#dcar.message.MessageInfo.allow_interactive_authorization" title="Permalink to this definition">¶</a></dt>
+<dd><p>header flag</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="dcar.message.MessageInfo.args">
+<code class="descname">args</code><a class="headerlink" href="#dcar.message.MessageInfo.args" title="Permalink to this definition">¶</a></dt>
+<dd><p>arguments as a tuple</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="dcar.message.MessageInfo.interface">
+<code class="descname">interface</code><a class="headerlink" href="#dcar.message.MessageInfo.interface" title="Permalink to this definition">¶</a></dt>
+<dd><p>interface name</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="dcar.message.MessageInfo.member">
+<code class="descname">member</code><a class="headerlink" href="#dcar.message.MessageInfo.member" title="Permalink to this definition">¶</a></dt>
+<dd><p>member (signal or method) name</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="dcar.message.MessageInfo.no_reply_expected">
+<code class="descname">no_reply_expected</code><a class="headerlink" href="#dcar.message.MessageInfo.no_reply_expected" title="Permalink to this definition">¶</a></dt>
+<dd><p>header flag</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="dcar.message.MessageInfo.path">
+<code class="descname">path</code><a class="headerlink" href="#dcar.message.MessageInfo.path" title="Permalink to this definition">¶</a></dt>
+<dd><p>object path</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="dcar.message.MessageInfo.sender">
+<code class="descname">sender</code><a class="headerlink" href="#dcar.message.MessageInfo.sender" title="Permalink to this definition">¶</a></dt>
+<dd><p>name of the sender’s connection</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="dcar.message.MessageInfo.serial">
+<code class="descname">serial</code><a class="headerlink" href="#dcar.message.MessageInfo.serial" title="Permalink to this definition">¶</a></dt>
+<dd><p>message serial</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="dcar.message.Message">
+<em class="property">class </em><code class="descclassname">dcar.message.</code><code class="descname">Message</code><span class="sig-paren">(</span><em>message_type</em>, <em>flags</em>, <em>fields</em>, <em>body</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dcar/message.html#Message"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dcar.message.Message" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<p>A D-Bus message.</p>
+<p>Objects of this type must be treated as immutable.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>message_type</strong> (<a class="reference internal" href="#dcar.message.MessageType" title="dcar.message.MessageType"><em>MessageType</em></a>) – type of this message</li>
+<li><strong>flags</strong> – or’ed <a class="reference internal" href="#dcar.message.HeaderFlag" title="dcar.message.HeaderFlag"><code class="xref py py-class docutils literal notranslate"><span class="pre">HeaderFlags</span></code></a>, <code class="docutils literal notranslate"><span class="pre">0</span></code>, or <code class="docutils literal notranslate"><span class="pre">None</span></code></li>
+<li><strong>fields</strong> (<a class="reference internal" href="#dcar.message.HeaderFields" title="dcar.message.HeaderFields"><em>HeaderFields</em></a>) – header fields</li>
+<li><strong>body</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.7)"><em>tuple</em></a>) – the data for the body of this message</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><ul class="first last simple">
+<li><a class="reference internal" href="api.html#dcar.ValidationError" title="dcar.ValidationError"><strong>ValidationError</strong></a> – if any validation fails</li>
+<li><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#TypeError" title="(in Python v3.7)"><strong>TypeError</strong></a> – if there is any argument of the wrong type</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<dl class="attribute">
+<dt id="dcar.message.Message.info">
+<code class="descname">info</code><a class="headerlink" href="#dcar.message.Message.info" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a <a class="reference internal" href="#dcar.message.MessageInfo" title="dcar.message.MessageInfo"><code class="xref py py-class docutils literal notranslate"><span class="pre">MessageInfo</span></code></a> object.</p>
+<p>Only available for messages of type METHOD_CALL and SIGNAL.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="dcar.message.Message.reply_expected">
+<code class="descname">reply_expected</code><a class="headerlink" href="#dcar.message.Message.reply_expected" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return <code class="docutils literal notranslate"><span class="pre">True</span></code> if a reply is expected.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="dcar.message.Message.reply_serial">
+<code class="descname">reply_serial</code><a class="headerlink" href="#dcar.message.Message.reply_serial" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the reply serial from the header fields.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="dcar.message.Message.sender">
+<code class="descname">sender</code><a class="headerlink" href="#dcar.message.Message.sender" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the sender from the header fields.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="dcar.message.Message.raise_on_error">
+<code class="descname">raise_on_error</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/dcar/message.html#Message.raise_on_error"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dcar.message.Message.raise_on_error" title="Permalink to this definition">¶</a></dt>
+<dd><p>Raise a <a class="reference internal" href="api.html#dcar.DBusError" title="dcar.DBusError"><code class="xref py py-class docutils literal notranslate"><span class="pre">DBusError</span></code></a> if this is an ERROR message.</p>
+</dd></dl>
+
+<dl class="classmethod">
+<dt id="dcar.message.Message.from_bytes">
+<em class="property">classmethod </em><code class="descname">from_bytes</code><span class="sig-paren">(</span><em>raw</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dcar/message.html#Message.from_bytes"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dcar.message.Message.from_bytes" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a new message object from bytes.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>raw</strong> (<a class="reference internal" href="#dcar.raw.RawData" title="dcar.raw.RawData"><em>RawData</em></a>) – raw message data</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><a class="reference internal" href="api.html#dcar.MessageError" title="dcar.MessageError"><strong>MessageError</strong></a> – if the message could not be created</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="dcar.message.Message.to_bytes">
+<code class="descname">to_bytes</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/dcar/message.html#Message.to_bytes"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dcar.message.Message.to_bytes" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convert this message to bytes.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><a class="reference internal" href="api.html#dcar.MessageError" title="dcar.MessageError"><strong>MessageError</strong></a> – if the message could not be converted</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-dcar.raw">
+<span id="dcar-raw"></span><h2>dcar.raw<a class="headerlink" href="#module-dcar.raw" title="Permalink to this headline">¶</a></h2>
+<p>Raw message data.</p>
+<dl class="class">
+<dt id="dcar.raw.RawData">
+<em class="property">class </em><code class="descclassname">dcar.raw.</code><code class="descname">RawData</code><span class="sig-paren">(</span><em>initial_bytes=b''</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dcar/raw.html#RawData"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dcar.raw.RawData" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">_io.BytesIO</span></code></p>
+<p>Raw messge data.</p>
+<dl class="attribute">
+<dt id="dcar.raw.RawData.unix_fds">
+<code class="descname">unix_fds</code><a class="headerlink" href="#dcar.raw.RawData.unix_fds" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return list with unix file descriptors.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="dcar.raw.RawData.write">
+<code class="descname">write</code><span class="sig-paren">(</span><em>b</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dcar/raw.html#RawData.write"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dcar.raw.RawData.write" title="Permalink to this definition">¶</a></dt>
+<dd><p>Write bytes.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="dcar.raw.RawData.write_nul_bytes">
+<code class="descname">write_nul_bytes</code><span class="sig-paren">(</span><em>n</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dcar/raw.html#RawData.write_nul_bytes"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dcar.raw.RawData.write_nul_bytes" title="Permalink to this definition">¶</a></dt>
+<dd><p>Write n NUL bytes.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="dcar.raw.RawData.write_padding">
+<code class="descname">write_padding</code><span class="sig-paren">(</span><em>alignment</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dcar/raw.html#RawData.write_padding"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dcar.raw.RawData.write_padding" title="Permalink to this definition">¶</a></dt>
+<dd><p>Write padding bytes.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="dcar.raw.RawData.skip_padding">
+<code class="descname">skip_padding</code><span class="sig-paren">(</span><em>alignment</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dcar/raw.html#RawData.skip_padding"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dcar.raw.RawData.skip_padding" title="Permalink to this definition">¶</a></dt>
+<dd><p>Skip padding bytes.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="dcar.raw.RawData.set_value">
+<code class="descname">set_value</code><span class="sig-paren">(</span><em>pos</em>, <em>fixed_type</em>, <em>value</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dcar/raw.html#RawData.set_value"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dcar.raw.RawData.set_value" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set value at position pos.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="dcar.raw.RawData.add_unix_fd">
+<code class="descname">add_unix_fd</code><span class="sig-paren">(</span><em>fd</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dcar/raw.html#RawData.add_unix_fd"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dcar.raw.RawData.add_unix_fd" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add unix file descriptor.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="dcar.raw.RawData.nesting_depth">
+<code class="descname">nesting_depth</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/dcar/raw.html#RawData.nesting_depth"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dcar.raw.RawData.nesting_depth" title="Permalink to this definition">¶</a></dt>
+<dd><p>Context manager for checking the nesting depth of variants.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-dcar.router">
+<span id="dcar-router"></span><h2>dcar.router<a class="headerlink" href="#module-dcar.router" title="Permalink to this headline">¶</a></h2>
+<p>Message routing.</p>
+<dl class="class">
+<dt id="dcar.router.Router">
+<em class="property">class </em><code class="descclassname">dcar.router.</code><code class="descname">Router</code><span class="sig-paren">(</span><em>bus</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dcar/router.html#Router"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dcar.router.Router" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<p>Class for routing in- and outgoing messages.</p>
+<dl class="method">
+<dt id="dcar.router.Router.outgoing">
+<code class="descname">outgoing</code><span class="sig-paren">(</span><em>msg</em>, <em>timeout</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dcar/router.html#Router.outgoing"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dcar.router.Router.outgoing" title="Permalink to this definition">¶</a></dt>
+<dd><p>Handle outgoing messages.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>msg</strong> (<a class="reference internal" href="#dcar.message.Message" title="dcar.message.Message"><em>Message</em></a>) – the message</li>
+<li><strong>timeout</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.7)"><em>float</em></a>) – timeout in seconds</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">return values of a message call (if a reply is expected)
+or <code class="docutils literal notranslate"><span class="pre">None</span></code></p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.7)">tuple</a> or <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.7)">None</a></p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><ul class="first last simple">
+<li><a class="reference internal" href="api.html#dcar.TransportError" title="dcar.TransportError"><strong>TransportError</strong></a> – if the message could not be sent</li>
+<li><a class="reference internal" href="api.html#dcar.MessageError" title="dcar.MessageError"><strong>MessageError</strong></a> – if the message could not be marshalled</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="dcar.router.Router.incoming">
+<code class="descname">incoming</code><span class="sig-paren">(</span><em>msg</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dcar/router.html#Router.incoming"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dcar.router.Router.incoming" title="Permalink to this definition">¶</a></dt>
+<dd><p>Handle incoming messages.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>msg</strong> (<a class="reference internal" href="#dcar.message.Message" title="dcar.message.Message"><em>Message</em></a>) – the message</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="dcar.router.MatchRule">
+<em class="property">class </em><code class="descclassname">dcar.router.</code><code class="descname">MatchRule</code><span class="sig-paren">(</span><em>object_path: str = None</em>, <em>interface: str = None</em>, <em>signal_name: str = None</em>, <em>sender: str = None</em>, <em>path_namespace: str = None</em>, <em>destination: str = None</em>, <em>arg0namespace: str = None</em>, <em>unicast: bool = False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dcar/router.html#MatchRule"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dcar.router.MatchRule" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<p>Match rule for signals.</p>
+<p>Except for <code class="docutils literal notranslate"><span class="pre">unicast</span></code> all parameters are explained in the
+<a class="reference external" href="https://dbus.freedesktop.org/doc/dbus-specification.html#message-bus-routing-match-rules">D-Bus specification</a>.</p>
+<p>If <code class="docutils literal notranslate"><span class="pre">unicast=True</span></code> this rule will only apply to unicast signals
+and no <em>AddMatch</em> message will be sent to the message bus from
+the <a class="reference internal" href="api.html#dcar.Bus.register_signal" title="dcar.Bus.register_signal"><code class="xref py py-meth docutils literal notranslate"><span class="pre">register_signal()</span></code></a> method.</p>
+<dl class="attribute">
+<dt id="dcar.router.MatchRule.object_path">
+<code class="descname">object_path</code><em class="property"> = None</em><a class="headerlink" href="#dcar.router.MatchRule.object_path" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="dcar.router.MatchRule.interface">
+<code class="descname">interface</code><em class="property"> = None</em><a class="headerlink" href="#dcar.router.MatchRule.interface" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="dcar.router.MatchRule.signal_name">
+<code class="descname">signal_name</code><em class="property"> = None</em><a class="headerlink" href="#dcar.router.MatchRule.signal_name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="dcar.router.MatchRule.sender">
+<code class="descname">sender</code><em class="property"> = None</em><a class="headerlink" href="#dcar.router.MatchRule.sender" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="dcar.router.MatchRule.path_namespace">
+<code class="descname">path_namespace</code><em class="property"> = None</em><a class="headerlink" href="#dcar.router.MatchRule.path_namespace" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="dcar.router.MatchRule.destination">
+<code class="descname">destination</code><em class="property"> = None</em><a class="headerlink" href="#dcar.router.MatchRule.destination" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="dcar.router.MatchRule.arg0namespace">
+<code class="descname">arg0namespace</code><em class="property"> = None</em><a class="headerlink" href="#dcar.router.MatchRule.arg0namespace" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="dcar.router.MatchRule.unicast">
+<code class="descname">unicast</code><em class="property"> = False</em><a class="headerlink" href="#dcar.router.MatchRule.unicast" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="dcar.router.MatchRule.add_arg">
+<code class="descname">add_arg</code><span class="sig-paren">(</span><em>idx</em>, <em>arg</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dcar/router.html#MatchRule.add_arg"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dcar.router.MatchRule.add_arg" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add an arg match at idx.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="dcar.router.MatchRule.add_argpath">
+<code class="descname">add_argpath</code><span class="sig-paren">(</span><em>idx</em>, <em>argpath</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dcar/router.html#MatchRule.add_argpath"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dcar.router.MatchRule.add_argpath" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add an argpath match at idx.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="dcar.router.Registry">
+<em class="property">class </em><code class="descclassname">dcar.router.</code><code class="descname">Registry</code><a class="reference internal" href="_modules/dcar/router.html#Registry"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dcar.router.Registry" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<p>Base class for registries.</p>
+<dl class="method">
+<dt id="dcar.router.Registry.add">
+<code class="descname">add</code><span class="sig-paren">(</span><em>item</em>, <em>handler</em>, <em>*args</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dcar/router.html#Registry.add"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dcar.router.Registry.add" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add an item.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>item</strong> – depends on type of registry subclass</li>
+<li><strong>handler</strong> (<em>callable</em>) – handler function</li>
+<li><strong>args</strong> – additional arguments</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="dcar.router.Registry.remove">
+<code class="descname">remove</code><span class="sig-paren">(</span><em>item_id</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dcar/router.html#Registry.remove"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dcar.router.Registry.remove" title="Permalink to this definition">¶</a></dt>
+<dd><p>Remove an item with ID <code class="docutils literal notranslate"><span class="pre">item_id</span></code>.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="dcar.router.Signals">
+<em class="property">class </em><code class="descclassname">dcar.router.</code><code class="descname">Signals</code><a class="reference internal" href="_modules/dcar/router.html#Signals"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dcar.router.Signals" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#dcar.router.Registry" title="dcar.router.Registry"><code class="xref py py-class docutils literal notranslate"><span class="pre">dcar.router.Registry</span></code></a></p>
+<p>Signals registry.</p>
+<p>An <code class="docutils literal notranslate"><span class="pre">item</span></code> for this type’s <a class="reference internal" href="#dcar.router.Registry.add" title="dcar.router.Registry.add"><code class="xref py py-meth docutils literal notranslate"><span class="pre">add()</span></code></a> method is a
+<a class="reference internal" href="#dcar.router.MatchRule" title="dcar.router.MatchRule"><code class="xref py py-class docutils literal notranslate"><span class="pre">MatchRule</span></code></a> (see also: <a class="reference internal" href="api.html#dcar.Bus.register_signal" title="dcar.Bus.register_signal"><code class="xref py py-meth docutils literal notranslate"><span class="pre">register_signal()</span></code></a>).</p>
+<dl class="attribute">
+<dt id="dcar.router.Signals.params">
+<code class="descname">params</code><em class="property"> = ('msginfo',)</em><a class="headerlink" href="#dcar.router.Signals.params" title="Permalink to this definition">¶</a></dt>
+<dd><p>handler parameters</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="dcar.router.Signals.matches">
+<code class="descname">matches</code><span class="sig-paren">(</span><em>msg</em>, <em>unique_name</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dcar/router.html#Signals.matches"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dcar.router.Signals.matches" title="Permalink to this definition">¶</a></dt>
+<dd><p>Match a SIGNAL message to a rule.</p>
+<p>This function is a generator which yields the handler function
+for each matching rule.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="dcar.router.Methods">
+<em class="property">class </em><code class="descclassname">dcar.router.</code><code class="descname">Methods</code><a class="reference internal" href="_modules/dcar/router.html#Methods"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dcar.router.Methods" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#dcar.router.Registry" title="dcar.router.Registry"><code class="xref py py-class docutils literal notranslate"><span class="pre">dcar.router.Registry</span></code></a></p>
+<p>Methods registry.</p>
+<p>An <code class="docutils literal notranslate"><span class="pre">item</span></code> for this type’s <a class="reference internal" href="#dcar.router.Registry.add" title="dcar.router.Registry.add"><code class="xref py py-meth docutils literal notranslate"><span class="pre">add()</span></code></a> method is a
+tuple <code class="docutils literal notranslate"><span class="pre">(object_path,</span> <span class="pre">interface,</span> <span class="pre">method_name)</span></code>
+(see also: <a class="reference internal" href="api.html#dcar.Bus.register_method" title="dcar.Bus.register_method"><code class="xref py py-meth docutils literal notranslate"><span class="pre">register_method()</span></code></a>).</p>
+<dl class="attribute">
+<dt id="dcar.router.Methods.params">
+<code class="descname">params</code><em class="property"> = ('bus', 'msginfo')</em><a class="headerlink" href="#dcar.router.Methods.params" title="Permalink to this definition">¶</a></dt>
+<dd><p>handler parameters</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="dcar.router.Methods.find">
+<code class="descname">find</code><span class="sig-paren">(</span><em>msg</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dcar/router.html#Methods.find"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dcar.router.Methods.find" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return handler function and signature for a METHOD_CALL message.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-dcar.signature">
+<span id="dcar-signature"></span><h2>dcar.signature<a class="headerlink" href="#module-dcar.signature" title="Permalink to this headline">¶</a></h2>
+<p>D-Bus type signature.</p>
+<dl class="class">
+<dt id="dcar.signature.Signature">
+<em class="property">class </em><code class="descclassname">dcar.signature.</code><code class="descname">Signature</code><span class="sig-paren">(</span><em>sig</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dcar/signature.html#Signature"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dcar.signature.Signature" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<p>A signature.</p>
+<p>The signature string will be parsed into a list of complete types.
+Each complete type is a tuple with the fist element being its
+signature. The second element is <code class="docutils literal notranslate"><span class="pre">None</span></code> for all basic
+(i.e. fixed and string-like) types, an empty list for variants,
+and a list of complete types for arrays, structs, and dict entries.</p>
+<p>A <a class="reference internal" href="#dcar.signature.Signature" title="dcar.signature.Signature"><code class="xref py py-class docutils literal notranslate"><span class="pre">Signature</span></code></a> object can be used as an iterator which yields
+tuples of complete types.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>sig</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a>) – D-Bus type signature</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><a class="reference internal" href="api.html#dcar.SignatureError" title="dcar.SignatureError"><strong>SignatureError</strong></a> – if there is a problem with the signature</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+<div class="section" id="module-dcar.transports">
+<span id="dcar-transports"></span><h2>dcar.transports<a class="headerlink" href="#module-dcar.transports" title="Permalink to this headline">¶</a></h2>
+<p>Transports for message bus connections.</p>
+<dl class="class">
+<dt id="dcar.transports.Transport">
+<em class="property">class </em><code class="descclassname">dcar.transports.</code><code class="descname">Transport</code><span class="sig-paren">(</span><em>params</em>, <em>router</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dcar/transports.html#Transport"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dcar.transports.Transport" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<p>Base class.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>params</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.7)"><em>dict</em></a>) – address parameters</li>
+<li><strong>router</strong> (<a class="reference internal" href="#dcar.router.Router" title="dcar.router.Router"><em>Router</em></a>) – router object</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<dl class="attribute">
+<dt id="dcar.transports.Transport.error">
+<code class="descname">error</code><a class="headerlink" href="#dcar.transports.Transport.error" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the error which caused disconnection or <code class="docutils literal notranslate"><span class="pre">None</span></code>.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="dcar.transports.Transport.connect">
+<code class="descname">connect</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/dcar/transports.html#Transport.connect"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dcar.transports.Transport.connect" title="Permalink to this definition">¶</a></dt>
+<dd><p>Connect to message bus.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="dcar.transports.Transport.disconnect">
+<code class="descname">disconnect</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/dcar/transports.html#Transport.disconnect"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dcar.transports.Transport.disconnect" title="Permalink to this definition">¶</a></dt>
+<dd><p>Disconnect from message bus.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="dcar.transports.Transport.authenticate">
+<code class="descname">authenticate</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/dcar/transports.html#Transport.authenticate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dcar.transports.Transport.authenticate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Authenticate to message bus.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="dcar.transports.Transport.start_loops">
+<code class="descname">start_loops</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/dcar/transports.html#Transport.start_loops"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dcar.transports.Transport.start_loops" title="Permalink to this definition">¶</a></dt>
+<dd><p>Start threads with <code class="docutils literal notranslate"><span class="pre">recv-loop</span></code> and <code class="docutils literal notranslate"><span class="pre">send-loop</span></code>.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="dcar.transports.Transport.block">
+<code class="descname">block</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/dcar/transports.html#Transport.block"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dcar.transports.Transport.block" title="Permalink to this definition">¶</a></dt>
+<dd><p>Block until loop threads are finished.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="dcar.transports.UnixTransport">
+<em class="property">class </em><code class="descclassname">dcar.transports.</code><code class="descname">UnixTransport</code><span class="sig-paren">(</span><em>params</em>, <em>router</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dcar/transports.html#UnixTransport"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dcar.transports.UnixTransport" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#dcar.transports.Transport" title="dcar.transports.Transport"><code class="xref py py-class docutils literal notranslate"><span class="pre">dcar.transports.Transport</span></code></a></p>
+<p>Transport that uses a unix domain socket.</p>
+<p>It supports the passing of file descriptors.</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="dcar.transports.TcpTransport">
+<em class="property">class </em><code class="descclassname">dcar.transports.</code><code class="descname">TcpTransport</code><span class="sig-paren">(</span><em>params</em>, <em>router</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dcar/transports.html#TcpTransport"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dcar.transports.TcpTransport" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#dcar.transports.Transport" title="dcar.transports.Transport"><code class="xref py py-class docutils literal notranslate"><span class="pre">dcar.transports.Transport</span></code></a></p>
+<p>Transport that uses a TCP socket.</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="dcar.transports.NonceTcpTransport">
+<em class="property">class </em><code class="descclassname">dcar.transports.</code><code class="descname">NonceTcpTransport</code><span class="sig-paren">(</span><em>params</em>, <em>router</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dcar/transports.html#NonceTcpTransport"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dcar.transports.NonceTcpTransport" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#dcar.transports.TcpTransport" title="dcar.transports.TcpTransport"><code class="xref py py-class docutils literal notranslate"><span class="pre">dcar.transports.TcpTransport</span></code></a></p>
+<p>Transport that uses a nonce-authenticated TCP socket.</p>
+<dl class="method">
+<dt id="dcar.transports.NonceTcpTransport.connect">
+<code class="descname">connect</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/dcar/transports.html#NonceTcpTransport.connect"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dcar.transports.NonceTcpTransport.connect" title="Permalink to this definition">¶</a></dt>
+<dd><p>Connect to message bus.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-dcar.validate">
+<span id="dcar-validate"></span><h2>dcar.validate<a class="headerlink" href="#module-dcar.validate" title="Permalink to this headline">¶</a></h2>
+<p>Validation functions.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">is_valid_*</span></code> functions return <code class="docutils literal notranslate"><span class="pre">True</span></code> if the argument is valid,
+otherwise <code class="docutils literal notranslate"><span class="pre">False</span></code>.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">validate_*</span></code> functions raise a <a class="reference internal" href="api.html#dcar.ValidationError" title="dcar.ValidationError"><code class="xref py py-class docutils literal notranslate"><span class="pre">ValidationError</span></code></a> if
+validation failed or else return the argument unchanged.</p>
+<dl class="function">
+<dt id="dcar.validate.is_valid_object_path">
+<code class="descclassname">dcar.validate.</code><code class="descname">is_valid_object_path</code><span class="sig-paren">(</span><em>s</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dcar/validate.html#is_valid_object_path"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dcar.validate.is_valid_object_path" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="dcar.validate.is_valid_signature">
+<code class="descclassname">dcar.validate.</code><code class="descname">is_valid_signature</code><span class="sig-paren">(</span><em>s</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dcar/validate.html#is_valid_signature"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dcar.validate.is_valid_signature" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="dcar.validate.is_valid_interface_name">
+<code class="descclassname">dcar.validate.</code><code class="descname">is_valid_interface_name</code><span class="sig-paren">(</span><em>s</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dcar/validate.html#is_valid_interface_name"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dcar.validate.is_valid_interface_name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="dcar.validate.is_valid_bus_name">
+<code class="descclassname">dcar.validate.</code><code class="descname">is_valid_bus_name</code><span class="sig-paren">(</span><em>s</em>, <em>unique=False</em>, <em>strict=True</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dcar/validate.html#is_valid_bus_name"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dcar.validate.is_valid_bus_name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="dcar.validate.is_valid_member_name">
+<code class="descclassname">dcar.validate.</code><code class="descname">is_valid_member_name</code><span class="sig-paren">(</span><em>s</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dcar/validate.html#is_valid_member_name"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dcar.validate.is_valid_member_name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="dcar.validate.is_valid_error_name">
+<code class="descclassname">dcar.validate.</code><code class="descname">is_valid_error_name</code><span class="sig-paren">(</span><em>s</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dcar/validate.html#is_valid_error_name"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dcar.validate.is_valid_error_name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="dcar.validate.is_valid_serial">
+<code class="descclassname">dcar.validate.</code><code class="descname">is_valid_serial</code><span class="sig-paren">(</span><em>i</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dcar/validate.html#is_valid_serial"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dcar.validate.is_valid_serial" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="dcar.validate.is_valid_unixfds_field">
+<code class="descclassname">dcar.validate.</code><code class="descname">is_valid_unixfds_field</code><span class="sig-paren">(</span><em>i</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dcar/validate.html#is_valid_unixfds_field"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dcar.validate.is_valid_unixfds_field" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="dcar.validate.validate_object_path">
+<code class="descclassname">dcar.validate.</code><code class="descname">validate_object_path</code><span class="sig-paren">(</span><em>s</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dcar/validate.html#validate_object_path"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dcar.validate.validate_object_path" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="dcar.validate.validate_signature">
+<code class="descclassname">dcar.validate.</code><code class="descname">validate_signature</code><span class="sig-paren">(</span><em>s</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dcar/validate.html#validate_signature"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dcar.validate.validate_signature" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="dcar.validate.validate_interface_name">
+<code class="descclassname">dcar.validate.</code><code class="descname">validate_interface_name</code><span class="sig-paren">(</span><em>s</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dcar/validate.html#validate_interface_name"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dcar.validate.validate_interface_name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="dcar.validate.validate_bus_name">
+<code class="descclassname">dcar.validate.</code><code class="descname">validate_bus_name</code><span class="sig-paren">(</span><em>s</em>, <em>unique=False</em>, <em>strict=True</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dcar/validate.html#validate_bus_name"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dcar.validate.validate_bus_name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="dcar.validate.validate_member_name">
+<code class="descclassname">dcar.validate.</code><code class="descname">validate_member_name</code><span class="sig-paren">(</span><em>s</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dcar/validate.html#validate_member_name"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dcar.validate.validate_member_name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="dcar.validate.validate_error_name">
+<code class="descclassname">dcar.validate.</code><code class="descname">validate_error_name</code><span class="sig-paren">(</span><em>s</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dcar/validate.html#validate_error_name"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dcar.validate.validate_error_name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="dcar.validate.validate_serial">
+<code class="descclassname">dcar.validate.</code><code class="descname">validate_serial</code><span class="sig-paren">(</span><em>i</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dcar/validate.html#validate_serial"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dcar.validate.validate_serial" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="dcar.validate.validate_unixfds_field">
+<code class="descclassname">dcar.validate.</code><code class="descname">validate_unixfds_field</code><span class="sig-paren">(</span><em>i</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dcar/validate.html#validate_unixfds_field"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dcar.validate.validate_unixfds_field" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+    <div class="clearer"></div>
+  </div>
+    <div class="footer">
+      &copy;2019, Andreas Suhre.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.8.2</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.11</a>
+      
+    </div>
+
+    
+
+    
+  </body>
+</html>

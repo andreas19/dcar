@@ -1,0 +1,474 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>dcar.router &#8212; D-Car 0.0.4 documentation</title>
+    <link rel="stylesheet" href="../../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <link rel="shortcut icon" href="../../_static/favicon.ico"/>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+   
+  <link rel="stylesheet" href="../../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  <div class="document">
+    
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../../index.html">D-Car</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../overview.html">Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api.html">API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../license.html">License</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../index.html">Documentation overview</a><ul>
+  <li><a href="../index.html">Module code</a><ul>
+  <li><a href="../dcar.html">dcar</a><ul>
+  </ul></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <h1>Source code for dcar.router</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;Message routing.&quot;&quot;&quot;</span>
+
+<span class="kn">import</span> <span class="nn">inspect</span>
+<span class="kn">import</span> <span class="nn">logging</span>
+<span class="kn">from</span> <span class="nn">contextlib</span> <span class="k">import</span> <span class="n">suppress</span>
+<span class="kn">from</span> <span class="nn">dataclasses</span> <span class="k">import</span> <span class="n">dataclass</span><span class="p">,</span> <span class="n">field</span><span class="p">,</span> <span class="n">astuple</span>
+<span class="kn">from</span> <span class="nn">functools</span> <span class="k">import</span> <span class="n">partial</span>
+<span class="kn">from</span> <span class="nn">queue</span> <span class="k">import</span> <span class="n">SimpleQueue</span>
+<span class="kn">from</span> <span class="nn">threading</span> <span class="k">import</span> <span class="n">Condition</span><span class="p">,</span> <span class="n">Lock</span>
+
+<span class="kn">from</span> <span class="nn">.</span> <span class="k">import</span> <span class="n">validate</span>
+<span class="kn">from</span> <span class="nn">.const</span> <span class="k">import</span> <span class="n">MAX_MATCH_RULE_LEN</span><span class="p">,</span> <span class="n">MAX_MATCH_RULE_ARG_NUM</span>
+<span class="kn">from</span> <span class="nn">.errors</span> <span class="k">import</span> <span class="p">(</span><span class="n">Error</span><span class="p">,</span> <span class="n">TransportError</span><span class="p">,</span> <span class="n">RegisterError</span><span class="p">,</span>
+                     <span class="n">TooLongError</span><span class="p">,</span> <span class="n">DBusError</span><span class="p">)</span>
+<span class="kn">from</span> <span class="nn">.message</span> <span class="k">import</span> <span class="n">HeaderField</span><span class="p">,</span> <span class="n">MessageType</span>
+
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;Router&#39;</span><span class="p">,</span> <span class="s1">&#39;MatchRule&#39;</span><span class="p">]</span>
+
+<span class="n">_logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
+
+<span class="n">MATCH_RULE_VALIDATORS</span> <span class="o">=</span> <span class="p">(</span>
+    <span class="n">validate</span><span class="o">.</span><span class="n">validate_object_path</span><span class="p">,</span>
+    <span class="n">validate</span><span class="o">.</span><span class="n">validate_interface_name</span><span class="p">,</span>
+    <span class="n">validate</span><span class="o">.</span><span class="n">validate_member_name</span><span class="p">,</span>
+    <span class="n">validate</span><span class="o">.</span><span class="n">validate_bus_name</span><span class="p">,</span>
+    <span class="n">validate</span><span class="o">.</span><span class="n">validate_object_path</span><span class="p">,</span>
+    <span class="n">partial</span><span class="p">(</span><span class="n">validate</span><span class="o">.</span><span class="n">validate_bus_name</span><span class="p">,</span> <span class="n">unique</span><span class="o">=</span><span class="kc">True</span><span class="p">),</span>
+    <span class="n">partial</span><span class="p">(</span><span class="n">validate</span><span class="o">.</span><span class="n">validate_bus_name</span><span class="p">,</span> <span class="n">strict</span><span class="o">=</span><span class="kc">False</span><span class="p">),</span>
+<span class="p">)</span>
+
+
+<div class="viewcode-block" id="Router"><a class="viewcode-back" href="../../modules.html#dcar.Router">[docs]</a><span class="k">class</span> <span class="nc">Router</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;Class for routing in- and outgoing messages.&quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">bus</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_cv</span> <span class="o">=</span> <span class="n">Condition</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_replies</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">signals</span> <span class="o">=</span> <span class="n">Signals</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">methods</span> <span class="o">=</span> <span class="n">Methods</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">out_queue</span> <span class="o">=</span> <span class="n">SimpleQueue</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_bus</span> <span class="o">=</span> <span class="n">bus</span>
+
+    <span class="k">def</span> <span class="nf">_check_replies</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">serial</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_bus</span><span class="o">.</span><span class="n">connected</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_replies</span><span class="p">[</span><span class="n">serial</span><span class="p">]</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_bus</span><span class="o">.</span><span class="n">error</span><span class="p">:</span>
+                <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_bus</span><span class="o">.</span><span class="n">error</span>
+            <span class="k">return</span> <span class="n">TransportError</span><span class="p">(</span><span class="s1">&#39;disconnected&#39;</span><span class="p">)</span>
+
+<div class="viewcode-block" id="Router.outgoing"><a class="viewcode-back" href="../../modules.html#dcar.Router.outgoing">[docs]</a>    <span class="k">def</span> <span class="nf">outgoing</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">msg</span><span class="p">,</span> <span class="n">timeout</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Handle outgoing messages.</span>
+
+<span class="sd">        :param ~dcar.message.Message msg: the message</span>
+<span class="sd">        :param float timeout: timeout in seconds</span>
+<span class="sd">        :returns: return values of a message call (if a reply is expected)</span>
+<span class="sd">                  or ``None``</span>
+<span class="sd">        :rtype: tuple or None</span>
+<span class="sd">        :raises ~dcar.TransportError: if the message could not be sent</span>
+<span class="sd">        :raises ~dcar.MessageError: if the message could not be marshalled</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">msg_bytes</span><span class="p">,</span> <span class="n">unix_fds</span> <span class="o">=</span> <span class="n">msg</span><span class="o">.</span><span class="n">to_bytes</span><span class="p">()</span>
+        <span class="n">_logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">-&gt; </span><span class="si">%s</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">msg</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">unix_fds</span> <span class="ow">and</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_bus</span><span class="o">.</span><span class="n">unix_fds_enabled</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">TransportError</span><span class="p">(</span><span class="s1">&#39;unix fds passing not supported&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">out_queue</span><span class="o">.</span><span class="n">put</span><span class="p">((</span><span class="n">msg_bytes</span><span class="p">,</span> <span class="n">unix_fds</span><span class="p">))</span>
+        <span class="k">if</span> <span class="n">msg</span><span class="o">.</span><span class="n">reply_expected</span><span class="p">:</span>
+            <span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cv</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_replies</span><span class="p">[</span><span class="n">msg</span><span class="o">.</span><span class="n">serial</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+                <span class="n">result</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cv</span><span class="o">.</span><span class="n">wait_for</span><span class="p">(</span><span class="n">partial</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_check_replies</span><span class="p">,</span>
+                                                   <span class="n">msg</span><span class="o">.</span><span class="n">serial</span><span class="p">),</span>
+                                           <span class="n">timeout</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">result</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">result</span><span class="p">,</span> <span class="n">Error</span><span class="p">):</span>
+                        <span class="k">raise</span> <span class="n">result</span>
+                    <span class="n">reply</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_replies</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="n">msg</span><span class="o">.</span><span class="n">serial</span><span class="p">)</span>
+                    <span class="n">reply</span><span class="o">.</span><span class="n">raise_on_error</span><span class="p">()</span>
+                    <span class="k">return</span> <span class="n">reply</span><span class="o">.</span><span class="n">body</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="k">del</span> <span class="bp">self</span><span class="o">.</span><span class="n">_replies</span><span class="p">[</span><span class="n">msg</span><span class="o">.</span><span class="n">serial</span><span class="p">]</span>
+                    <span class="k">raise</span> <span class="n">TransportError</span><span class="p">(</span><span class="s1">&#39;Timeout: </span><span class="si">%f</span><span class="s1"> secs.&#39;</span> <span class="o">%</span> <span class="n">timeout</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">None</span></div>
+
+<div class="viewcode-block" id="Router.incoming"><a class="viewcode-back" href="../../modules.html#dcar.Router.incoming">[docs]</a>    <span class="k">def</span> <span class="nf">incoming</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">msg</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Handle incoming messages.</span>
+
+<span class="sd">        :param ~dcar.message.Message msg: the message</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">_logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&lt;- </span><span class="si">%s</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">msg</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">msg</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>  <span class="c1"># transport disconnected</span>
+            <span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cv</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">out_queue</span><span class="o">.</span><span class="n">put</span><span class="p">((</span><span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">))</span>  <span class="c1"># unblock send-loop</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_cv</span><span class="o">.</span><span class="n">notify_all</span><span class="p">()</span>
+            <span class="k">return</span>
+        <span class="k">if</span> <span class="n">msg</span><span class="o">.</span><span class="n">message_type</span> <span class="ow">is</span> <span class="n">MessageType</span><span class="o">.</span><span class="n">INVALID</span><span class="p">:</span>
+            <span class="k">return</span>  <span class="c1"># ignore unknown message types</span>
+        <span class="k">if</span> <span class="n">msg</span><span class="o">.</span><span class="n">message_type</span> <span class="ow">in</span> <span class="p">(</span><span class="n">MessageType</span><span class="o">.</span><span class="n">METHOD_RETURN</span><span class="p">,</span> <span class="n">MessageType</span><span class="o">.</span><span class="n">ERROR</span><span class="p">):</span>
+            <span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cv</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">msg</span><span class="o">.</span><span class="n">reply_serial</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_replies</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">_replies</span><span class="p">[</span><span class="n">msg</span><span class="o">.</span><span class="n">reply_serial</span><span class="p">]</span> <span class="o">=</span> <span class="n">msg</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">_cv</span><span class="o">.</span><span class="n">notify_all</span><span class="p">()</span>
+        <span class="k">elif</span> <span class="n">msg</span><span class="o">.</span><span class="n">message_type</span> <span class="ow">is</span> <span class="n">MessageType</span><span class="o">.</span><span class="n">METHOD_CALL</span><span class="p">:</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">method</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_find_method</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+                <span class="n">method</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_bus</span><span class="p">,</span> <span class="n">msg</span><span class="o">.</span><span class="n">info</span><span class="p">)</span>
+            <span class="k">except</span> <span class="n">DBusError</span> <span class="k">as</span> <span class="n">ex</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_send_error</span><span class="p">(</span><span class="n">ex</span><span class="p">,</span> <span class="n">msg</span><span class="o">.</span><span class="n">serial</span><span class="p">,</span> <span class="n">msg</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">HeaderField</span><span class="o">.</span><span class="n">SENDER</span><span class="p">])</span>
+        <span class="k">elif</span> <span class="n">msg</span><span class="o">.</span><span class="n">message_type</span> <span class="ow">is</span> <span class="n">MessageType</span><span class="o">.</span><span class="n">SIGNAL</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">handler</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">signals</span><span class="o">.</span><span class="n">matches</span><span class="p">(</span><span class="n">msg</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_bus</span><span class="o">.</span><span class="n">unique_name</span><span class="p">):</span>
+                <span class="n">handler</span><span class="p">(</span><span class="n">msg</span><span class="o">.</span><span class="n">info</span><span class="p">)</span></div>
+
+    <span class="k">def</span> <span class="nf">_find_method</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">msg</span><span class="p">):</span>
+        <span class="n">method</span><span class="p">,</span> <span class="n">signature</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">methods</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">method</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">DBusError</span><span class="p">(</span><span class="s1">&#39;org.freedesktop.DBus.Error.UnknownMethod&#39;</span><span class="p">,</span>
+                            <span class="s1">&#39;Method </span><span class="si">%r</span><span class="s1"> not found in interface </span><span class="si">%r</span><span class="s1"> &#39;</span>
+                            <span class="s1">&#39;on object path </span><span class="si">%r</span><span class="s1">&#39;</span> <span class="o">%</span>
+                            <span class="p">(</span><span class="n">msg</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">HeaderField</span><span class="o">.</span><span class="n">MEMBER</span><span class="p">],</span>
+                             <span class="n">msg</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">HeaderField</span><span class="o">.</span><span class="n">INTERFACE</span><span class="p">],</span>
+                             <span class="n">msg</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">HeaderField</span><span class="o">.</span><span class="n">PATH</span><span class="p">]))</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="ow">not</span> <span class="n">signature</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">msg</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">HeaderField</span><span class="o">.</span><span class="n">SIGNATURE</span><span class="p">]</span> <span class="ow">or</span>
+                <span class="n">signature</span> <span class="o">==</span> <span class="n">msg</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">HeaderField</span><span class="o">.</span><span class="n">SIGNATURE</span><span class="p">]):</span>
+            <span class="k">raise</span> <span class="n">DBusError</span><span class="p">(</span><span class="s1">&#39;org.freedesktop.DBus.Error.InvalidArgs&#39;</span><span class="p">,</span>
+                            <span class="s1">&#39;the message signature &quot;</span><span class="si">%s</span><span class="s1">&quot; is not the &#39;</span>
+                            <span class="s1">&#39;expected &quot;</span><span class="si">%s</span><span class="s1">&quot;&#39;</span> <span class="o">%</span>
+                            <span class="p">(</span><span class="n">msg</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">HeaderField</span><span class="o">.</span><span class="n">SIGNATURE</span><span class="p">]</span> <span class="ow">or</span> <span class="s1">&#39;&#39;</span><span class="p">,</span>
+                             <span class="n">signature</span> <span class="ow">or</span> <span class="s1">&#39;&#39;</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">method</span>
+
+    <span class="k">def</span> <span class="nf">_send_error</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ex</span><span class="p">,</span> <span class="n">serial</span><span class="p">,</span> <span class="n">sender</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_bus</span><span class="o">.</span><span class="n">send_error</span><span class="p">(</span><span class="n">ex</span><span class="o">.</span><span class="n">args</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">serial</span><span class="p">,</span> <span class="n">sender</span><span class="p">,</span> <span class="n">signature</span><span class="o">=</span><span class="s1">&#39;s&#39;</span><span class="p">,</span>
+                             <span class="n">args</span><span class="o">=</span><span class="n">ex</span><span class="o">.</span><span class="n">args</span><span class="p">[</span><span class="mi">1</span><span class="p">:])</span></div>
+
+
+<div class="viewcode-block" id="MatchRule"><a class="viewcode-back" href="../../modules.html#dcar.MatchRule">[docs]</a><span class="nd">@dataclass</span><span class="p">(</span><span class="n">frozen</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="k">class</span> <span class="nc">MatchRule</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;Match rule for signals.</span>
+
+<span class="sd">    Except for ``unicast`` all parameters are explained in the</span>
+<span class="sd">    `D-Bus specification</span>
+<span class="sd">    &lt;https://dbus.freedesktop.org/doc/dbus-specification.html</span>
+<span class="sd">    #message-bus-routing-match-rules&gt;`_.</span>
+
+<span class="sd">    If ``unicast=True`` this rule will only apply to unicast signals</span>
+<span class="sd">    and no *AddMatch* message will be sent to the message bus from</span>
+<span class="sd">    the :meth:`~dcar.Bus.register_signal` method.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">object_path</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">interface</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">signal_name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">sender</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">path_namespace</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">destination</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">arg0namespace</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">unicast</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="n">args</span><span class="p">:</span> <span class="nb">dict</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">init</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">default_factory</span><span class="o">=</span><span class="nb">dict</span><span class="p">)</span>
+    <span class="n">argpaths</span><span class="p">:</span> <span class="nb">dict</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">init</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">default_factory</span><span class="o">=</span><span class="nb">dict</span><span class="p">)</span>
+
+<div class="viewcode-block" id="MatchRule.add_arg"><a class="viewcode-back" href="../../modules.html#dcar.MatchRule.add_arg">[docs]</a>    <span class="k">def</span> <span class="nf">add_arg</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">idx</span><span class="p">,</span> <span class="n">arg</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Add an arg match at idx.&quot;&quot;&quot;</span>
+        <span class="n">_check_index_and_type</span><span class="p">(</span><span class="n">idx</span><span class="p">,</span> <span class="n">arg</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">args</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span> <span class="o">=</span> <span class="n">arg</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_check_length</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="MatchRule.add_argpath"><a class="viewcode-back" href="../../modules.html#dcar.MatchRule.add_argpath">[docs]</a>    <span class="k">def</span> <span class="nf">add_argpath</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">idx</span><span class="p">,</span> <span class="n">argpath</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Add an argpath match at idx.&quot;&quot;&quot;</span>
+        <span class="n">_check_index_and_type</span><span class="p">(</span><span class="n">idx</span><span class="p">,</span> <span class="n">argpath</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">argpaths</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span> <span class="o">=</span> <span class="n">argpath</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_check_length</span><span class="p">()</span></div>
+
+    <span class="k">def</span> <span class="nf">__post_init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">value</span><span class="p">,</span> <span class="n">validator</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">astuple</span><span class="p">(</span><span class="bp">self</span><span class="p">),</span> <span class="n">MATCH_RULE_VALIDATORS</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">value</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">validator</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_check_length</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">_check_length</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="p">))</span> <span class="o">&gt;</span> <span class="n">MAX_MATCH_RULE_LEN</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">TooLongError</span><span class="p">(</span><span class="s1">&#39;match rule too long: </span><span class="si">%d</span><span class="s1"> bytes&#39;</span> <span class="o">%</span> <span class="nb">len</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="p">)))</span>
+
+    <span class="k">def</span> <span class="nf">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">lst</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;</span><span class="si">%s</span><span class="s2">=&#39;</span><span class="si">%s</span><span class="s2">&#39;&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span> <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span>
+            <span class="p">[</span><span class="s1">&#39;type&#39;</span><span class="p">,</span> <span class="s1">&#39;sender&#39;</span><span class="p">,</span> <span class="s1">&#39;interface&#39;</span><span class="p">,</span> <span class="s1">&#39;member&#39;</span><span class="p">,</span> <span class="s1">&#39;path&#39;</span><span class="p">,</span> <span class="s1">&#39;path_namespace&#39;</span><span class="p">,</span>
+             <span class="s1">&#39;destination&#39;</span><span class="p">,</span> <span class="s1">&#39;arg0namespace&#39;</span><span class="p">],</span>
+            <span class="p">[</span><span class="s1">&#39;signal&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">sender</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">interface</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">signal_name</span><span class="p">,</span>
+             <span class="bp">self</span><span class="o">.</span><span class="n">object_path</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">path_namespace</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">destination</span><span class="p">,</span>
+             <span class="bp">self</span><span class="o">.</span><span class="n">arg0namespace</span><span class="p">])</span> <span class="k">if</span> <span class="n">value</span><span class="p">]</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">args</span><span class="p">:</span>
+            <span class="n">lst</span><span class="o">.</span><span class="n">extend</span><span class="p">([</span><span class="s2">&quot;arg</span><span class="si">%d</span><span class="s2">=&#39;</span><span class="si">%s</span><span class="s2">&#39;&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">v</span><span class="p">)</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">args</span><span class="o">.</span><span class="n">items</span><span class="p">()])</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">argpaths</span><span class="p">:</span>
+            <span class="n">lst</span><span class="o">.</span><span class="n">extend</span><span class="p">([</span><span class="s2">&quot;arg</span><span class="si">%d</span><span class="s2">path=&#39;</span><span class="si">%s</span><span class="s2">&#39;&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">v</span><span class="p">)</span>
+                        <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">argpaths</span><span class="o">.</span><span class="n">items</span><span class="p">()])</span>
+        <span class="k">return</span> <span class="s1">&#39;,&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">lst</span><span class="p">)</span></div>
+
+
+<span class="k">def</span> <span class="nf">_check_index_and_type</span><span class="p">(</span><span class="n">idx</span><span class="p">,</span> <span class="n">arg</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">idx</span> <span class="o">&lt;</span> <span class="mi">0</span> <span class="ow">or</span> <span class="n">idx</span> <span class="o">&gt;</span> <span class="n">MAX_MATCH_RULE_ARG_NUM</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">IndexError</span><span class="p">(</span><span class="s1">&#39;index </span><span class="si">%d</span><span class="s1"> out of range 0..</span><span class="si">%d</span><span class="s1">&#39;</span> <span class="o">%</span>
+                         <span class="p">(</span><span class="n">idx</span><span class="p">,</span> <span class="n">MAX_MATCH_RULE_ARG_NUM</span><span class="p">))</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">arg</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s1">&#39;arg must be type str, not </span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="n">arg</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="Registry"><a class="viewcode-back" href="../../modules.html#dcar.Registry">[docs]</a><span class="k">class</span> <span class="nc">Registry</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;Base class for registries.&quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_counter</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_lock</span> <span class="o">=</span> <span class="n">Lock</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_data</span> <span class="o">=</span> <span class="p">{}</span>
+
+<div class="viewcode-block" id="Registry.add"><a class="viewcode-back" href="../../modules.html#dcar.Registry.add">[docs]</a>    <span class="k">def</span> <span class="nf">add</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">item</span><span class="p">,</span> <span class="n">handler</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Add an item.</span>
+
+<span class="sd">        :param item: depends on type of registry subclass</span>
+<span class="sd">        :param callable handler: handler function</span>
+<span class="sd">        :param args: additional arguments</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_check_handler</span><span class="p">(</span><span class="n">handler</span><span class="p">)</span>
+        <span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="n">_lock</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_add</span><span class="p">(</span><span class="n">item</span><span class="p">,</span> <span class="n">handler</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">)</span></div>
+
+    <span class="k">def</span> <span class="nf">_add</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">item</span><span class="p">,</span> <span class="n">handler</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span>
+
+<div class="viewcode-block" id="Registry.remove"><a class="viewcode-back" href="../../modules.html#dcar.Registry.remove">[docs]</a>    <span class="k">def</span> <span class="nf">remove</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">item_id</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Remove an item with ID ``item_id``.&quot;&quot;&quot;</span>
+        <span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="n">_lock</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_remove</span><span class="p">(</span><span class="n">item_id</span><span class="p">)</span></div>
+
+    <span class="k">def</span> <span class="nf">_remove</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">item_id</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span>
+
+    <span class="k">def</span> <span class="nf">_check_handler</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">handler</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">callable</span><span class="p">(</span><span class="n">handler</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s1">&#39;handler must be callable&#39;</span><span class="p">)</span>
+        <span class="n">sig</span> <span class="o">=</span> <span class="n">inspect</span><span class="o">.</span><span class="n">signature</span><span class="p">(</span><span class="n">handler</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">sig</span><span class="o">.</span><span class="n">parameters</span><span class="p">)</span> <span class="o">!=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="n">params</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s1">&#39;handler must have </span><span class="si">%d</span><span class="s1"> parameter(s): </span><span class="si">%r</span><span class="s1">&#39;</span> <span class="o">%</span>
+                            <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="n">params</span><span class="p">),</span>
+                             <span class="s1">&#39;, &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="n">params</span><span class="p">)))</span></div>
+
+
+<div class="viewcode-block" id="Signals"><a class="viewcode-back" href="../../modules.html#dcar.Signals">[docs]</a><span class="k">class</span> <span class="nc">Signals</span><span class="p">(</span><span class="n">Registry</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Signals registry.</span>
+
+<span class="sd">    An ``item`` for this type&#39;s :meth:`~Registry.add` method is a</span>
+<span class="sd">    :class:`MatchRule` (see also: :meth:`~dcar.Bus.register_signal`).</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">params</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;msginfo&#39;</span><span class="p">,)</span>  <span class="c1">#: handler parameters</span>
+
+    <span class="k">def</span> <span class="nf">_add</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">rule</span><span class="p">,</span> <span class="n">handler</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">rule</span><span class="p">,</span> <span class="n">MatchRule</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s1">&#39;first argument must be a MatchRule&#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">rule</span><span class="p">,</span> <span class="n">handler</span><span class="p">)</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_data</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
+            <span class="k">raise</span> <span class="n">RegisterError</span><span class="p">(</span><span class="s1">&#39;rule </span><span class="si">%r</span><span class="s1"> exists with same handler </span><span class="si">%r</span><span class="s1">&#39;</span> <span class="o">%</span>
+                                <span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">rule</span><span class="p">),</span> <span class="n">handler</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_counter</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_data</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_counter</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">rule</span><span class="p">,</span> <span class="n">handler</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_counter</span>
+
+    <span class="k">def</span> <span class="nf">_remove</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">rule_id</span><span class="p">):</span>
+        <span class="k">with</span> <span class="n">suppress</span><span class="p">(</span><span class="ne">KeyError</span><span class="p">):</span>
+            <span class="n">rule</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_data</span><span class="p">[</span><span class="n">rule_id</span><span class="p">]</span>
+            <span class="k">del</span> <span class="bp">self</span><span class="o">.</span><span class="n">_data</span><span class="p">[</span><span class="n">rule_id</span><span class="p">]</span>
+            <span class="k">return</span> <span class="n">rule</span>
+
+<div class="viewcode-block" id="Signals.matches"><a class="viewcode-back" href="../../modules.html#dcar.Signals.matches">[docs]</a>    <span class="k">def</span> <span class="nf">matches</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">msg</span><span class="p">,</span> <span class="n">unique_name</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Match a SIGNAL message to a rule.</span>
+
+<span class="sd">        This function is a generator which yields the handler function</span>
+<span class="sd">        for each matching rule.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">fields</span> <span class="o">=</span> <span class="n">msg</span><span class="o">.</span><span class="n">fields</span>
+        <span class="n">object_path</span> <span class="o">=</span> <span class="n">fields</span><span class="p">[</span><span class="n">HeaderField</span><span class="o">.</span><span class="n">PATH</span><span class="p">]</span>
+        <span class="n">interface</span> <span class="o">=</span> <span class="n">fields</span><span class="p">[</span><span class="n">HeaderField</span><span class="o">.</span><span class="n">INTERFACE</span><span class="p">]</span>
+        <span class="n">signal_name</span> <span class="o">=</span> <span class="n">fields</span><span class="p">[</span><span class="n">HeaderField</span><span class="o">.</span><span class="n">MEMBER</span><span class="p">]</span>
+        <span class="n">sender</span> <span class="o">=</span> <span class="n">fields</span><span class="p">[</span><span class="n">HeaderField</span><span class="o">.</span><span class="n">SENDER</span><span class="p">]</span>
+        <span class="n">destination</span> <span class="o">=</span> <span class="n">fields</span><span class="p">[</span><span class="n">HeaderField</span><span class="o">.</span><span class="n">DESTINATION</span><span class="p">]</span>
+        <span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="n">_lock</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">rule</span><span class="p">,</span> <span class="n">handler</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_data</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
+                <span class="k">if</span> <span class="n">rule</span><span class="o">.</span><span class="n">unicast</span><span class="p">:</span>
+                    <span class="n">rule_destination</span> <span class="o">=</span> <span class="n">unique_name</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">rule_destination</span> <span class="o">=</span> <span class="n">rule</span><span class="o">.</span><span class="n">destination</span>
+                <span class="k">if</span> <span class="nb">all</span><span class="p">(((</span><span class="n">rule</span><span class="o">.</span><span class="n">object_path</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span>
+                         <span class="n">rule</span><span class="o">.</span><span class="n">object_path</span> <span class="o">==</span> <span class="n">object_path</span><span class="p">),</span>
+                        <span class="n">rule</span><span class="o">.</span><span class="n">interface</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">rule</span><span class="o">.</span><span class="n">interface</span> <span class="o">==</span> <span class="n">interface</span><span class="p">,</span>
+                        <span class="p">(</span><span class="n">rule</span><span class="o">.</span><span class="n">signal_name</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span>
+                         <span class="n">rule</span><span class="o">.</span><span class="n">signal_name</span> <span class="o">==</span> <span class="n">signal_name</span><span class="p">),</span>
+                        <span class="n">rule</span><span class="o">.</span><span class="n">sender</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">rule</span><span class="o">.</span><span class="n">sender</span> <span class="o">==</span> <span class="n">sender</span><span class="p">,</span>
+                        <span class="p">(</span><span class="n">rule_destination</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span>
+                         <span class="n">rule_destination</span> <span class="o">==</span> <span class="n">destination</span><span class="p">),</span>
+                        <span class="p">(</span><span class="n">rule</span><span class="o">.</span><span class="n">path_namespace</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span>
+                         <span class="n">rule</span><span class="o">.</span><span class="n">path_namespace</span> <span class="o">==</span> <span class="n">object_path</span> <span class="ow">or</span>
+                         <span class="n">object_path</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="n">rule</span><span class="o">.</span><span class="n">path_namespace</span> <span class="o">+</span> <span class="s1">&#39;/&#39;</span><span class="p">)),</span>
+                        <span class="p">(</span><span class="n">rule</span><span class="o">.</span><span class="n">arg0namespace</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span>
+                         <span class="n">msg</span><span class="o">.</span><span class="n">body</span> <span class="ow">and</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">msg</span><span class="o">.</span><span class="n">body</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="nb">str</span><span class="p">)</span> <span class="ow">and</span>
+                         <span class="p">(</span><span class="n">rule</span><span class="o">.</span><span class="n">arg0namespace</span> <span class="o">==</span> <span class="n">msg</span><span class="o">.</span><span class="n">body</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="ow">or</span>
+                          <span class="n">msg</span><span class="o">.</span><span class="n">body</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="n">rule</span><span class="o">.</span><span class="n">arg0namespace</span> <span class="o">+</span> <span class="s1">&#39;.&#39;</span><span class="p">))),</span>
+                        <span class="ow">not</span> <span class="n">rule</span><span class="o">.</span><span class="n">args</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">_match_args</span><span class="p">(</span><span class="n">rule</span><span class="o">.</span><span class="n">args</span><span class="p">,</span> <span class="n">msg</span><span class="o">.</span><span class="n">body</span><span class="p">),</span>
+                        <span class="p">(</span><span class="ow">not</span> <span class="n">rule</span><span class="o">.</span><span class="n">argpaths</span> <span class="ow">or</span>
+                         <span class="bp">self</span><span class="o">.</span><span class="n">_match_argpaths</span><span class="p">(</span><span class="n">rule</span><span class="o">.</span><span class="n">argpaths</span><span class="p">,</span> <span class="n">msg</span><span class="o">.</span><span class="n">body</span><span class="p">)))):</span>
+                    <span class="k">yield</span> <span class="n">handler</span></div>
+
+    <span class="k">def</span> <span class="nf">_match_args</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">args</span><span class="p">,</span> <span class="n">body</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">body</span> <span class="ow">or</span> <span class="nb">len</span><span class="p">(</span><span class="n">body</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span> <span class="o">&lt;</span> <span class="nb">max</span><span class="p">(</span><span class="n">args</span><span class="p">):</span>
+            <span class="k">return</span> <span class="kc">False</span>
+        <span class="k">for</span> <span class="n">idx</span> <span class="ow">in</span> <span class="n">args</span><span class="p">:</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">body</span><span class="p">[</span><span class="n">idx</span><span class="p">],</span> <span class="nb">str</span><span class="p">)</span> <span class="ow">or</span> <span class="n">args</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span> <span class="o">!=</span> <span class="n">body</span><span class="p">[</span><span class="n">idx</span><span class="p">]:</span>
+                <span class="k">return</span> <span class="kc">False</span>
+        <span class="k">return</span> <span class="kc">True</span>
+
+    <span class="k">def</span> <span class="nf">_match_argpaths</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">argpaths</span><span class="p">,</span> <span class="n">body</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">body</span> <span class="ow">or</span> <span class="nb">len</span><span class="p">(</span><span class="n">body</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span> <span class="o">&lt;</span> <span class="nb">max</span><span class="p">(</span><span class="n">argpaths</span><span class="p">):</span>
+            <span class="k">return</span> <span class="kc">False</span>
+        <span class="k">for</span> <span class="n">idx</span> <span class="ow">in</span> <span class="n">argpaths</span><span class="p">:</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">body</span><span class="p">[</span><span class="n">idx</span><span class="p">],</span> <span class="nb">str</span><span class="p">):</span>
+                <span class="k">return</span> <span class="kc">False</span>
+            <span class="k">if</span> <span class="n">argpaths</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span> <span class="o">==</span> <span class="n">body</span><span class="p">[</span><span class="n">idx</span><span class="p">]:</span>
+                <span class="k">continue</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">argpaths</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s1">&#39;/&#39;</span><span class="p">)</span> <span class="ow">and</span>
+               <span class="n">body</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="n">argpaths</span><span class="p">[</span><span class="n">idx</span><span class="p">])</span> <span class="ow">or</span>
+               <span class="n">body</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s1">&#39;/&#39;</span><span class="p">)</span> <span class="ow">and</span>
+               <span class="n">argpaths</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="n">body</span><span class="p">[</span><span class="n">idx</span><span class="p">])):</span>
+                    <span class="k">continue</span>
+            <span class="k">return</span> <span class="kc">False</span>
+        <span class="k">return</span> <span class="kc">True</span></div>
+
+
+<div class="viewcode-block" id="Methods"><a class="viewcode-back" href="../../modules.html#dcar.Methods">[docs]</a><span class="k">class</span> <span class="nc">Methods</span><span class="p">(</span><span class="n">Registry</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Methods registry.</span>
+
+<span class="sd">    An ``item`` for this type&#39;s :meth:`~Registry.add` method is a</span>
+<span class="sd">    tuple ``(object_path, interface, method_name)``</span>
+<span class="sd">    (see also: :meth:`~dcar.Bus.register_method`).</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">params</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;bus&#39;</span><span class="p">,</span> <span class="s1">&#39;msginfo&#39;</span><span class="p">)</span>  <span class="c1">#: handler parameters</span>
+
+    <span class="k">def</span> <span class="nf">_add</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tup</span><span class="p">,</span> <span class="n">handler</span><span class="p">,</span> <span class="n">signature</span><span class="p">):</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">tup</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">3</span> <span class="ow">or</span> <span class="ow">not</span> <span class="p">(</span><span class="nb">all</span><span class="p">(</span><span class="n">tup</span><span class="p">)</span> <span class="ow">and</span> <span class="n">handler</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="n">RegisterError</span><span class="p">(</span><span class="s1">&#39;invalid arguments: </span><span class="si">%r</span><span class="s1">, </span><span class="si">%r</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">tup</span><span class="p">,</span> <span class="n">handler</span><span class="p">))</span>
+        <span class="k">if</span> <span class="n">tup</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_data</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">RegisterError</span><span class="p">(</span><span class="s1">&#39;a handler for method </span><span class="si">%r</span><span class="s1"> in interface </span><span class="si">%r</span><span class="s1"> &#39;</span>
+                                <span class="s1">&#39;on object </span><span class="si">%r</span><span class="s1"> already exists&#39;</span> <span class="o">%</span> <span class="n">tup</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_counter</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_data</span><span class="p">[</span><span class="n">tup</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_counter</span><span class="p">,</span> <span class="n">handler</span><span class="p">,</span> <span class="n">signature</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_counter</span>
+
+    <span class="k">def</span> <span class="nf">_remove</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">meth_id</span><span class="p">):</span>
+        <span class="k">with</span> <span class="n">suppress</span><span class="p">(</span><span class="ne">KeyError</span><span class="p">,</span> <span class="ne">IndexError</span><span class="p">):</span>
+            <span class="n">tup</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">filter</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_data</span><span class="p">[</span><span class="n">x</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="n">meth_id</span><span class="p">,</span>
+                              <span class="bp">self</span><span class="o">.</span><span class="n">_data</span><span class="p">))[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="k">del</span> <span class="bp">self</span><span class="o">.</span><span class="n">_data</span><span class="p">[</span><span class="n">tup</span><span class="p">]</span>
+
+<div class="viewcode-block" id="Methods.find"><a class="viewcode-back" href="../../modules.html#dcar.Methods.find">[docs]</a>    <span class="k">def</span> <span class="nf">find</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">msg</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Return handler function and signature for a METHOD_CALL message.&quot;&quot;&quot;</span>
+        <span class="n">fields</span> <span class="o">=</span> <span class="n">msg</span><span class="o">.</span><span class="n">fields</span>
+        <span class="n">object_path</span> <span class="o">=</span> <span class="n">fields</span><span class="p">[</span><span class="n">HeaderField</span><span class="o">.</span><span class="n">PATH</span><span class="p">]</span>
+        <span class="n">interface</span> <span class="o">=</span> <span class="n">fields</span><span class="p">[</span><span class="n">HeaderField</span><span class="o">.</span><span class="n">INTERFACE</span><span class="p">]</span>
+        <span class="n">method_name</span> <span class="o">=</span> <span class="n">fields</span><span class="p">[</span><span class="n">HeaderField</span><span class="o">.</span><span class="n">MEMBER</span><span class="p">]</span>
+        <span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="n">_lock</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">interface</span><span class="p">:</span>
+                <span class="k">if</span> <span class="p">(</span><span class="n">object_path</span><span class="p">,</span> <span class="n">interface</span><span class="p">,</span> <span class="n">method_name</span><span class="p">)</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_data</span><span class="p">:</span>
+                    <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_data</span><span class="p">[(</span><span class="n">object_path</span><span class="p">,</span> <span class="n">interface</span><span class="p">,</span> <span class="n">method_name</span><span class="p">)][</span><span class="mi">1</span><span class="p">:]</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_data</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="n">t</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="n">object_path</span> <span class="ow">and</span> <span class="n">t</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">==</span> <span class="n">method_name</span><span class="p">:</span>
+                        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_data</span><span class="p">[</span><span class="n">t</span><span class="p">][</span><span class="mi">1</span><span class="p">:]</span>
+        <span class="k">return</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span></div></div>
+</pre></div>
+
+          </div>
+          
+        </div>
+      </div>
+    <div class="clearer"></div>
+  </div>
+    <div class="footer">
+      &copy;2019, Andreas Suhre.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.8.2</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.11</a>
+      
+    </div>
+
+    
+
+    
+  </body>
+</html>

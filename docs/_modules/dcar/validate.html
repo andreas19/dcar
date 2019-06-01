@@ -1,0 +1,271 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>dcar.validate &#8212; D-Car 0.0.4 documentation</title>
+    <link rel="stylesheet" href="../../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <link rel="shortcut icon" href="../../_static/favicon.ico"/>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+   
+  <link rel="stylesheet" href="../../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  <div class="document">
+    
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../../index.html">D-Car</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../overview.html">Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api.html">API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../license.html">License</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../index.html">Documentation overview</a><ul>
+  <li><a href="../index.html">Module code</a><ul>
+  <li><a href="../dcar.html">dcar</a><ul>
+  </ul></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <h1>Source code for dcar.validate</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;Validation functions.</span>
+
+<span class="sd">The ``is_valid_*`` functions return ``True`` if the argument is valid,</span>
+<span class="sd">otherwise ``False``.</span>
+
+<span class="sd">The ``validate_*`` functions raise a :class:`~dcar.ValidationError` if</span>
+<span class="sd">validation failed or else return the argument unchanged.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="c1"># flake8: noqa</span>
+
+<span class="kn">import</span> <span class="nn">re</span>
+<span class="kn">import</span> <span class="nn">string</span>
+
+<span class="kn">from</span> <span class="nn">.const</span> <span class="k">import</span> <span class="n">MAX_NAME_LEN</span><span class="p">,</span> <span class="n">LOCAL_PATH</span><span class="p">,</span> <span class="n">LOCAL_INTERFACE</span>
+<span class="kn">from</span> <span class="nn">.errors</span> <span class="k">import</span> <span class="n">ValidationError</span><span class="p">,</span> <span class="n">SignatureError</span>
+<span class="kn">from</span> <span class="nn">.signature</span> <span class="k">import</span> <span class="n">Signature</span>
+
+<span class="n">_INVALID_CHARS_RE</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="s1">&#39;[^a-zA-Z0-9_]&#39;</span><span class="p">)</span>
+<span class="n">_INVALID_CHARS_BUS_RE</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;[^a-zA-Z0-9_-]&#39;</span><span class="p">)</span>
+
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="s1">&#39;is_valid_bus_name&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;is_valid_error_name&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;is_valid_interface_name&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;is_valid_member_name&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;is_valid_object_path&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;is_valid_serial&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;is_valid_signature&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;is_valid_unixfds_field&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;validate_bus_name&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;validate_error_name&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;validate_interface_name&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;validate_member_name&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;validate_object_path&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;validate_serial&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;validate_signature&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;validate_unixfds_field&#39;</span><span class="p">,</span>
+<span class="p">]</span>
+
+
+<div class="viewcode-block" id="is_valid_object_path"><a class="viewcode-back" href="../../modules.html#dcar.validate.is_valid_object_path">[docs]</a><span class="k">def</span> <span class="nf">is_valid_object_path</span><span class="p">(</span><span class="n">s</span><span class="p">):</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="nb">str</span><span class="p">)</span> <span class="ow">or</span> <span class="ow">not</span> <span class="n">s</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s1">&#39;/&#39;</span><span class="p">):</span>
+        <span class="k">return</span> <span class="kc">False</span>
+    <span class="k">if</span> <span class="n">s</span> <span class="o">==</span> <span class="n">LOCAL_PATH</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">False</span>
+    <span class="k">if</span> <span class="n">s</span> <span class="o">==</span> <span class="s1">&#39;/&#39;</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">True</span>
+    <span class="k">if</span> <span class="n">s</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s1">&#39;/&#39;</span><span class="p">):</span>
+        <span class="k">return</span> <span class="kc">False</span>
+    <span class="k">for</span> <span class="n">elem</span> <span class="ow">in</span> <span class="n">s</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;/&#39;</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">elem</span> <span class="ow">or</span> <span class="n">_INVALID_CHARS_RE</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">elem</span><span class="p">):</span>
+            <span class="k">return</span> <span class="kc">False</span>
+    <span class="k">return</span> <span class="kc">True</span></div>
+
+
+<div class="viewcode-block" id="is_valid_signature"><a class="viewcode-back" href="../../modules.html#dcar.validate.is_valid_signature">[docs]</a><span class="k">def</span> <span class="nf">is_valid_signature</span><span class="p">(</span><span class="n">s</span><span class="p">):</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">Signature</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
+        <span class="k">return</span> <span class="kc">True</span>
+    <span class="k">except</span> <span class="n">SignatureError</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">False</span></div>
+
+
+<span class="k">def</span> <span class="nf">_is_valid_name</span><span class="p">(</span><span class="n">s</span><span class="p">):</span>
+    <span class="k">return</span> <span class="mi">0</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">s</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="n">MAX_NAME_LEN</span> <span class="ow">and</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="nb">str</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="is_valid_interface_name"><a class="viewcode-back" href="../../modules.html#dcar.validate.is_valid_interface_name">[docs]</a><span class="k">def</span> <span class="nf">is_valid_interface_name</span><span class="p">(</span><span class="n">s</span><span class="p">):</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">_is_valid_name</span><span class="p">(</span><span class="n">s</span><span class="p">):</span>
+        <span class="k">return</span> <span class="kc">False</span>
+    <span class="k">if</span> <span class="n">s</span> <span class="o">==</span> <span class="n">LOCAL_INTERFACE</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">False</span>
+    <span class="n">elems</span> <span class="o">=</span> <span class="n">s</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;.&#39;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">elems</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">2</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">False</span>
+    <span class="k">for</span> <span class="n">elem</span> <span class="ow">in</span> <span class="n">elems</span><span class="p">:</span>
+        <span class="k">if</span> <span class="p">(</span><span class="ow">not</span> <span class="n">elem</span> <span class="ow">or</span> <span class="n">elem</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="ow">in</span> <span class="n">string</span><span class="o">.</span><span class="n">digits</span> <span class="ow">or</span>
+                <span class="n">_INVALID_CHARS_RE</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">elem</span><span class="p">)):</span>
+            <span class="k">return</span> <span class="kc">False</span>
+    <span class="k">return</span> <span class="kc">True</span></div>
+
+
+<div class="viewcode-block" id="is_valid_bus_name"><a class="viewcode-back" href="../../modules.html#dcar.validate.is_valid_bus_name">[docs]</a><span class="k">def</span> <span class="nf">is_valid_bus_name</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">unique</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">strict</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">unique</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">s</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s1">&#39;:&#39;</span><span class="p">):</span>
+        <span class="k">return</span> <span class="kc">False</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">_is_valid_name</span><span class="p">(</span><span class="n">s</span><span class="p">):</span>
+        <span class="k">return</span> <span class="kc">False</span>
+    <span class="k">if</span> <span class="n">s</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s1">&#39;:&#39;</span><span class="p">):</span>
+        <span class="n">unique</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="n">s</span> <span class="o">=</span> <span class="n">s</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">unique</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="n">elems</span> <span class="o">=</span> <span class="n">s</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;.&#39;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">elems</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="ow">or</span> <span class="n">strict</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">elems</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">2</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">False</span>
+    <span class="k">for</span> <span class="n">elem</span> <span class="ow">in</span> <span class="n">elems</span><span class="p">:</span>
+        <span class="k">if</span> <span class="p">(</span><span class="ow">not</span> <span class="n">elem</span> <span class="ow">or</span> <span class="p">(</span><span class="ow">not</span> <span class="n">unique</span> <span class="ow">and</span> <span class="n">elem</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="ow">in</span> <span class="n">string</span><span class="o">.</span><span class="n">digits</span><span class="p">)</span> <span class="ow">or</span>
+                <span class="n">_INVALID_CHARS_BUS_RE</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">elem</span><span class="p">)):</span>
+            <span class="k">return</span> <span class="kc">False</span>
+    <span class="k">return</span> <span class="kc">True</span></div>
+
+
+<div class="viewcode-block" id="is_valid_member_name"><a class="viewcode-back" href="../../modules.html#dcar.validate.is_valid_member_name">[docs]</a><span class="k">def</span> <span class="nf">is_valid_member_name</span><span class="p">(</span><span class="n">s</span><span class="p">):</span>
+    <span class="k">if</span> <span class="p">(</span><span class="ow">not</span> <span class="n">_is_valid_name</span><span class="p">(</span><span class="n">s</span><span class="p">)</span> <span class="ow">or</span> <span class="s1">&#39;.&#39;</span> <span class="ow">in</span> <span class="n">s</span> <span class="ow">or</span> <span class="n">s</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="ow">in</span> <span class="n">string</span><span class="o">.</span><span class="n">digits</span> <span class="ow">or</span>
+            <span class="n">_INVALID_CHARS_RE</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">s</span><span class="p">)):</span>
+        <span class="k">return</span> <span class="kc">False</span>
+    <span class="k">return</span> <span class="kc">True</span></div>
+
+
+<div class="viewcode-block" id="is_valid_error_name"><a class="viewcode-back" href="../../modules.html#dcar.validate.is_valid_error_name">[docs]</a><span class="k">def</span> <span class="nf">is_valid_error_name</span><span class="p">(</span><span class="n">s</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">is_valid_interface_name</span><span class="p">(</span><span class="n">s</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="is_valid_serial"><a class="viewcode-back" href="../../modules.html#dcar.validate.is_valid_serial">[docs]</a><span class="k">def</span> <span class="nf">is_valid_serial</span><span class="p">(</span><span class="n">i</span><span class="p">):</span>
+    <span class="k">return</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="nb">int</span><span class="p">)</span> <span class="ow">and</span> <span class="n">i</span> <span class="o">&gt;</span> <span class="mi">0</span></div>
+
+
+<div class="viewcode-block" id="is_valid_unixfds_field"><a class="viewcode-back" href="../../modules.html#dcar.validate.is_valid_unixfds_field">[docs]</a><span class="k">def</span> <span class="nf">is_valid_unixfds_field</span><span class="p">(</span><span class="n">i</span><span class="p">):</span>
+    <span class="k">return</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="nb">int</span><span class="p">)</span> <span class="ow">and</span> <span class="n">i</span> <span class="o">&gt;=</span> <span class="mi">0</span></div>
+
+
+<div class="viewcode-block" id="validate_object_path"><a class="viewcode-back" href="../../modules.html#dcar.validate.validate_object_path">[docs]</a><span class="k">def</span> <span class="nf">validate_object_path</span><span class="p">(</span><span class="n">s</span><span class="p">):</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">is_valid_object_path</span><span class="p">(</span><span class="n">s</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="n">ValidationError</span><span class="p">(</span><span class="s1">&#39;not a valid object path: </span><span class="si">%r</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="n">s</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">s</span></div>
+
+
+<div class="viewcode-block" id="validate_signature"><a class="viewcode-back" href="../../modules.html#dcar.validate.validate_signature">[docs]</a><span class="k">def</span> <span class="nf">validate_signature</span><span class="p">(</span><span class="n">s</span><span class="p">):</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">Signature</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
+    <span class="k">except</span> <span class="n">SignatureError</span> <span class="k">as</span> <span class="n">ex</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="n">ValidationError</span><span class="p">(</span><span class="s1">&#39;not a valid signature: </span><span class="si">%r</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="n">s</span><span class="p">)</span> <span class="kn">from</span> <span class="nn">ex</span>
+    <span class="k">return</span> <span class="n">s</span></div>
+
+
+<div class="viewcode-block" id="validate_interface_name"><a class="viewcode-back" href="../../modules.html#dcar.validate.validate_interface_name">[docs]</a><span class="k">def</span> <span class="nf">validate_interface_name</span><span class="p">(</span><span class="n">s</span><span class="p">):</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">is_valid_interface_name</span><span class="p">(</span><span class="n">s</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="n">ValidationError</span><span class="p">(</span><span class="s1">&#39;not a valid interface name: </span><span class="si">%r</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="n">s</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">s</span></div>
+
+
+<div class="viewcode-block" id="validate_bus_name"><a class="viewcode-back" href="../../modules.html#dcar.validate.validate_bus_name">[docs]</a><span class="k">def</span> <span class="nf">validate_bus_name</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">unique</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">strict</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">is_valid_bus_name</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">unique</span><span class="p">,</span> <span class="n">strict</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">unique</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">ValidationError</span><span class="p">(</span><span class="s1">&#39;not a valid unique name: </span><span class="si">%r</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="n">s</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">ValidationError</span><span class="p">(</span><span class="s1">&#39;not a valid bus name: </span><span class="si">%r</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="n">s</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">s</span></div>
+
+
+<div class="viewcode-block" id="validate_member_name"><a class="viewcode-back" href="../../modules.html#dcar.validate.validate_member_name">[docs]</a><span class="k">def</span> <span class="nf">validate_member_name</span><span class="p">(</span><span class="n">s</span><span class="p">):</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">is_valid_member_name</span><span class="p">(</span><span class="n">s</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="n">ValidationError</span><span class="p">(</span><span class="s1">&#39;not a valid member name: </span><span class="si">%r</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="n">s</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">s</span></div>
+
+
+<div class="viewcode-block" id="validate_error_name"><a class="viewcode-back" href="../../modules.html#dcar.validate.validate_error_name">[docs]</a><span class="k">def</span> <span class="nf">validate_error_name</span><span class="p">(</span><span class="n">s</span><span class="p">):</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">is_valid_error_name</span><span class="p">(</span><span class="n">s</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="n">ValidationError</span><span class="p">(</span><span class="s1">&#39;not a valid error name: </span><span class="si">%r</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="n">s</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">s</span></div>
+
+
+<div class="viewcode-block" id="validate_serial"><a class="viewcode-back" href="../../modules.html#dcar.validate.validate_serial">[docs]</a><span class="k">def</span> <span class="nf">validate_serial</span><span class="p">(</span><span class="n">i</span><span class="p">):</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">is_valid_serial</span><span class="p">(</span><span class="n">i</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="n">ValidationError</span><span class="p">(</span><span class="s1">&#39;serial must be an int &gt; 0 not </span><span class="si">%r</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="n">i</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="validate_unixfds_field"><a class="viewcode-back" href="../../modules.html#dcar.validate.validate_unixfds_field">[docs]</a><span class="k">def</span> <span class="nf">validate_unixfds_field</span><span class="p">(</span><span class="n">i</span><span class="p">):</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">is_valid_unixfds_field</span><span class="p">(</span><span class="n">i</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="n">ValidationError</span><span class="p">(</span><span class="s1">&#39;UNIX_FDS field must be an int &gt;= 0 not </span><span class="si">%r</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="n">i</span><span class="p">)</span></div>
+</pre></div>
+
+          </div>
+          
+        </div>
+      </div>
+    <div class="clearer"></div>
+  </div>
+    <div class="footer">
+      &copy;2019, Andreas Suhre.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.8.2</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.11</a>
+      
+    </div>
+
+    
+
+    
+  </body>
+</html>

@@ -1,0 +1,336 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>dcar.transports &#8212; D-Car 0.0.4 documentation</title>
+    <link rel="stylesheet" href="../../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <link rel="shortcut icon" href="../../_static/favicon.ico"/>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+   
+  <link rel="stylesheet" href="../../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  <div class="document">
+    
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../../index.html">D-Car</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../overview.html">Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api.html">API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../license.html">License</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../index.html">Documentation overview</a><ul>
+  <li><a href="../index.html">Module code</a><ul>
+  <li><a href="../dcar.html">dcar</a><ul>
+  </ul></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <h1>Source code for dcar.transports</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;Transports for message bus connections.&quot;&quot;&quot;</span>
+
+<span class="kn">import</span> <span class="nn">array</span>
+<span class="kn">import</span> <span class="nn">logging</span>
+<span class="kn">import</span> <span class="nn">socket</span>
+<span class="kn">import</span> <span class="nn">threading</span>
+<span class="kn">from</span> <span class="nn">contextlib</span> <span class="k">import</span> <span class="n">suppress</span>
+
+<span class="kn">from</span> <span class="nn">.auth</span> <span class="k">import</span> <span class="n">authenticate</span>
+<span class="kn">from</span> <span class="nn">.const</span> <span class="k">import</span> <span class="n">MAX_MESSAGE_LEN</span><span class="p">,</span> <span class="n">MIN_HEADER_SIZE</span>
+<span class="kn">from</span> <span class="nn">.errors</span> <span class="k">import</span> <span class="n">TransportError</span><span class="p">,</span> <span class="n">TooLongError</span>
+<span class="kn">from</span> <span class="nn">.message</span> <span class="k">import</span> <span class="n">get_sizes</span><span class="p">,</span> <span class="n">get_unix_fds_cnt</span><span class="p">,</span> <span class="n">Message</span>
+<span class="kn">from</span> <span class="nn">.raw</span> <span class="k">import</span> <span class="n">RawData</span>
+
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="s1">&#39;Transport&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;UnixTransport&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;TcpTransport&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;NonceTcpTransport&#39;</span><span class="p">,</span>
+<span class="p">]</span>
+
+<span class="n">_logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">check_for_known_transport</span><span class="p">(</span><span class="n">addr</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Check whether there is a known transport for any address.</span>
+
+<span class="sd">    :param ~dcar.address.Address addr: addresses</span>
+<span class="sd">    :raises TransportError: if no transport was found</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">_</span> <span class="ow">in</span> <span class="n">addr</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">_transports</span><span class="p">:</span>
+            <span class="k">return</span>
+    <span class="k">raise</span> <span class="n">TransportError</span><span class="p">(</span><span class="s1">&#39;no transport found&#39;</span><span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">connect</span><span class="p">(</span><span class="n">addr</span><span class="p">,</span> <span class="n">router</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Connect to message bus.</span>
+
+<span class="sd">    Tries every address until connection is successful</span>
+<span class="sd">    or there are no more addresses.</span>
+
+<span class="sd">    :param ~dcar.address.Address addr: addresses</span>
+<span class="sd">    :raises TransportError: if connection failed</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">params</span> <span class="ow">in</span> <span class="n">addr</span><span class="p">:</span>
+        <span class="n">transport_class</span> <span class="o">=</span> <span class="n">_transports</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">transport_class</span><span class="p">:</span>
+            <span class="n">transport</span> <span class="o">=</span> <span class="n">transport_class</span><span class="p">(</span><span class="n">params</span><span class="p">,</span> <span class="n">router</span><span class="p">)</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">transport</span><span class="o">.</span><span class="n">connect</span><span class="p">()</span>
+                <span class="k">return</span> <span class="p">(</span><span class="n">transport</span><span class="p">,</span>
+                        <span class="s1">&#39;</span><span class="si">%s</span><span class="s1">:</span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">name</span><span class="p">,</span>
+                                   <span class="s1">&#39;,&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">%s</span><span class="s1">=</span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">v</span><span class="p">)</span>
+                                            <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">params</span><span class="o">.</span><span class="n">items</span><span class="p">())))</span>
+            <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+                <span class="n">_logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s1">&#39;connect failed: </span><span class="si">%s</span><span class="s1">, </span><span class="si">%s</span><span class="s1">&#39;</span><span class="p">,</span>
+                              <span class="n">name</span><span class="p">,</span> <span class="n">params</span><span class="p">,</span> <span class="n">exc_info</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="n">TransportError</span><span class="p">(</span><span class="s1">&#39;connection failed&#39;</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="Transport"><a class="viewcode-back" href="../../modules.html#dcar.transports.Transport">[docs]</a><span class="k">class</span> <span class="nc">Transport</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;Base class.</span>
+
+<span class="sd">    :param dict params: address parameters</span>
+<span class="sd">    :param ~dcar.router.Router router: router object</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">params</span><span class="p">,</span> <span class="n">router</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">guid</span> <span class="o">=</span> <span class="n">params</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;guid&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">unix_fds_enabled</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">connected</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_router</span> <span class="o">=</span> <span class="n">router</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_error</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_lock</span> <span class="o">=</span> <span class="n">threading</span><span class="o">.</span><span class="n">Lock</span><span class="p">()</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">error</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Return the error which caused disconnection or ``None``.&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_error</span><span class="p">:</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_error</span><span class="p">,</span> <span class="n">TransportError</span><span class="p">):</span>
+                <span class="n">ex</span> <span class="o">=</span> <span class="n">TransportError</span><span class="p">(</span><span class="s1">&#39;connection lost&#39;</span><span class="p">)</span>
+                <span class="n">ex</span><span class="o">.</span><span class="n">__traceback__</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_error</span><span class="o">.</span><span class="n">__traceback__</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">ex</span> <span class="o">=</span> <span class="n">TransportError</span><span class="p">(</span><span class="s1">&#39;connection lost: </span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">_error</span><span class="p">)</span>
+                <span class="n">ex</span><span class="o">.</span><span class="n">__cause__</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_error</span>
+            <span class="k">return</span> <span class="n">ex</span>
+
+    <span class="k">def</span> <span class="nf">_set_error</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">exc</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_error</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">connected</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_error</span> <span class="o">=</span> <span class="n">exc</span>
+
+<div class="viewcode-block" id="Transport.connect"><a class="viewcode-back" href="../../modules.html#dcar.transports.Transport.connect">[docs]</a>    <span class="k">def</span> <span class="nf">connect</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Connect to message bus.&quot;&quot;&quot;</span>
+        <span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="n">_lock</span><span class="p">:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">connected</span><span class="p">:</span>
+                <span class="k">return</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_sock</span> <span class="o">=</span> <span class="n">socket</span><span class="o">.</span><span class="n">socket</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_addr_family</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_sock</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_address</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">connected</span> <span class="o">=</span> <span class="kc">True</span></div>
+
+<div class="viewcode-block" id="Transport.disconnect"><a class="viewcode-back" href="../../modules.html#dcar.transports.Transport.disconnect">[docs]</a>    <span class="k">def</span> <span class="nf">disconnect</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Disconnect from message bus.&quot;&quot;&quot;</span>
+        <span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="n">_lock</span><span class="p">:</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">connected</span><span class="p">:</span>
+                <span class="k">return</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">connected</span> <span class="o">=</span> <span class="kc">False</span>
+            <span class="k">with</span> <span class="n">suppress</span><span class="p">(</span><span class="ne">OSError</span><span class="p">):</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_sock</span><span class="o">.</span><span class="n">shutdown</span><span class="p">(</span><span class="n">socket</span><span class="o">.</span><span class="n">SHUT_RDWR</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_sock</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_router</span><span class="o">.</span><span class="n">incoming</span><span class="p">(</span><span class="kc">None</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Transport.authenticate"><a class="viewcode-back" href="../../modules.html#dcar.transports.Transport.authenticate">[docs]</a>    <span class="k">def</span> <span class="nf">authenticate</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Authenticate to message bus.&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">guid</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">unix_fds_enabled</span> <span class="o">=</span> <span class="n">authenticate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_sock</span><span class="p">,</span>
+                                                        <span class="bp">self</span><span class="o">.</span><span class="n">unix_fds_enabled</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Transport.start_loops"><a class="viewcode-back" href="../../modules.html#dcar.transports.Transport.start_loops">[docs]</a>    <span class="k">def</span> <span class="nf">start_loops</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Start threads with ``recv-loop`` and ``send-loop``.&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_recv_loop</span> <span class="o">=</span> <span class="n">threading</span><span class="o">.</span><span class="n">Thread</span><span class="p">(</span><span class="n">target</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_recv_loop</span><span class="p">,</span>
+                                           <span class="n">name</span><span class="o">=</span><span class="s1">&#39;recv-loop&#39;</span><span class="p">,</span> <span class="n">daemon</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_recv_loop</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_send_loop</span> <span class="o">=</span> <span class="n">threading</span><span class="o">.</span><span class="n">Thread</span><span class="p">(</span><span class="n">target</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_send_loop</span><span class="p">,</span>
+                                           <span class="n">name</span><span class="o">=</span><span class="s1">&#39;send-loop&#39;</span><span class="p">,</span> <span class="n">daemon</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_send_loop</span><span class="o">.</span><span class="n">start</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="Transport.block"><a class="viewcode-back" href="../../modules.html#dcar.transports.Transport.block">[docs]</a>    <span class="k">def</span> <span class="nf">block</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Block until loop threads are finished.&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_recv_loop</span><span class="o">.</span><span class="n">join</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_send_loop</span><span class="o">.</span><span class="n">join</span><span class="p">()</span></div>
+
+    <span class="k">def</span> <span class="nf">_send_loop</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">while</span> <span class="bp">self</span><span class="o">.</span><span class="n">connected</span><span class="p">:</span>
+            <span class="n">b</span><span class="p">,</span> <span class="n">fds</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_router</span><span class="o">.</span><span class="n">out_queue</span><span class="o">.</span><span class="n">get</span><span class="p">()</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">b</span><span class="p">:</span>
+                <span class="k">break</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">unix_fds_enabled</span> <span class="ow">and</span> <span class="n">fds</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">_sock</span><span class="o">.</span><span class="n">sendmsg</span><span class="p">([</span><span class="n">b</span><span class="p">],</span> <span class="p">[(</span><span class="n">socket</span><span class="o">.</span><span class="n">SOL_SOCKET</span><span class="p">,</span>
+                                              <span class="n">socket</span><span class="o">.</span><span class="n">SCM_RIGHTS</span><span class="p">,</span>
+                                              <span class="n">array</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="s1">&#39;i&#39;</span><span class="p">,</span> <span class="n">fds</span><span class="p">))])</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">_sock</span><span class="o">.</span><span class="n">sendall</span><span class="p">(</span><span class="n">b</span><span class="p">)</span>
+            <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">ex</span><span class="p">:</span>
+                <span class="n">_logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s1">&#39;send loop&#39;</span><span class="p">,</span> <span class="n">exc_info</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_set_error</span><span class="p">(</span><span class="n">ex</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">disconnect</span><span class="p">()</span>
+                <span class="k">break</span>
+        <span class="n">_logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s1">&#39;EXIT send loop&#39;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_recv_loop</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">while</span> <span class="bp">self</span><span class="o">.</span><span class="n">connected</span><span class="p">:</span>
+                <span class="n">b</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_sock</span><span class="o">.</span><span class="n">recv</span><span class="p">(</span><span class="n">MIN_HEADER_SIZE</span><span class="p">,</span> <span class="n">socket</span><span class="o">.</span><span class="n">MSG_PEEK</span><span class="p">)</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="n">b</span><span class="p">:</span>
+                    <span class="k">raise</span> <span class="n">TransportError</span><span class="p">()</span>
+                <span class="n">total_size</span><span class="p">,</span> <span class="n">fields_size</span> <span class="o">=</span> <span class="n">get_sizes</span><span class="p">(</span><span class="n">RawData</span><span class="p">(</span><span class="n">b</span><span class="p">))</span>
+                <span class="k">if</span> <span class="n">total_size</span> <span class="o">&gt;</span> <span class="n">MAX_MESSAGE_LEN</span><span class="p">:</span>
+                    <span class="k">raise</span> <span class="n">TooLongError</span><span class="p">(</span><span class="s1">&#39;message too long: </span><span class="si">%d</span><span class="s1"> bytes&#39;</span> <span class="o">%</span>
+                                       <span class="n">total_size</span><span class="p">)</span>
+                <span class="n">raw</span> <span class="o">=</span> <span class="n">RawData</span><span class="p">(</span><span class="nb">bytearray</span><span class="p">(</span><span class="n">total_size</span><span class="p">))</span>
+                <span class="n">view</span> <span class="o">=</span> <span class="n">raw</span><span class="o">.</span><span class="n">getbuffer</span><span class="p">()</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">unix_fds_enabled</span><span class="p">:</span>
+                    <span class="n">b</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_sock</span><span class="o">.</span><span class="n">recv</span><span class="p">(</span><span class="n">MIN_HEADER_SIZE</span> <span class="o">+</span> <span class="n">fields_size</span><span class="p">,</span>
+                                        <span class="n">socket</span><span class="o">.</span><span class="n">MSG_PEEK</span><span class="p">)</span>
+                    <span class="n">unix_fds_cnt</span> <span class="o">=</span> <span class="n">get_unix_fds_cnt</span><span class="p">(</span><span class="n">RawData</span><span class="p">(</span><span class="n">b</span><span class="p">))</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">unix_fds_cnt</span> <span class="o">=</span> <span class="mi">0</span>
+                <span class="k">if</span> <span class="n">unix_fds_cnt</span><span class="p">:</span>
+                    <span class="n">fds</span> <span class="o">=</span> <span class="n">array</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="s1">&#39;i&#39;</span><span class="p">)</span>
+                    <span class="n">cnt</span><span class="p">,</span> <span class="n">anc</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_sock</span><span class="o">.</span><span class="n">recvmsg_into</span><span class="p">(</span>
+                        <span class="p">[</span><span class="n">view</span><span class="p">],</span> <span class="n">socket</span><span class="o">.</span><span class="n">CMSG_SPACE</span><span class="p">(</span><span class="n">unix_fds_cnt</span> <span class="o">*</span> <span class="n">fds</span><span class="o">.</span><span class="n">itemsize</span><span class="p">))</span>
+                    <span class="k">for</span> <span class="n">cmsg_level</span><span class="p">,</span> <span class="n">cmsg_type</span><span class="p">,</span> <span class="n">cmsg_data</span> <span class="ow">in</span> <span class="n">anc</span><span class="p">:</span>
+                        <span class="k">if</span> <span class="p">(</span><span class="n">cmsg_level</span> <span class="o">==</span> <span class="n">socket</span><span class="o">.</span><span class="n">SOL_SOCKET</span> <span class="ow">and</span>
+                                <span class="n">cmsg_type</span> <span class="o">==</span> <span class="n">socket</span><span class="o">.</span><span class="n">SCM_RIGHTS</span><span class="p">):</span>
+                            <span class="n">fds</span><span class="o">.</span><span class="n">frombytes</span><span class="p">(</span><span class="n">cmsg_data</span><span class="p">[:</span><span class="nb">len</span><span class="p">(</span><span class="n">cmsg_data</span><span class="p">)</span> <span class="o">-</span>
+                                          <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">cmsg_data</span><span class="p">)</span> <span class="o">%</span> <span class="n">fds</span><span class="o">.</span><span class="n">itemsize</span><span class="p">)])</span>
+                    <span class="n">raw</span><span class="o">.</span><span class="n">unix_fds</span> <span class="o">=</span> <span class="n">fds</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">cnt</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_sock</span><span class="o">.</span><span class="n">recv_into</span><span class="p">(</span><span class="n">view</span><span class="p">)</span>
+                <span class="n">view</span><span class="o">.</span><span class="n">release</span><span class="p">()</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="n">cnt</span><span class="p">:</span>
+                    <span class="k">raise</span> <span class="n">TransportError</span><span class="p">()</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_router</span><span class="o">.</span><span class="n">incoming</span><span class="p">(</span><span class="n">Message</span><span class="o">.</span><span class="n">from_bytes</span><span class="p">(</span><span class="n">raw</span><span class="p">))</span>
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">ex</span><span class="p">:</span>
+            <span class="n">_logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s1">&#39;recv loop&#39;</span><span class="p">,</span> <span class="n">exc_info</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_set_error</span><span class="p">(</span><span class="n">ex</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">disconnect</span><span class="p">()</span>
+        <span class="n">_logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s1">&#39;EXIT recv loop&#39;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="UnixTransport"><a class="viewcode-back" href="../../modules.html#dcar.transports.UnixTransport">[docs]</a><span class="k">class</span> <span class="nc">UnixTransport</span><span class="p">(</span><span class="n">Transport</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Transport that uses a unix domain socket.</span>
+
+<span class="sd">    It supports the passing of file descriptors.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">params</span><span class="p">,</span> <span class="n">router</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">params</span><span class="p">,</span> <span class="n">router</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">unix_fds_enabled</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_addr_family</span> <span class="o">=</span> <span class="n">socket</span><span class="o">.</span><span class="n">AF_UNIX</span>
+        <span class="k">if</span> <span class="s1">&#39;path&#39;</span> <span class="ow">in</span> <span class="n">params</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_address</span> <span class="o">=</span> <span class="n">params</span><span class="p">[</span><span class="s1">&#39;path&#39;</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_address</span> <span class="o">=</span> <span class="sa">b</span><span class="s1">&#39;</span><span class="se">\0</span><span class="s1">&#39;</span> <span class="o">+</span> <span class="n">params</span><span class="p">[</span><span class="s1">&#39;abstract&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">encode</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="TcpTransport"><a class="viewcode-back" href="../../modules.html#dcar.transports.TcpTransport">[docs]</a><span class="k">class</span> <span class="nc">TcpTransport</span><span class="p">(</span><span class="n">Transport</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Transport that uses a TCP socket.&quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">params</span><span class="p">,</span> <span class="n">router</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">params</span><span class="p">,</span> <span class="n">router</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_addr_family</span> <span class="o">=</span> <span class="n">socket</span><span class="o">.</span><span class="n">AF_INET</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_address</span> <span class="o">=</span> <span class="p">(</span><span class="n">params</span><span class="p">[</span><span class="s1">&#39;host&#39;</span><span class="p">],</span> <span class="nb">int</span><span class="p">(</span><span class="n">params</span><span class="p">[</span><span class="s1">&#39;port&#39;</span><span class="p">]))</span></div>
+
+
+<div class="viewcode-block" id="NonceTcpTransport"><a class="viewcode-back" href="../../modules.html#dcar.transports.NonceTcpTransport">[docs]</a><span class="k">class</span> <span class="nc">NonceTcpTransport</span><span class="p">(</span><span class="n">TcpTransport</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Transport that uses a nonce-authenticated TCP socket.&quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">params</span><span class="p">,</span> <span class="n">router</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">params</span><span class="p">,</span> <span class="n">router</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_noncefile</span> <span class="o">=</span> <span class="n">params</span><span class="p">[</span><span class="s1">&#39;noncefile&#39;</span><span class="p">]</span>
+
+<div class="viewcode-block" id="NonceTcpTransport.connect"><a class="viewcode-back" href="../../modules.html#dcar.transports.NonceTcpTransport.connect">[docs]</a>    <span class="k">def</span> <span class="nf">connect</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Connect to message bus.&quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">connect</span><span class="p">()</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_noncefile</span><span class="p">,</span> <span class="s1">&#39;br&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">fh</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_sock</span><span class="o">.</span><span class="n">sendall</span><span class="p">(</span><span class="n">fh</span><span class="o">.</span><span class="n">read</span><span class="p">())</span></div></div>
+
+
+<span class="n">_transports</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s1">&#39;unix&#39;</span><span class="p">:</span> <span class="n">UnixTransport</span><span class="p">,</span>
+    <span class="s1">&#39;tcp&#39;</span><span class="p">:</span> <span class="n">TcpTransport</span><span class="p">,</span>
+    <span class="s1">&#39;nonce-tcp&#39;</span><span class="p">:</span> <span class="n">NonceTcpTransport</span><span class="p">,</span>
+<span class="p">}</span>
+</pre></div>
+
+          </div>
+          
+        </div>
+      </div>
+    <div class="clearer"></div>
+  </div>
+    <div class="footer">
+      &copy;2019, Andreas Suhre.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.8.2</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.11</a>
+      
+    </div>
+
+    
+
+    
+  </body>
+</html>

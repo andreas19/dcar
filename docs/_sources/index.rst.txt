@@ -1,0 +1,24 @@
+D-Car |version|
+===============
+
+
+Contents
+--------
+
+
+.. toctree::
+   :maxdepth: 2
+
+   overview
+   introduction
+   api
+   license
+
+
+
+Indices and tables
+------------------
+
+* :ref:`genindex`
+* :ref:`modindex`
+* :ref:`search`
