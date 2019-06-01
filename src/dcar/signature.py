@@ -1,7 +1,5 @@
-"""
-dcar.signature
---------------
-"""
+"""D-Bus type signature."""
+
 from collections import Counter
 
 from . import marshal
@@ -12,6 +10,21 @@ __all__ = ['Signature']
 
 
 class Signature:
+    """A signature.
+
+    The signature string will be parsed into a list of complete types.
+    Each complete type is a tuple with the fist element being its
+    signature. The second element is ``None`` for all basic
+    (i.e. fixed and string-like) types, an empty list for variants,
+    and a list of complete types for arrays, structs, and dict entries.
+
+    A :class:`Signature` object can be used as an iterator which yields
+    tuples of complete types.
+
+    :param str sig: D-Bus type signature
+    :raises ~dcar.SignatureError: if there is a problem with the signature
+    """
+
     def __init__(self, sig):
         if not isinstance(sig, str):
             raise SignatureError('must be of type str, not %s' %

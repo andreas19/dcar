@@ -1,10 +1,8 @@
-"""
-dcar.router
------------
-"""
+"""Message routing."""
 
 import inspect
 import logging
+from contextlib import suppress
 from dataclasses import dataclass, field, astuple
 from functools import partial
 from queue import SimpleQueue
@@ -32,6 +30,8 @@ MATCH_RULE_VALIDATORS = (
 
 
 class Router:
+    """Class for routing in- and outgoing messages."""
+
     def __init__(self, bus):
         self._cv = Condition()
         self._replies = {}
@@ -49,6 +49,16 @@ class Router:
             return TransportError('disconnected')
 
     def outgoing(self, msg, timeout):
+        """Handle outgoing messages.
+
+        :param ~dcar.message.Message msg: the message
+        :param float timeout: timeout in seconds
+        :returns: return values of a message call (if a reply is expected)
+                  or ``None``
+        :rtype: tuple or None
+        :raises ~dcar.TransportError: if the message could not be sent
+        :raises ~dcar.MessageError: if the message could not be marshalled
+        """
         msg_bytes, unix_fds = msg.to_bytes()
         _logger.debug('\n-> %s', msg)
         if unix_fds and not self._bus.unix_fds_enabled:
@@ -73,6 +83,10 @@ class Router:
             return None
 
     def incoming(self, msg):
+        """Handle incoming messages.
+
+        :param ~dcar.message.Message msg: the message
+        """
         _logger.debug('\n<- %s', msg)
         if msg is None:  # transport disconnected
             with self._cv:
@@ -89,12 +103,12 @@ class Router:
         elif msg.message_type is MessageType.METHOD_CALL:
             try:
                 method = self._find_method(msg)
-                method(self._bus, msg)
+                method(self._bus, msg.info)
             except DBusError as ex:
                 self._send_error(ex, msg.serial, msg.fields[HeaderField.SENDER])
         elif msg.message_type is MessageType.SIGNAL:
             for handler in self.signals.matches(msg, self._bus.unique_name):
-                handler(msg)
+                handler(msg.info)
 
     def _find_method(self, msg):
         method, signature = self.methods.find(msg)
@@ -121,6 +135,18 @@ class Router:
 
 @dataclass(frozen=True)
 class MatchRule:
+    """Match rule for signals.
+
+    Except for ``unicast`` all parameters are explained in the
+    `D-Bus specification
+    <https://dbus.freedesktop.org/doc/dbus-specification.html
+    #message-bus-routing-match-rules>`_.
+
+    If ``unicast=True`` this rule will only apply to unicast signals
+    and no *AddMatch* message will be sent to the message bus from
+    the :meth:`~dcar.Bus.register_signal` method.
+    """
+
     object_path: str = None
     interface: str = None
     signal_name: str = None
@@ -133,11 +159,13 @@ class MatchRule:
     argpaths: dict = field(init=False, default_factory=dict)
 
     def add_arg(self, idx, arg):
+        """Add an arg match at idx."""
         _check_index_and_type(idx, arg)
         self.args[idx] = arg
         self._check_length()
 
     def add_argpath(self, idx, argpath):
+        """Add an argpath match at idx."""
         _check_index_and_type(idx, argpath)
         self.argpaths[idx] = argpath
         self._check_length()
@@ -176,12 +204,20 @@ def _check_index_and_type(idx, arg):
 
 
 class Registry:
+    """Base class for registries."""
+
     def __init__(self):
         self._counter = 0
         self._lock = Lock()
         self._data = {}
 
     def add(self, item, handler, *args):
+        """Add an item.
+
+        :param item: depends on type of registry subclass
+        :param callable handler: handler function
+        :param args: additional arguments
+        """
         self._check_handler(handler)
         with self._lock:
             return self._add(item, handler, *args)
@@ -190,6 +226,7 @@ class Registry:
         raise NotImplementedError
 
     def remove(self, item_id):
+        """Remove an item with ID ``item_id``."""
         with self._lock:
             return self._remove(item_id)
 
@@ -207,7 +244,13 @@ class Registry:
 
 
 class Signals(Registry):
-    params = ('message',)
+    """Signals registry.
+
+    An ``item`` for this type's :meth:`~Registry.add` method is a
+    :class:`MatchRule` (see also: :meth:`~dcar.Bus.register_signal`).
+    """
+
+    params = ('msginfo',)  #: handler parameters
 
     def _add(self, rule, handler):
         if not isinstance(rule, MatchRule):
@@ -220,9 +263,17 @@ class Signals(Registry):
         return self._counter
 
     def _remove(self, rule_id):
-        return self._data.pop(rule_id, (None, None))
+        with suppress(KeyError):
+            rule, _ = self._data[rule_id]
+            del self._data[rule_id]
+            return rule
 
     def matches(self, msg, unique_name):
+        """Match a SIGNAL message to a rule.
+
+        This function is a generator which yields the handler function
+        for each matching rule.
+        """
         fields = msg.fields
         object_path = fields[HeaderField.PATH]
         interface = fields[HeaderField.INTERFACE]
@@ -281,7 +332,14 @@ class Signals(Registry):
 
 
 class Methods(Registry):
-    params = ('bus', 'message')
+    """Methods registry.
+
+    An ``item`` for this type's :meth:`~Registry.add` method is a
+    tuple ``(object_path, interface, method_name)``
+    (see also: :meth:`~dcar.Bus.register_method`).
+    """
+
+    params = ('bus', 'msginfo')  #: handler parameters
 
     def _add(self, tup, handler, signature):
         if len(tup) != 3 or not (all(tup) and handler):
@@ -294,16 +352,13 @@ class Methods(Registry):
         return self._counter
 
     def _remove(self, meth_id):
-        try:
-            tup = list(filter(lambda x: self._data[x][0] ==
-                              meth_id, self._data))[0]
-            handler = self._data[tup][1]
+        with suppress(KeyError, IndexError):
+            tup = list(filter(lambda x: self._data[x][0] == meth_id,
+                              self._data))[0]
             del self._data[tup]
-            return tup, handler
-        except IndexError:
-            return None, None
 
     def find(self, msg):
+        """Return handler function and signature for a METHOD_CALL message."""
         fields = msg.fields
         object_path = fields[HeaderField.PATH]
         interface = fields[HeaderField.INTERFACE]

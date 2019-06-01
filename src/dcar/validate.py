@@ -1,7 +1,13 @@
+"""Validation functions.
+
+The ``is_valid_*`` functions return ``True`` if the argument is valid,
+otherwise ``False``.
+
+The ``validate_*`` functions raise a :class:`~dcar.ValidationError` if
+validation failed or else return the argument unchanged.
 """
-dcar.validate
--------------
-"""
+
+# flake8: noqa
 
 import re
 import string

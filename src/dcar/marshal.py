@@ -1,28 +1,37 @@
-"""
-dcar.marshal
-------------
+"""Marshal/unmarshal D-Bus Messages.
 
-Marshal/unmarshal D-Bus Messages.
+.. _ref-types-table:
 
 Types:
 
 =============  ===================  ==========
 D-Bus          Python IN            Python OUT
 =============  ===================  ==========
-a              list                 list
-               array.array
+a              list, array.array    list
 ()             tuple                tuple
 a{}            dict                 dict
-v              2-tuple (sig,value)  value
-               bus.Variant
+v              bus.Variant,         value
+               2-tuple (sig,value)
 s,o,g          str                  str
 d              float                float
 b              bool                 bool
 y,n,q,i,u,x,t  int                  int
-h              obj with fileno()    fd (int)
-               fd (int)
-               bus.UnixFd
+h              bus.UnixFD,          file descriptor
+               obj with fileno(),
+               file descriptor
 =============  ===================  ==========
+
+See:
+
+* `Summary of types
+  <https://dbus.freedesktop.org/doc/dbus-specification.html#idm487>`_
+* `Marshalling (Wire Format)
+  <https://dbus.freedesktop.org/doc/dbus-specification.html
+  #message-protocol-marshaling>`_
+
+.. note::
+   Instances of the type classes should be used through the
+   :data:`types` mapping which uses D-Bus type codes as keys.
 """
 
 import array
@@ -37,13 +46,44 @@ __all__ = ['types', 'marshal', 'unmarshal']
 
 
 class Type:
+    """Base class.
+
+    :param str name: type name
+    """
+
     def __init__(self, name):
         self.name = name
 
     def marshal(self, raw, data, signature=None):
+        """Marshal an object of this type.
+
+        The data must be of an appropriate type according
+        to the column *Python IN* in the :ref:`table above <ref-types-table>`.
+
+        The ``signature`` parameter is only used in the classes
+        :class:`Array`, :class:`Struct`, and :class:`DictEntry`.
+
+        :param RawData raw: raw message data
+        :param data: data to be marshalled
+        :param signature: see :class:`~dcar.signature.Signature`
+        :raises ~dcar.MessageError: if the data could not be marshalled
+        """
         raise NotImplementedError
 
     def unmarshal(self, raw, signature=None):
+        """Unmarshal an object of this type.
+
+        The returned data will be of a type according
+        to the column *Python OUT* in the :ref:`table above <ref-types-table>`.
+
+        The ``signature`` parameter is only used in the classes
+        :class:`Array`, :class:`Struct`, and :class:`DictEntry`.
+
+        :param RawData raw: raw message data
+        :param signature: see :class:`~dcar.signature.Signature`
+        :return: unmarshalled data
+        :raises ~dcar.MessageError: if the data could not be unmarshalled
+        """
         raise NotImplementedError
 
     def __repr__(self):
@@ -52,6 +92,12 @@ class Type:
 
 
 class Fixed(Type):
+    """Class for fixed types.
+
+    :param str name: type name
+    :param str struct_code: code from :mod:`struct` module
+    """
+
     def __init__(self, name, struct_code):
         super().__init__(name)
         self.code = struct_code
@@ -77,6 +123,8 @@ class Fixed(Type):
 
 
 class Boolean(Fixed):
+    """Class for booleans."""
+
     def __init__(self):
         super().__init__('BOOLEAN', 'I')
 
@@ -95,6 +143,8 @@ class Boolean(Fixed):
 
 
 class UnixFd(Fixed):
+    """Class for unix file descriptors."""
+
     def __init__(self):
         super().__init__('UNIX_FD', 'I')
 
@@ -134,6 +184,14 @@ types = {
 
 
 class StringLike(Type):
+    """Class for string like types.
+
+    :param str name: type name
+    :param str len_type: D-Bus type code for the length field
+    :param validate_func: a ``validate_*`` function from the
+                          :mod:`validate` module or ``None``
+    """
+
     def __init__(self, name, len_type, validate_func):
         super().__init__(name)
         self.len_type = types[len_type]
@@ -182,6 +240,12 @@ types.update({
 
 
 class Container(Type):
+    """Base class for container types.
+
+    :param str name: type name
+    :param int alignment: the type's alignment
+    """
+
     def __init__(self, name, alignment):
         super().__init__(name)
         self.alignment = alignment
@@ -192,6 +256,8 @@ class Container(Type):
 
 
 class Variant(Container):
+    """Class for a D-Bus Variant."""
+
     def __init__(self):
         super().__init__('VARIANT', 1)
 
@@ -216,6 +282,8 @@ class Variant(Container):
 
 
 class Array(Container):
+    """Class for a D-Bus Array."""
+
     def __init__(self):
         super().__init__('ARRAY', types['u'].alignment)
         self.len_type = types['u']
@@ -260,6 +328,8 @@ class Array(Container):
 
 
 class Struct(Container):
+    """Class for a D-Bus Struct."""
+
     def __init__(self, name='STRUCT'):
         super().__init__(name, 8)
 
@@ -277,6 +347,8 @@ class Struct(Container):
 
 
 class DictEntry(Struct):
+    """Class for a D-Bus DictEntry."""
+
     def __init__(self):
         super().__init__('DICT_ENTRY')
 
@@ -291,6 +363,16 @@ types.update({'r': Struct(), 'e': DictEntry()})
 
 
 def marshal(raw, data, signature):
+    """Marshal objects.
+
+    The elements of the data tuple must be of appropriate types according
+    to the column *Python IN* in the :ref:`table above <ref-types-table>`.
+
+    :param RawData raw: raw message data
+    :param tuple data: tuple of data to be marshalled
+    :param signature: see :class:`~dcar.signature.Signature`
+    :raises ~dcar.MessageError: if the data could not be marshalled
+    """
     signature = _signature(signature)
     if len(signature) != len(data):
         raise MessageError('length: signature %d, args %d' %
@@ -301,6 +383,17 @@ def marshal(raw, data, signature):
 
 
 def unmarshal(raw, signature):
+    """Unmarshal objects.
+
+    The elements of the returned tuple will be of types according
+    to the column *Python OUT* in the :ref:`table above <ref-types-table>`.
+
+    :param RawData raw: raw message data
+    :param signature: see :class:`~dcar.signature.Signature`
+    :return: tuple of unmarshalled data
+    :rtype: tuple
+    :raises ~dcar.MessageError: if the data could not be unmarshalled
+    """
     signature = _signature(signature)
     data = []
     for t, s in signature:

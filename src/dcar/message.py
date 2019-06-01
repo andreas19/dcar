@@ -1,6 +1,7 @@
-"""
-dcar.message
-------------
+"""D-Bus Message.
+
+See: `Message Protocol
+<https://dbus.freedesktop.org/doc/dbus-specification.html#message-protocol>`_
 """
 
 import sys
@@ -27,20 +28,26 @@ __all__ = [
     'HeaderField',
     'HeaderFields',
     'Message',
+    'MessageInfo',
 ]
 
 
 class EnumReprMixin:
+    """Mixin class."""
+
     def __repr__(self):
         return '<%s.%s>' % (self.__class__.__name__, self.name)
 
 
 class Byteorder(EnumReprMixin, Enum):
+    """Enumeration of byteorders."""
+
     LITTLE = (b'l', '<')
     BIG = (b'B', '>')
     NATIVE = LITTLE if sys.byteorder == 'little' else BIG
 
     def __new__(cls, dbus_code, struct_code):
+        """Create new instance."""
         obj = object.__new__(cls)
         obj._value_ = dbus_code
         obj.code = struct_code
@@ -48,6 +55,8 @@ class Byteorder(EnumReprMixin, Enum):
 
 
 class MessageType(EnumReprMixin, Enum):
+    """Enumeration of message types."""
+
     INVALID = b'\x00'
     METHOD_CALL = b'\x01'
     METHOD_RETURN = b'\x02'
@@ -56,6 +65,8 @@ class MessageType(EnumReprMixin, Enum):
 
 
 class HeaderFlag(IntFlag):
+    """Enumeration of header flags."""
+
     NONE = 0
     NO_REPLY_EXPECTED = 1
     NO_AUTO_START = 2
@@ -63,13 +74,17 @@ class HeaderFlag(IntFlag):
 
     @classmethod
     def from_byte(cls, byte):
+        """Convert ``byte`` to a header flag."""
         return cls(int.from_bytes(byte, 'little', signed=False))
 
     def to_byte(self):
+        """Convert header flag to a byte."""
         return self.value.to_bytes(1, 'little', signed=False)
 
 
 class HeaderField(EnumReprMixin, Enum):
+    """Enumeration of header fields."""
+
     PATH = (1, 'o', validate_object_path)
     INTERFACE = (2, 's', validate_interface_name)
     MEMBER = (3, 's', validate_member_name)
@@ -81,6 +96,7 @@ class HeaderField(EnumReprMixin, Enum):
     UNIX_FDS = (9, 'u', validate_unixfds_field)
 
     def __new__(cls, field_code, type_code, validate_func):
+        """Create new instance."""
         obj = object.__new__(cls)
         obj._value_ = field_code
         obj.type_code = type_code
@@ -88,6 +104,7 @@ class HeaderField(EnumReprMixin, Enum):
         return obj
 
 
+#: mapping from message types to required header fields
 required_header_fields = {
     MessageType.INVALID: (),
     MessageType.METHOD_CALL: (HeaderField.PATH, HeaderField.MEMBER),
@@ -99,6 +116,8 @@ required_header_fields = {
 
 
 class HeaderFields:
+    """Fields in a message header."""
+
     signature = 'a(yv)'
 
     def __init__(self):
@@ -120,13 +139,15 @@ class HeaderFields:
         return ((e, self._fields[e]) for e in HeaderField
                 if e in self._fields and self._fields[e] is not None)
 
-    def to_array(self):
+    def to_list(self):
+        """Convert the internal dict representation to a list."""
         return [(e.value, (e.type_code, v)) for e, v in self]
 
     @classmethod
-    def from_array(cls, ar):
+    def from_list(cls, lst):
+        """Convert a list to the internal dict representation."""
         obj = cls()
-        for key, value in ar:
+        for key, value in lst:
             with suppress(ValueError):
                 obj._fields[HeaderField(key)] = value
         return obj
@@ -136,6 +157,12 @@ class HeaderFields:
                              ', '.join('%s=%r' % (e.name, v) for e, v in self))
 
     def check(self, message_type):
+        """Check if required header fields are present and validate them.
+
+        :param MessageType message_type: the message type
+        :raises ~dcar.ValidationError: if validation failed
+        :raises ~dcar.MessageError: if required fields are missing
+        """
         required = list(required_header_fields[message_type])
         for field, value in self._fields.items():
             if value is not None:
@@ -155,11 +182,36 @@ def _validate_type(obj, type_, name):
     return obj
 
 
-MessageInfo = namedtuple('MessageInfo', '')
+MessageInfo = namedtuple('MessageInfo',
+                         ['serial', 'args', 'path', 'interface', 'member',
+                          'sender', 'no_reply_expected',
+                          'allow_interactive_authorization'])
+MessageInfo.__doc__ += ('\nObjects of this type will be passed to handler'
+                        ' functions registered with'
+                        ' :meth:`~dcar.Bus.register_signal` and'
+                        ' :meth:`~dcar.Bus.register_method`.')
+MessageInfo.serial.__doc__ = 'message serial'
+MessageInfo.args.__doc__ = 'arguments as a tuple'
+MessageInfo.path.__doc__ = 'object path'
+MessageInfo.interface.__doc__ = 'interface name'
+MessageInfo.member.__doc__ = 'member (signal or method) name'
+MessageInfo.sender.__doc__ = "name of the sender's connection"
+MessageInfo.no_reply_expected.__doc__ = 'header flag'
+MessageInfo.allow_interactive_authorization.__doc__ = 'header flag'
 
 
 class Message:
-    """Must be treated as unmutable."""
+    """A D-Bus message.
+
+    Objects of this type must be treated as immutable.
+
+    :param MessageType message_type: type of this message
+    :param flags: or'ed :class:`HeaderFlags <HeaderFlag>`, ``0``, or ``None``
+    :param HeaderFields fields: header fields
+    :param tuple body: the data for the body of this message
+    :raises ~dcar.ValidationError: if any validation fails
+    :raises TypeError: if there is any argument of the wrong type
+    """
 
     _next_serial = 1
     _lock = Lock()
@@ -184,26 +236,44 @@ class Message:
             self.serial = Message._next_serial
             Message._next_serial += 1
         self.unix_fds_cnt = -1
+        self._info = None
+
+    @property
+    def info(self):
+        """Return a :class:`MessageInfo` object.
+
+        Only available for messages of type METHOD_CALL and SIGNAL.
+        """
+        return self._info
 
     @property
     def reply_expected(self):
+        """Return ``True`` if a reply is expected."""
         return (self.message_type is MessageType.METHOD_CALL and
                 not (self.flags & HeaderFlag.NO_REPLY_EXPECTED))
 
     @property
     def reply_serial(self):
+        """Return the reply serial from the header fields."""
         return self.fields[HeaderField.REPLY_SERIAL]
 
     @property
     def sender(self):
+        """Return the sender from the header fields."""
         return self.fields[HeaderField.SENDER]
 
     def raise_on_error(self):
+        """Raise a :class:`~dcar.DBusError` if this is an ERROR message."""
         if self.message_type is MessageType.ERROR:
             raise DBusError(self.fields[HeaderField.ERROR_NAME], *self.body)
 
     @classmethod
     def from_bytes(cls, raw):
+        """Create a new message object from bytes.
+
+        :param RawData raw: raw message data
+        :raises ~dcar.MessageError: if the message could not be created
+        """
         raw.seek(0)
         byteorder = Byteorder(raw.read(1))
         raw.byteorder = byteorder
@@ -220,8 +290,8 @@ class Message:
         serial = types['u'].unmarshal(raw)
         if serial == 0:
             raise MessageError('serial == 0 not allowed')
-        fields = HeaderFields.from_array(unmarshal(raw,
-                                                   HeaderFields.signature)[0])
+        fields = HeaderFields.from_list(unmarshal(raw,
+                                                  HeaderFields.signature)[0])
         fields.check(message_type)
         raw.skip_padding(HEADER_ALIGNMENT)
         body = unmarshal(raw, fields[HeaderField.SIGNATURE])
@@ -238,9 +308,20 @@ class Message:
         obj.fields = fields
         obj.body = body
         obj.unix_fds_cnt = len(raw.unix_fds)
+        if message_type in (MessageType.METHOD_CALL, MessageType.SIGNAL):
+            obj._info = MessageInfo(
+                 serial, body, fields[HeaderField.PATH],
+                 fields[HeaderField.INTERFACE], fields[HeaderField.MEMBER],
+                 fields[HeaderField.SENDER],
+                 bool(flags & HeaderFlag.NO_REPLY_EXPECTED),
+                 bool(flags & HeaderFlag.ALLOW_INTERACTIVE_AUTHORIZATION))
         return obj
 
     def to_bytes(self):
+        """Convert this message to bytes.
+
+        :raises ~dcar.MessageError: if the message could not be converted
+        """
         signature = self.fields[HeaderField.SIGNATURE]
         if signature and not self.body or not signature and self.body:
             raise MessageError('signature and no body or no signature and body')
@@ -259,7 +340,7 @@ class Message:
         self.unix_fds_cnt = len(rawbody.unix_fds)
         if rawbody.unix_fds:
             self.fields[HeaderField.UNIX_FDS] = self.unix_fds_cnt
-        marshal(rawhead, (self.fields.to_array(),), HeaderFields.signature)
+        marshal(rawhead, (self.fields.to_list(),), HeaderFields.signature)
         rawhead.write_padding(HEADER_ALIGNMENT)
         return rawhead.getvalue() + rawbody.getvalue(), rawbody.unix_fds
 
@@ -271,7 +352,8 @@ class Message:
                 '%(body)r, %(unix_fds_cnt)s>') % args
 
 
-def compute_sizes(raw):
+def get_sizes(raw):
+    """Get sizes from raw message data."""
     raw.byteorder = Byteorder(raw.read(1))
     raw.read(3)  # skip bytes
     body_size = types['u'].unmarshal(raw)
@@ -282,9 +364,10 @@ def compute_sizes(raw):
     return MIN_HEADER_SIZE + fields_size + pad + body_size, fields_size
 
 
-def compute_unix_fds_cnt(raw):
+def get_unix_fds_cnt(raw):
+    """Get number of unix file descriptors from raw message data."""
     raw.byteorder = Byteorder(raw.read(1))
     raw.read(11)  # skip bytes
-    fields = HeaderFields.from_array(unmarshal(raw,
-                                               HeaderFields.signature)[0])
+    fields = HeaderFields.from_list(unmarshal(raw,
+                                              HeaderFields.signature)[0])
     return fields[HeaderField.UNIX_FDS] or 0

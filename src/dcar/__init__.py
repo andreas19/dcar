@@ -1,4 +1,4 @@
-"""D-Car package main API.
+"""D-Car main API.
 
 This should normally be enough for implementing message bus clients.
 """

@@ -1,9 +1,4 @@
-"""
-dcar.const
-----------
-
-Some constants from dbus source files.
-"""
+"""Some constants from dbus source files."""
 
 MAJOR_PROTOCOL_VERSION = b'\x01'  #: Major protocol version
 
@@ -30,3 +25,5 @@ MAX_MSG_UNIX_FDS = 2 ** 25  #: Maximum number of unix file descriptors
 LOCAL_PATH = '/org/freedesktop/DBus/Local'  #: Reserved local path
 
 LOCAL_INTERFACE = 'org.freedesktop.DBus.Local'  #: Reserved local interface
+
+DEFAULT_TIMEOUT_VALUE = 25.0  #: Default timeout when waiting for a reply

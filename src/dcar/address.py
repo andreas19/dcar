@@ -1,7 +1,4 @@
-"""
-dcar.address
-------------
-"""
+"""Server Addresses."""
 
 import os
 import string
@@ -12,7 +9,35 @@ from .errors import AddressError
 __all__ = ['Address']
 
 
-class Address:
+class Address:  # noqa: D412, D413
+    """This class represents addresses of a message bus.
+
+    See also:
+
+    * `server addresses`_
+    * `well-known message bus instances`_
+    * `starting services`_
+
+    .. _server addresses:
+       https://dbus.freedesktop.org/doc/dbus-specification.html#addresses
+
+    .. _well-known message bus instances:
+       https://dbus.freedesktop.org/doc/dbus-specification.html
+       #message-bus-types
+
+    .. _starting services:
+       https://dbus.freedesktop.org/doc/dbus-specification.html
+       #message-bus-starting-services
+
+    An ``Address`` object can be used as an iterator which yields tuples
+    with the first element being the name of a transport and the second
+    a dict with the parameters.
+
+    :param str address: can be one of the case-insensitive names
+                        ``'system'``, ``'session'`` , or ``'starter'``
+                        or a valid D-Bus server address
+    """
+
     def __init__(self, address='session'):
         if address.lower() == 'system':
             addr = os.environ.get(
@@ -36,6 +61,7 @@ class Address:
 
     @property
     def bus_type(self):
+        """Return the bus type: ``'system'``, ``'session'`` , or ``None``."""
         return self._bus_type
 
     def __len__(self):

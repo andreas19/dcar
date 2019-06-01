@@ -1,6 +1,13 @@
-"""
-dcar.auth
----------
+"""Authentication to a message bus.
+
+Supported mechanisms:
+
+* EXTERNAL
+* DBUS_COOKIE_SHA1
+* ANONYMOUS
+
+See: `Authentication Protocol
+<https://dbus.freedesktop.org/doc/dbus-specification.html#auth-protocol>`_
 """
 
 import binascii
@@ -60,6 +67,21 @@ auth_mechs = {
 
 
 def authenticate(sock, unix_fds):
+    """Authenticate to a message bus.
+
+    The passing of unix file descriptors will only be negotiated if ``unix_fds``
+    is ``True``.
+
+    :param socket sock: a connected socket
+    :param bool unix_fds: if the current :class:`~dcar.transports.Transport`
+                           supports the passing of unix file descriptors this
+                           must be ``True``
+    :return: the GUID of the server and a :class:`bool` that indicates whether
+             unix file descriptor passing is possible (``True``)
+             or not (``False``)
+    :rtype: str, bool
+    :raises ~dcar.AuthenticationError: if authentication failed
+    """
     sock.sendall(b'\0AUTH\r\n')
     auth_reply = _recv_line(sock)
     if auth_reply[0] == b'REJECTED':

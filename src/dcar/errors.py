@@ -1,7 +1,4 @@
-"""
-dcar.errors
------------
-"""
+"""Errors module."""
 
 __all__ = [
     'Error',
@@ -18,40 +15,40 @@ __all__ = [
 
 
 class Error(Exception):
-    pass
+    """Base class."""
 
 
 class AddressError(Error):
-    pass
+    """Raised for errors in server addresses."""
 
 
 class AuthenticationError(Error):
-    pass
+    """Raised when authentication failed."""
 
 
 class TransportError(Error):
-    pass
+    """Raised for transport related errors."""
 
 
 class ValidationError(Error):
-    pass
+    """Raised when validation failed."""
 
 
 class RegisterError(Error):
-    pass
+    """Raised when a signal or method could not be registered."""
 
 
 class MessageError(Error):
-    pass
+    """Raised for errors in messages."""
 
 
 class DBusError(MessageError):
-    pass
+    """Raised for errors from ERROR messages."""
 
 
 class SignatureError(MessageError):
-    pass
+    """Raised for errors in signatures."""
 
 
 class TooLongError(MessageError):
-    pass
+    """Raised when a message, an array, a name etc. is too long."""
