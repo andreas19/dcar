@@ -14,7 +14,9 @@ class Bus:
     """Representation of a client's connection to a message bus.
 
     An instance of this class is the central point for a client to interact
-    with a message bus.
+    with a message bus. It can be used as a context manager. On entering the
+    runtime context the :meth:`connect` method will be called, on exiting the
+    :meth:`disconnect` method.
 
     :param address: same as for :class:`~dcar.address.Address` or an
                     :class:`~dcar.address.Address` object

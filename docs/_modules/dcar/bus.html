@@ -92,7 +92,9 @@
     <span class="sd">&quot;&quot;&quot;Representation of a client&#39;s connection to a message bus.</span>
 
 <span class="sd">    An instance of this class is the central point for a client to interact</span>
-<span class="sd">    with a message bus.</span>
+<span class="sd">    with a message bus. It can be used as a context manager. On entering the</span>
+<span class="sd">    runtime context the :meth:`connect` method will be called, on exiting the</span>
+<span class="sd">    :meth:`disconnect` method.</span>
 
 <span class="sd">    :param address: same as for :class:`~dcar.address.Address` or an</span>
 <span class="sd">                    :class:`~dcar.address.Address` object</span>

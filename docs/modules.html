@@ -171,7 +171,9 @@ or not (<code class="docutils literal notranslate"><span class="pre">False</span
 <dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
 <p>Representation of a client’s connection to a message bus.</p>
 <p>An instance of this class is the central point for a client to interact
-with a message bus.</p>
+with a message bus. It can be used as a context manager. On entering the
+runtime context the <a class="reference internal" href="#dcar.bus.Bus.connect" title="dcar.bus.Bus.connect"><code class="xref py py-meth docutils literal notranslate"><span class="pre">connect()</span></code></a> method will be called, on exiting the
+<a class="reference internal" href="#dcar.bus.Bus.disconnect" title="dcar.bus.Bus.disconnect"><code class="xref py py-meth docutils literal notranslate"><span class="pre">disconnect()</span></code></a> method.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
