@@ -3,7 +3,7 @@
 This should normally be enough for implementing message bus clients.
 """
 
-__version__ = '0.0.3'
+__version__ = '0.0.4'
 
 # flake8: noqa
 
