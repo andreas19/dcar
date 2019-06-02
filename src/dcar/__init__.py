@@ -3,7 +3,7 @@
 This should normally be enough for implementing message bus clients.
 """
 
-__version__ = '0.0.4'
+__version__ = '0.0.5'
 
 # flake8: noqa
 
@@ -38,7 +38,7 @@ class UnixFD:
     responsible for closing the original file descriptor.
 
     :param f: file descriptor or object that has a ``fileno()`` method which
-              returns an :class:`int`
+              returns a file descriptor
     :type f: int or file-like object
     :param bool close: if set to ``True`` the original file descriptor will be
                        closed after duplicating it
