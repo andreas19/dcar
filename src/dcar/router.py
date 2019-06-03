@@ -137,14 +137,9 @@ class Router:
 class MatchRule:
     """Match rule for signals.
 
-    Except for ``unicast`` all parameters are explained in the
-    `D-Bus specification
+    All parameters are explained in the `D-Bus specification
     <https://dbus.freedesktop.org/doc/dbus-specification.html
     #message-bus-routing-match-rules>`_.
-
-    If ``unicast=True`` this rule will only apply to unicast signals
-    and no *AddMatch* message will be sent to the message bus from
-    the :meth:`~dcar.Bus.register_signal` method.
     """
 
     object_path: str = None
@@ -154,7 +149,6 @@ class MatchRule:
     path_namespace: str = None
     destination: str = None
     arg0namespace: str = None
-    unicast: bool = False
     args: dict = field(init=False, default_factory=dict)
     argpaths: dict = field(init=False, default_factory=dict)
 
@@ -252,19 +246,19 @@ class Signals(Registry):
 
     params = ('msginfo',)  #: handler parameters
 
-    def _add(self, rule, handler):
+    def _add(self, rule, handler, unicast):
         if not isinstance(rule, MatchRule):
             raise TypeError('first argument must be a MatchRule')
-        if (rule, handler) in self._data.values():
+        if (rule, handler, unicast) in self._data.values():
             raise RegisterError('rule %r exists with same handler %r' %
                                 (str(rule), handler))
         self._counter += 1
-        self._data[self._counter] = (rule, handler)
+        self._data[self._counter] = (rule, handler, unicast)
         return self._counter
 
     def _remove(self, rule_id):
         with suppress(KeyError):
-            rule, _ = self._data[rule_id]
+            rule, _, _ = self._data[rule_id]
             del self._data[rule_id]
             return rule
 
@@ -281,8 +275,8 @@ class Signals(Registry):
         sender = fields[HeaderField.SENDER]
         destination = fields[HeaderField.DESTINATION]
         with self._lock:
-            for rule, handler in self._data.values():
-                if rule.unicast:
+            for rule, handler, unicast in self._data.values():
+                if unicast:
                     rule_destination = unique_name
                 else:
                     rule_destination = rule.destination

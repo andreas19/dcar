@@ -228,22 +228,32 @@ class Bus:
         msg = Message(MessageType.SIGNAL, HeaderFlag.NONE, header_fields, args)
         return self.send_message(msg)
 
-    def register_signal(self, rule, handler, timeout=DEFAULT_TIMEOUT_VALUE):
+    def register_signal(self, rule, handler, unicast=False,
+                        timeout=DEFAULT_TIMEOUT_VALUE):
         """Register a signal.
 
         The handler function must take one parameter:
         a :class:`~dcar.message.MessageInfo` object.
 
+        .. note::
+
+           The handler function will be executed in the same thread
+           as the 'recv-loop' so it should return quickly.
+
         :param ~dcar.MatchRule rule: the match rule
         :param callable handler: handler function for the signal
+        :param bool unicast: if ``True`` this rule applies to a unicast
+                             signal and no *AddMatch* message will
+                             be sent to the message bus
         :param float timeout: timeout in seconds
         :return: ID of the signal
         :rtype: int
         :raises ~dcar.RegisterError: if the signal could not be registered
-        :raises ~dcar.TransportError: if AddMatch message could not be sent
+        :raises ~dcar.TransportError: if the *AddMatch* message could
+                                      not be sent
         """
-        reg_id = self._router.signals.add(rule, handler)
-        if not rule.unicast:
+        reg_id = self._router.signals.add(rule, handler, unicast)
+        if not unicast:
             try:
                 self.method_call('/org/freedesktop/DBus',
                                  'org.freedesktop.DBus',
@@ -279,6 +289,11 @@ class Bus:
         The handler function must take two parameters:
         a :class:`Bus` object and
         a :class:`~dcar.message.MessageInfo` object.
+
+        .. note::
+
+           The handler function will be executed in the same thread
+           as the 'recv-loop' so it should return quickly.
 
         :param str object_path: object path
         :param str interface: interface name

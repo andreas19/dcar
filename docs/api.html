@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>API Reference &#8212; D-Car 0.0.4 documentation</title>
+    <title>API Reference &#8212; D-Car 0.0.5 documentation</title>
     <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
@@ -114,7 +114,7 @@ responsible for closing the original file descriptor.</p>
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
 <li><strong>f</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.7)"><em>int</em></a><em> or </em><em>file-like object</em>) – file descriptor or object that has a <code class="docutils literal notranslate"><span class="pre">fileno()</span></code> method which
-returns an <a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></li>
+returns a file descriptor</li>
 <li><strong>close</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.7)"><em>bool</em></a>) – if set to <code class="docutils literal notranslate"><span class="pre">True</span></code> the original file descriptor will be
 closed after duplicating it</li>
 </ul>
@@ -367,10 +367,15 @@ a reply (required)</li>
 
 <dl class="method">
 <dt id="dcar.Bus.register_signal">
-<code class="descname">register_signal</code><span class="sig-paren">(</span><em>rule</em>, <em>handler</em>, <em>timeout=25.0</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dcar/bus.html#Bus.register_signal"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dcar.Bus.register_signal" title="Permalink to this definition">¶</a></dt>
+<code class="descname">register_signal</code><span class="sig-paren">(</span><em>rule</em>, <em>handler</em>, <em>unicast=False</em>, <em>timeout=25.0</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dcar/bus.html#Bus.register_signal"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dcar.Bus.register_signal" title="Permalink to this definition">¶</a></dt>
 <dd><p>Register a signal.</p>
 <p>The handler function must take one parameter:
 a <a class="reference internal" href="modules.html#dcar.message.MessageInfo" title="dcar.message.MessageInfo"><code class="xref py py-class docutils literal notranslate"><span class="pre">MessageInfo</span></code></a> object.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">The handler function will be executed in the same thread
+as the ‘recv-loop’ so it should return quickly.</p>
+</div>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -378,6 +383,9 @@ a <a class="reference internal" href="modules.html#dcar.message.MessageInfo" tit
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
 <li><strong>rule</strong> (<a class="reference internal" href="#dcar.MatchRule" title="dcar.MatchRule"><em>MatchRule</em></a>) – the match rule</li>
 <li><strong>handler</strong> (<em>callable</em>) – handler function for the signal</li>
+<li><strong>unicast</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.7)"><em>bool</em></a>) – if <code class="docutils literal notranslate"><span class="pre">True</span></code> this rule applies to a unicast
+signal and no <em>AddMatch</em> message will
+be sent to the message bus</li>
 <li><strong>timeout</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.7)"><em>float</em></a>) – timeout in seconds</li>
 </ul>
 </td>
@@ -390,7 +398,8 @@ a <a class="reference internal" href="modules.html#dcar.message.MessageInfo" tit
 </tr>
 <tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><ul class="first last simple">
 <li><a class="reference internal" href="#dcar.RegisterError" title="dcar.RegisterError"><strong>RegisterError</strong></a> – if the signal could not be registered</li>
-<li><a class="reference internal" href="#dcar.TransportError" title="dcar.TransportError"><strong>TransportError</strong></a> – if AddMatch message could not be sent</li>
+<li><a class="reference internal" href="#dcar.TransportError" title="dcar.TransportError"><strong>TransportError</strong></a> – if the <em>AddMatch</em> message could
+not be sent</li>
 </ul>
 </td>
 </tr>
@@ -426,6 +435,11 @@ a <a class="reference internal" href="modules.html#dcar.message.MessageInfo" tit
 <p>The handler function must take two parameters:
 a <a class="reference internal" href="#dcar.Bus" title="dcar.Bus"><code class="xref py py-class docutils literal notranslate"><span class="pre">Bus</span></code></a> object and
 a <a class="reference internal" href="modules.html#dcar.message.MessageInfo" title="dcar.message.MessageInfo"><code class="xref py py-class docutils literal notranslate"><span class="pre">MessageInfo</span></code></a> object.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">The handler function will be executed in the same thread
+as the ‘recv-loop’ so it should return quickly.</p>
+</div>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -469,14 +483,10 @@ a <a class="reference internal" href="modules.html#dcar.message.MessageInfo" tit
 
 <dl class="class">
 <dt id="dcar.MatchRule">
-<em class="property">class </em><code class="descclassname">dcar.</code><code class="descname">MatchRule</code><span class="sig-paren">(</span><em>object_path: str = None</em>, <em>interface: str = None</em>, <em>signal_name: str = None</em>, <em>sender: str = None</em>, <em>path_namespace: str = None</em>, <em>destination: str = None</em>, <em>arg0namespace: str = None</em>, <em>unicast: bool = False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dcar/router.html#MatchRule"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dcar.MatchRule" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">dcar.</code><code class="descname">MatchRule</code><span class="sig-paren">(</span><em>object_path: str = None</em>, <em>interface: str = None</em>, <em>signal_name: str = None</em>, <em>sender: str = None</em>, <em>path_namespace: str = None</em>, <em>destination: str = None</em>, <em>arg0namespace: str = None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dcar/router.html#MatchRule"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dcar.MatchRule" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
 <p>Match rule for signals.</p>
-<p>Except for <code class="docutils literal notranslate"><span class="pre">unicast</span></code> all parameters are explained in the
-<a class="reference external" href="https://dbus.freedesktop.org/doc/dbus-specification.html#message-bus-routing-match-rules">D-Bus specification</a>.</p>
-<p>If <code class="docutils literal notranslate"><span class="pre">unicast=True</span></code> this rule will only apply to unicast signals
-and no <em>AddMatch</em> message will be sent to the message bus from
-the <a class="reference internal" href="#dcar.Bus.register_signal" title="dcar.Bus.register_signal"><code class="xref py py-meth docutils literal notranslate"><span class="pre">register_signal()</span></code></a> method.</p>
+<p>All parameters are explained in the <a class="reference external" href="https://dbus.freedesktop.org/doc/dbus-specification.html#message-bus-routing-match-rules">D-Bus specification</a>.</p>
 <dl class="attribute">
 <dt id="dcar.MatchRule.object_path">
 <code class="descname">object_path</code><em class="property"> = None</em><a class="headerlink" href="#dcar.MatchRule.object_path" title="Permalink to this definition">¶</a></dt>
@@ -510,11 +520,6 @@ the <a class="reference internal" href="#dcar.Bus.register_signal" title="dcar.B
 <dl class="attribute">
 <dt id="dcar.MatchRule.arg0namespace">
 <code class="descname">arg0namespace</code><em class="property"> = None</em><a class="headerlink" href="#dcar.MatchRule.arg0namespace" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="dcar.MatchRule.unicast">
-<code class="descname">unicast</code><em class="property"> = False</em><a class="headerlink" href="#dcar.MatchRule.unicast" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
