@@ -13,10 +13,10 @@ Installation
 # pip install dcar
 
 
-Dependencies
+Requirements
 ------------
 
-.. include:: dependencies.txt
+.. include:: requirements.incl
 
 
 Links

@@ -317,10 +317,10 @@ class Signals(Registry):
             if argpaths[idx] == body[idx]:
                 continue
             if (argpaths[idx].endswith('/') and
-               body[idx].startswith(argpaths[idx]) or
-               body[idx].endswith('/') and
-               argpaths[idx].startswith(body[idx])):
-                    continue
+                    body[idx].startswith(argpaths[idx]) or
+                    body[idx].endswith('/') and
+                    argpaths[idx].startswith(body[idx])):
+                continue
             return False
         return True
 

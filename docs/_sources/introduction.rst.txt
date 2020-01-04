@@ -43,7 +43,7 @@ Examples
 Calling a method
 ^^^^^^^^^^^^^^^^
 
-.. code-block:: python
+.. code-block:: python3
 
    import dcar
 
@@ -58,7 +58,7 @@ Calling a method
 Subscribing to a signal
 ^^^^^^^^^^^^^^^^^^^^^^^
 
-.. code-block:: python
+.. code-block:: python3
 
    import dcar
    
@@ -84,7 +84,7 @@ Subscribing to a signal
 Export a method
 ^^^^^^^^^^^^^^^
 
-.. code-block:: python
+.. code-block:: python3
 
    import dcar
    
@@ -106,7 +106,7 @@ Export a method
 
 This method can be called like this:
 
-.. code-block:: python
+.. code-block:: python3
 
    import dcar
    
