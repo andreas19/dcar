@@ -1,17 +1,17 @@
 
 <!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html>
   <head>
     <meta charset="utf-8" />
     <title>dcar.bus &#8212; D-Car 0.1.0 documentation</title>
     <link rel="stylesheet" href="../../_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
-    <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
-    <script type="text/javascript" src="../../_static/jquery.js"></script>
-    <script type="text/javascript" src="../../_static/underscore.js"></script>
-    <script type="text/javascript" src="../../_static/doctools.js"></script>
-    <script type="text/javascript" src="../../_static/language_data.js"></script>
+    <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/language_data.js"></script>
     <link rel="shortcut icon" href="../../_static/favicon.ico"/>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
@@ -63,7 +63,7 @@
     </form>
     </div>
 </div>
-<script type="text/javascript">$('#searchbox').show(0);</script>
+<script>$('#searchbox').show(0);</script>
 
 
 
@@ -185,14 +185,20 @@
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">connected</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_transport</span><span class="o">.</span><span class="n">disconnect</span><span class="p">()</span></div>
 
-<div class="viewcode-block" id="Bus.block"><a class="viewcode-back" href="../../modules.html#dcar.Bus.block">[docs]</a>    <span class="k">def</span> <span class="nf">block</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Blocks until ``send-loop`` and ``recv-loop`` are finished.</span>
+<div class="viewcode-block" id="Bus.block"><a class="viewcode-back" href="../../modules.html#dcar.Bus.block">[docs]</a>    <span class="k">def</span> <span class="nf">block</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Blocks until ``send-loop`` and ``recv-loop``\</span>
+<span class="sd">           are finished or timeout is reached.</span>
 
 <span class="sd">        These threads are started with</span>
 <span class="sd">        :meth:`dcar.transports.Transport.start_loops`.</span>
+
+<span class="sd">        :param float timeout: timeout value in seconds</span>
+<span class="sd">                              (``None`` means no timeout)</span>
+
+<span class="sd">        .. versionchanged:: 0.2.0 Add parameter ``timeout``</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_transport</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_transport</span><span class="o">.</span><span class="n">block</span><span class="p">()</span></div>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_transport</span><span class="o">.</span><span class="n">block</span><span class="p">(</span><span class="n">timeout</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="Bus.send_message"><a class="viewcode-back" href="../../modules.html#dcar.Bus.send_message">[docs]</a>    <span class="k">def</span> <span class="nf">send_message</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">msg</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Send a message.</span>
@@ -203,6 +209,9 @@
 <span class="sd">        :param Message msg: the message</span>
 <span class="sd">        :param float timeout: ``None`` = no timeout, ``0`` = no reply expected</span>
 <span class="sd">                              and ``&gt; 0`` = timeout in seconds</span>
+<span class="sd">        :returns: return values of the message call if a reply is expected</span>
+<span class="sd">                  else ``None``</span>
+<span class="sd">        :rtype: tuple or None</span>
 <span class="sd">        :raises ~dcar.TransportError: if the message could not be sent</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">connected</span><span class="p">:</span>
@@ -227,6 +236,9 @@
 <span class="sd">        :param float timeout: timeout in seconds</span>
 <span class="sd">        :param bool no_auto_start: header flag</span>
 <span class="sd">        :param bool allow_interactive_authorization: header flag</span>
+<span class="sd">        :returns: return values of the method call if a reply is expected</span>
+<span class="sd">                  else ``None``</span>
+<span class="sd">        :rtype: tuple or None</span>
 <span class="sd">        :raises ~dcar.TransportError: if the message could not be sent</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">header_fields</span> <span class="o">=</span> <span class="n">HeaderFields</span><span class="p">()</span>
@@ -320,8 +332,8 @@
 
 <span class="sd">        .. note::</span>
 
-<span class="sd">           The handler function will be executed in the same thread</span>
-<span class="sd">           as the &#39;recv-loop&#39; so it should return quickly.</span>
+<span class="sd">           The handler functions for incoming method calls and signals will be</span>
+<span class="sd">           executed in a separate thread sequentially.</span>
 
 <span class="sd">        :param ~dcar.MatchRule rule: the match rule</span>
 <span class="sd">        :param callable handler: handler function for the signal</span>
@@ -375,8 +387,8 @@
 
 <span class="sd">        .. note::</span>
 
-<span class="sd">           The handler function will be executed in the same thread</span>
-<span class="sd">           as the &#39;recv-loop&#39; so it should return quickly.</span>
+<span class="sd">           The handler functions for incoming method calls and signals will be</span>
+<span class="sd">           executed in a separate thread sequentially.</span>
 
 <span class="sd">        :param str object_path: object path</span>
 <span class="sd">        :param str interface: interface name</span>
@@ -407,7 +419,7 @@
       &copy;2019-2020, Andreas Suhre.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 2.2.2</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.0.3</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
     </div>

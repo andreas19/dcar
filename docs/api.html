@@ -1,17 +1,17 @@
 
 <!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html>
   <head>
     <meta charset="utf-8" />
     <title>API Reference &#8212; D-Car 0.1.0 documentation</title>
     <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
-    <script type="text/javascript" src="_static/jquery.js"></script>
-    <script type="text/javascript" src="_static/underscore.js"></script>
-    <script type="text/javascript" src="_static/doctools.js"></script>
-    <script type="text/javascript" src="_static/language_data.js"></script>
+    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/language_data.js"></script>
     <link rel="shortcut icon" href="_static/favicon.ico"/>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
@@ -66,7 +66,7 @@
     </form>
     </div>
 </div>
-<script type="text/javascript">$('#searchbox').show(0);</script>
+<script>$('#searchbox').show(0);</script>
 
 
 
@@ -87,9 +87,9 @@
 <span id="api-reference"></span><h1>API Reference<a class="headerlink" href="#module-dcar" title="Permalink to this headline">¶</a></h1>
 <p>D-Car main API.</p>
 <p>This should normally be enough for implementing message bus clients.</p>
-<dl class="class">
+<dl class="py class">
 <dt id="dcar.Bus">
-<em class="property">class </em><code class="sig-prename descclassname">dcar.</code><code class="sig-name descname">Bus</code><span class="sig-paren">(</span><em class="sig-param">address='session'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dcar/bus.html#Bus"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dcar.Bus" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">dcar.</code><code class="sig-name descname">Bus</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">address</span><span class="o">=</span><span class="default_value">'session'</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dcar/bus.html#Bus"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dcar.Bus" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
 <p>Representation of a client’s connection to a message bus.</p>
 <p>An instance of this class is the central point for a client to interact
@@ -102,37 +102,37 @@ runtime context the <a class="reference internal" href="#dcar.Bus.connect" title
 <a class="reference internal" href="modules.html#dcar.address.Address" title="dcar.address.Address"><code class="xref py py-class docutils literal notranslate"><span class="pre">Address</span></code></a> object</p>
 </dd>
 </dl>
-<dl class="method">
+<dl class="py method">
 <dt id="dcar.Bus.address">
 <em class="property">property </em><code class="sig-name descname">address</code><a class="headerlink" href="#dcar.Bus.address" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return the actual address the client is connected to.</p>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="dcar.Bus.connected">
 <em class="property">property </em><code class="sig-name descname">connected</code><a class="headerlink" href="#dcar.Bus.connected" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return whether the client is connected.</p>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="dcar.Bus.unique_name">
 <em class="property">property </em><code class="sig-name descname">unique_name</code><a class="headerlink" href="#dcar.Bus.unique_name" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return the unique name of the client’s connection.</p>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="dcar.Bus.guid">
 <em class="property">property </em><code class="sig-name descname">guid</code><a class="headerlink" href="#dcar.Bus.guid" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return the GUID of the server.</p>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="dcar.Bus.unix_fds_enabled">
 <em class="property">property </em><code class="sig-name descname">unix_fds_enabled</code><a class="headerlink" href="#dcar.Bus.unix_fds_enabled" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return whether passing of unix file descriptors is enabled.</p>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="dcar.Bus.error">
 <em class="property">property </em><code class="sig-name descname">error</code><a class="headerlink" href="#dcar.Bus.error" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return transport error or  <code class="docutils literal notranslate"><span class="pre">None</span></code>.</p>
@@ -140,13 +140,13 @@ runtime context the <a class="reference internal" href="#dcar.Bus.connect" title
 bus because of this error.</p>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="dcar.Bus.raise_on_error">
 <code class="sig-name descname">raise_on_error</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/dcar/bus.html#Bus.raise_on_error"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dcar.Bus.raise_on_error" title="Permalink to this definition">¶</a></dt>
 <dd><p>Re-raises the <a class="reference internal" href="#dcar.Bus.error" title="dcar.Bus.error"><code class="xref py py-attr docutils literal notranslate"><span class="pre">error</span></code></a> or does nothing.</p>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="dcar.Bus.connect">
 <code class="sig-name descname">connect</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/dcar/bus.html#Bus.connect"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dcar.Bus.connect" title="Permalink to this definition">¶</a></dt>
 <dd><p>Connect to message bus.</p>
@@ -160,23 +160,32 @@ bus because of this error.</p>
 </dl>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="dcar.Bus.disconnect">
 <code class="sig-name descname">disconnect</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/dcar/bus.html#Bus.disconnect"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dcar.Bus.disconnect" title="Permalink to this definition">¶</a></dt>
 <dd><p>Disconnect the client.</p>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="dcar.Bus.block">
-<code class="sig-name descname">block</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/dcar/bus.html#Bus.block"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dcar.Bus.block" title="Permalink to this definition">¶</a></dt>
-<dd><p>Blocks until <code class="docutils literal notranslate"><span class="pre">send-loop</span></code> and <code class="docutils literal notranslate"><span class="pre">recv-loop</span></code> are finished.</p>
+<code class="sig-name descname">block</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">timeout</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dcar/bus.html#Bus.block"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dcar.Bus.block" title="Permalink to this definition">¶</a></dt>
+<dd><p>Blocks until <code class="docutils literal notranslate"><span class="pre">send-loop</span></code> and <code class="docutils literal notranslate"><span class="pre">recv-loop</span></code>           are finished or timeout is reached.</p>
 <p>These threads are started with
 <a class="reference internal" href="modules.html#dcar.transports.Transport.start_loops" title="dcar.transports.Transport.start_loops"><code class="xref py py-meth docutils literal notranslate"><span class="pre">dcar.transports.Transport.start_loops()</span></code></a>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>timeout</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.8)"><em>float</em></a>) – timeout value in seconds
+(<code class="docutils literal notranslate"><span class="pre">None</span></code> means no timeout)</p>
+</dd>
+</dl>
+<div class="versionchanged">
+<p><span class="versionmodified changed">Changed in version 0.2.0: </span>Add parameter <code class="docutils literal notranslate"><span class="pre">timeout</span></code></p>
+</div>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="dcar.Bus.send_message">
-<code class="sig-name descname">send_message</code><span class="sig-paren">(</span><em class="sig-param">msg</em>, <em class="sig-param">timeout=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dcar/bus.html#Bus.send_message"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dcar.Bus.send_message" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">send_message</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">msg</span></em>, <em class="sig-param"><span class="n">timeout</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dcar/bus.html#Bus.send_message"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dcar.Bus.send_message" title="Permalink to this definition">¶</a></dt>
 <dd><p>Send a message.</p>
 <p>Normally <a class="reference internal" href="#dcar.Bus.method_call" title="dcar.Bus.method_call"><code class="xref py py-meth docutils literal notranslate"><span class="pre">method_call()</span></code></a>, <a class="reference internal" href="#dcar.Bus.method_return" title="dcar.Bus.method_return"><code class="xref py py-meth docutils literal notranslate"><span class="pre">method_return()</span></code></a>, <a class="reference internal" href="#dcar.Bus.send_error" title="dcar.Bus.send_error"><code class="xref py py-meth docutils literal notranslate"><span class="pre">send_error()</span></code></a>
 or <a class="reference internal" href="#dcar.Bus.emit_signal" title="dcar.Bus.emit_signal"><code class="xref py py-meth docutils literal notranslate"><span class="pre">emit_signal()</span></code></a> should be used.</p>
@@ -188,15 +197,22 @@ or <a class="reference internal" href="#dcar.Bus.emit_signal" title="dcar.Bus.em
 and <code class="docutils literal notranslate"><span class="pre">&gt;</span> <span class="pre">0</span></code> = timeout in seconds</p></li>
 </ul>
 </dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>return values of the message call if a reply is expected
+else <code class="docutils literal notranslate"><span class="pre">None</span></code></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.8)">tuple</a> or <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.8)">None</a></p>
+</dd>
 <dt class="field-even">Raises</dt>
 <dd class="field-even"><p><a class="reference internal" href="#dcar.TransportError" title="dcar.TransportError"><strong>TransportError</strong></a> – if the message could not be sent</p>
 </dd>
 </dl>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="dcar.Bus.method_call">
-<code class="sig-name descname">method_call</code><span class="sig-paren">(</span><em class="sig-param">object_path</em>, <em class="sig-param">interface</em>, <em class="sig-param">method_name</em>, <em class="sig-param">destination</em>, <em class="sig-param">*</em>, <em class="sig-param">sender=None</em>, <em class="sig-param">signature=None</em>, <em class="sig-param">args=()</em>, <em class="sig-param">timeout=25.0</em>, <em class="sig-param">no_auto_start=False</em>, <em class="sig-param">allow_interactive_authorization=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dcar/bus.html#Bus.method_call"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dcar.Bus.method_call" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">method_call</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">object_path</span></em>, <em class="sig-param"><span class="n">interface</span></em>, <em class="sig-param"><span class="n">method_name</span></em>, <em class="sig-param"><span class="n">destination</span></em>, <em class="sig-param"><span class="o">*</span></em>, <em class="sig-param"><span class="n">sender</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">signature</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">args</span><span class="o">=</span><span class="default_value">()</span></em>, <em class="sig-param"><span class="n">timeout</span><span class="o">=</span><span class="default_value">25.0</span></em>, <em class="sig-param"><span class="n">no_auto_start</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">allow_interactive_authorization</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dcar/bus.html#Bus.method_call"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dcar.Bus.method_call" title="Permalink to this definition">¶</a></dt>
 <dd><p>Send a message of type METHOD_CALL.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -213,15 +229,22 @@ and <code class="docutils literal notranslate"><span class="pre">&gt;</span> <sp
 <li><p><strong>allow_interactive_authorization</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.8)"><em>bool</em></a>) – header flag</p></li>
 </ul>
 </dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>return values of the method call if a reply is expected
+else <code class="docutils literal notranslate"><span class="pre">None</span></code></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.8)">tuple</a> or <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.8)">None</a></p>
+</dd>
 <dt class="field-even">Raises</dt>
 <dd class="field-even"><p><a class="reference internal" href="#dcar.TransportError" title="dcar.TransportError"><strong>TransportError</strong></a> – if the message could not be sent</p>
 </dd>
 </dl>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="dcar.Bus.method_return">
-<code class="sig-name descname">method_return</code><span class="sig-paren">(</span><em class="sig-param">reply_serial</em>, <em class="sig-param">destination</em>, <em class="sig-param">*</em>, <em class="sig-param">sender=None</em>, <em class="sig-param">signature=None</em>, <em class="sig-param">args=()</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dcar/bus.html#Bus.method_return"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dcar.Bus.method_return" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">method_return</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">reply_serial</span></em>, <em class="sig-param"><span class="n">destination</span></em>, <em class="sig-param"><span class="o">*</span></em>, <em class="sig-param"><span class="n">sender</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">signature</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">args</span><span class="o">=</span><span class="default_value">()</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dcar/bus.html#Bus.method_return"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dcar.Bus.method_return" title="Permalink to this definition">¶</a></dt>
 <dd><p>Send a message of type METHOD_RETURN.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -241,9 +264,9 @@ the called method</p></li>
 </dl>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="dcar.Bus.send_error">
-<code class="sig-name descname">send_error</code><span class="sig-paren">(</span><em class="sig-param">error_name</em>, <em class="sig-param">reply_serial</em>, <em class="sig-param">destination</em>, <em class="sig-param">*</em>, <em class="sig-param">sender=None</em>, <em class="sig-param">signature=None</em>, <em class="sig-param">args=()</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dcar/bus.html#Bus.send_error"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dcar.Bus.send_error" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">send_error</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">error_name</span></em>, <em class="sig-param"><span class="n">reply_serial</span></em>, <em class="sig-param"><span class="n">destination</span></em>, <em class="sig-param"><span class="o">*</span></em>, <em class="sig-param"><span class="n">sender</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">signature</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">args</span><span class="o">=</span><span class="default_value">()</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dcar/bus.html#Bus.send_error"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dcar.Bus.send_error" title="Permalink to this definition">¶</a></dt>
 <dd><p>Send a message of type ERROR.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -263,9 +286,9 @@ a reply (required)</p></li>
 </dl>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="dcar.Bus.emit_signal">
-<code class="sig-name descname">emit_signal</code><span class="sig-paren">(</span><em class="sig-param">object_path</em>, <em class="sig-param">interface</em>, <em class="sig-param">signal_name</em>, <em class="sig-param">destination=None</em>, <em class="sig-param">*</em>, <em class="sig-param">sender=None</em>, <em class="sig-param">signature=None</em>, <em class="sig-param">args=()</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dcar/bus.html#Bus.emit_signal"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dcar.Bus.emit_signal" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">emit_signal</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">object_path</span></em>, <em class="sig-param"><span class="n">interface</span></em>, <em class="sig-param"><span class="n">signal_name</span></em>, <em class="sig-param"><span class="n">destination</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="o">*</span></em>, <em class="sig-param"><span class="n">sender</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">signature</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">args</span><span class="o">=</span><span class="default_value">()</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dcar/bus.html#Bus.emit_signal"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dcar.Bus.emit_signal" title="Permalink to this definition">¶</a></dt>
 <dd><p>Send a message of type SIGNAL.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -285,16 +308,16 @@ a reply (required)</p></li>
 </dl>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="dcar.Bus.register_signal">
-<code class="sig-name descname">register_signal</code><span class="sig-paren">(</span><em class="sig-param">rule</em>, <em class="sig-param">handler</em>, <em class="sig-param">unicast=False</em>, <em class="sig-param">timeout=25.0</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dcar/bus.html#Bus.register_signal"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dcar.Bus.register_signal" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">register_signal</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">rule</span></em>, <em class="sig-param"><span class="n">handler</span></em>, <em class="sig-param"><span class="n">unicast</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">timeout</span><span class="o">=</span><span class="default_value">25.0</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dcar/bus.html#Bus.register_signal"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dcar.Bus.register_signal" title="Permalink to this definition">¶</a></dt>
 <dd><p>Register a signal.</p>
 <p>The handler function must take one parameter:
 a <a class="reference internal" href="modules.html#dcar.message.MessageInfo" title="dcar.message.MessageInfo"><code class="xref py py-class docutils literal notranslate"><span class="pre">MessageInfo</span></code></a> object.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>The handler function will be executed in the same thread
-as the ‘recv-loop’ so it should return quickly.</p>
+<p>The handler functions for incoming method calls and signals will be
+executed in a separate thread sequentially.</p>
 </div>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -323,9 +346,9 @@ not be sent</p></li>
 </dl>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="dcar.Bus.unregister_signal">
-<code class="sig-name descname">unregister_signal</code><span class="sig-paren">(</span><em class="sig-param">reg_id</em>, <em class="sig-param">timeout=25.0</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dcar/bus.html#Bus.unregister_signal"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dcar.Bus.unregister_signal" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">unregister_signal</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">reg_id</span></em>, <em class="sig-param"><span class="n">timeout</span><span class="o">=</span><span class="default_value">25.0</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dcar/bus.html#Bus.unregister_signal"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dcar.Bus.unregister_signal" title="Permalink to this definition">¶</a></dt>
 <dd><p>Unregister a signal.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -340,17 +363,17 @@ not be sent</p></li>
 </dl>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="dcar.Bus.register_method">
-<code class="sig-name descname">register_method</code><span class="sig-paren">(</span><em class="sig-param">object_path</em>, <em class="sig-param">interface</em>, <em class="sig-param">method_name</em>, <em class="sig-param">handler</em>, <em class="sig-param">signature=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dcar/bus.html#Bus.register_method"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dcar.Bus.register_method" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">register_method</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">object_path</span></em>, <em class="sig-param"><span class="n">interface</span></em>, <em class="sig-param"><span class="n">method_name</span></em>, <em class="sig-param"><span class="n">handler</span></em>, <em class="sig-param"><span class="n">signature</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dcar/bus.html#Bus.register_method"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dcar.Bus.register_method" title="Permalink to this definition">¶</a></dt>
 <dd><p>Register a method.</p>
 <p>The handler function must take two parameters:
 a <a class="reference internal" href="#dcar.Bus" title="dcar.Bus"><code class="xref py py-class docutils literal notranslate"><span class="pre">Bus</span></code></a> object and
 a <a class="reference internal" href="modules.html#dcar.message.MessageInfo" title="dcar.message.MessageInfo"><code class="xref py py-class docutils literal notranslate"><span class="pre">MessageInfo</span></code></a> object.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>The handler function will be executed in the same thread
-as the ‘recv-loop’ so it should return quickly.</p>
+<p>The handler functions for incoming method calls and signals will be
+executed in a separate thread sequentially.</p>
 </div>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -373,9 +396,9 @@ as the ‘recv-loop’ so it should return quickly.</p>
 </dl>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="dcar.Bus.unregister_method">
-<code class="sig-name descname">unregister_method</code><span class="sig-paren">(</span><em class="sig-param">meth_id</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dcar/bus.html#Bus.unregister_method"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dcar.Bus.unregister_method" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">unregister_method</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">meth_id</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dcar/bus.html#Bus.unregister_method"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dcar.Bus.unregister_method" title="Permalink to this definition">¶</a></dt>
 <dd><p>Unregister a method.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -386,73 +409,83 @@ as the ‘recv-loop’ so it should return quickly.</p>
 
 </dd></dl>
 
-<dl class="class">
+<dl class="py class">
 <dt id="dcar.MatchRule">
-<em class="property">class </em><code class="sig-prename descclassname">dcar.</code><code class="sig-name descname">MatchRule</code><span class="sig-paren">(</span><em class="sig-param">object_path: str = None</em>, <em class="sig-param">interface: str = None</em>, <em class="sig-param">signal_name: str = None</em>, <em class="sig-param">sender: str = None</em>, <em class="sig-param">path_namespace: str = None</em>, <em class="sig-param">destination: str = None</em>, <em class="sig-param">arg0namespace: str = None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dcar/router.html#MatchRule"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dcar.MatchRule" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">dcar.</code><code class="sig-name descname">MatchRule</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">object_path</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)">str</a></span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">interface</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)">str</a></span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">signal_name</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)">str</a></span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">sender</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)">str</a></span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">path_namespace</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)">str</a></span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">destination</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)">str</a></span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">arg0namespace</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)">str</a></span> <span class="o">=</span> <span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dcar/router.html#MatchRule"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dcar.MatchRule" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
 <p>Match rule for signals.</p>
 <p>All parameters are explained in the <a class="reference external" href="https://dbus.freedesktop.org/doc/dbus-specification.html#message-bus-routing-match-rules">D-Bus specification</a>.</p>
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="dcar.MatchRule.object_path">
-<code class="sig-name descname">object_path</code><em class="property"> = None</em><a class="headerlink" href="#dcar.MatchRule.object_path" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">object_path</code><em class="property">: str</em><em class="property"> = None</em><a class="headerlink" href="#dcar.MatchRule.object_path" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="dcar.MatchRule.interface">
-<code class="sig-name descname">interface</code><em class="property"> = None</em><a class="headerlink" href="#dcar.MatchRule.interface" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">interface</code><em class="property">: str</em><em class="property"> = None</em><a class="headerlink" href="#dcar.MatchRule.interface" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="dcar.MatchRule.signal_name">
-<code class="sig-name descname">signal_name</code><em class="property"> = None</em><a class="headerlink" href="#dcar.MatchRule.signal_name" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">signal_name</code><em class="property">: str</em><em class="property"> = None</em><a class="headerlink" href="#dcar.MatchRule.signal_name" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="dcar.MatchRule.sender">
-<code class="sig-name descname">sender</code><em class="property"> = None</em><a class="headerlink" href="#dcar.MatchRule.sender" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">sender</code><em class="property">: str</em><em class="property"> = None</em><a class="headerlink" href="#dcar.MatchRule.sender" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="dcar.MatchRule.path_namespace">
-<code class="sig-name descname">path_namespace</code><em class="property"> = None</em><a class="headerlink" href="#dcar.MatchRule.path_namespace" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">path_namespace</code><em class="property">: str</em><em class="property"> = None</em><a class="headerlink" href="#dcar.MatchRule.path_namespace" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="dcar.MatchRule.destination">
-<code class="sig-name descname">destination</code><em class="property"> = None</em><a class="headerlink" href="#dcar.MatchRule.destination" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">destination</code><em class="property">: str</em><em class="property"> = None</em><a class="headerlink" href="#dcar.MatchRule.destination" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="dcar.MatchRule.arg0namespace">
-<code class="sig-name descname">arg0namespace</code><em class="property"> = None</em><a class="headerlink" href="#dcar.MatchRule.arg0namespace" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">arg0namespace</code><em class="property">: str</em><em class="property"> = None</em><a class="headerlink" href="#dcar.MatchRule.arg0namespace" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
-<dl class="method">
+<dl class="py attribute">
+<dt id="dcar.MatchRule.args">
+<code class="sig-name descname">args</code><em class="property">: dict</em><em class="property"> = None</em><a class="headerlink" href="#dcar.MatchRule.args" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="dcar.MatchRule.argpaths">
+<code class="sig-name descname">argpaths</code><em class="property">: dict</em><em class="property"> = None</em><a class="headerlink" href="#dcar.MatchRule.argpaths" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
 <dt id="dcar.MatchRule.add_arg">
-<code class="sig-name descname">add_arg</code><span class="sig-paren">(</span><em class="sig-param">idx</em>, <em class="sig-param">arg</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dcar/router.html#MatchRule.add_arg"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dcar.MatchRule.add_arg" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">add_arg</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">idx</span></em>, <em class="sig-param"><span class="n">arg</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dcar/router.html#MatchRule.add_arg"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dcar.MatchRule.add_arg" title="Permalink to this definition">¶</a></dt>
 <dd><p>Add an arg match at idx.</p>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="dcar.MatchRule.add_argpath">
-<code class="sig-name descname">add_argpath</code><span class="sig-paren">(</span><em class="sig-param">idx</em>, <em class="sig-param">argpath</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dcar/router.html#MatchRule.add_argpath"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dcar.MatchRule.add_argpath" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">add_argpath</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">idx</span></em>, <em class="sig-param"><span class="n">argpath</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dcar/router.html#MatchRule.add_argpath"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dcar.MatchRule.add_argpath" title="Permalink to this definition">¶</a></dt>
 <dd><p>Add an argpath match at idx.</p>
 </dd></dl>
 
 </dd></dl>
 
-<dl class="class">
+<dl class="py class">
 <dt id="dcar.Variant">
-<em class="property">class </em><code class="sig-prename descclassname">dcar.</code><code class="sig-name descname">Variant</code><span class="sig-paren">(</span><em class="sig-param">signature</em>, <em class="sig-param">value</em><span class="sig-paren">)</span><a class="headerlink" href="#dcar.Variant" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">dcar.</code><code class="sig-name descname">Variant</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">signature</span></em>, <em class="sig-param"><span class="n">value</span></em><span class="sig-paren">)</span><a class="headerlink" href="#dcar.Variant" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">tuple</span></code></a></p>
 <p>A D-Bus Variant.</p>
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="dcar.Variant.signature">
 <code class="sig-name descname">signature</code><a class="headerlink" href="#dcar.Variant.signature" title="Permalink to this definition">¶</a></dt>
 <dd><p>D-Bus type signature</p>
 </dd></dl>
 
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="dcar.Variant.value">
 <code class="sig-name descname">value</code><a class="headerlink" href="#dcar.Variant.value" title="Permalink to this definition">¶</a></dt>
 <dd><p>value of the Variant</p>
@@ -460,9 +493,9 @@ as the ‘recv-loop’ so it should return quickly.</p>
 
 </dd></dl>
 
-<dl class="class">
+<dl class="py class">
 <dt id="dcar.UnixFD">
-<em class="property">class </em><code class="sig-prename descclassname">dcar.</code><code class="sig-name descname">UnixFD</code><span class="sig-paren">(</span><em class="sig-param">f</em>, <em class="sig-param">close=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dcar.html#UnixFD"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dcar.UnixFD" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">dcar.</code><code class="sig-name descname">UnixFD</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">f</span></em>, <em class="sig-param"><span class="n">close</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dcar.html#UnixFD"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dcar.UnixFD" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
 <p>Wrapper for a unix file descriptor.</p>
 <p>The file descriptor will be <a class="reference external" href="https://docs.python.org/3/library/os.html#os.dup" title="(in Python v3.8)"><code class="xref py py-func docutils literal notranslate"><span class="pre">duplicated</span></code></a>. The caller is
@@ -477,7 +510,7 @@ closed after duplicating it</p></li>
 </ul>
 </dd>
 </dl>
-<dl class="method">
+<dl class="py method">
 <dt id="dcar.UnixFD.fileno">
 <code class="sig-name descname">fileno</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/dcar.html#UnixFD.fileno"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dcar.UnixFD.fileno" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return the file descriptor.</p>
@@ -493,70 +526,70 @@ closed after duplicating it</p></li>
 
 </dd></dl>
 
-<dl class="exception">
+<dl class="py exception">
 <dt id="dcar.Error">
 <em class="property">exception </em><code class="sig-prename descclassname">dcar.</code><code class="sig-name descname">Error</code><a class="reference internal" href="_modules/dcar/errors.html#Error"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dcar.Error" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/exceptions.html#Exception" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Exception</span></code></a></p>
 <p>Base class.</p>
 </dd></dl>
 
-<dl class="exception">
+<dl class="py exception">
 <dt id="dcar.AddressError">
 <em class="property">exception </em><code class="sig-prename descclassname">dcar.</code><code class="sig-name descname">AddressError</code><a class="reference internal" href="_modules/dcar/errors.html#AddressError"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dcar.AddressError" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="modules.html#dcar.errors.Error" title="dcar.errors.Error"><code class="xref py py-class docutils literal notranslate"><span class="pre">dcar.errors.Error</span></code></a></p>
 <p>Raised for errors in server addresses.</p>
 </dd></dl>
 
-<dl class="exception">
+<dl class="py exception">
 <dt id="dcar.AuthenticationError">
 <em class="property">exception </em><code class="sig-prename descclassname">dcar.</code><code class="sig-name descname">AuthenticationError</code><a class="reference internal" href="_modules/dcar/errors.html#AuthenticationError"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dcar.AuthenticationError" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="modules.html#dcar.errors.Error" title="dcar.errors.Error"><code class="xref py py-class docutils literal notranslate"><span class="pre">dcar.errors.Error</span></code></a></p>
 <p>Raised when authentication failed.</p>
 </dd></dl>
 
-<dl class="exception">
+<dl class="py exception">
 <dt id="dcar.TransportError">
 <em class="property">exception </em><code class="sig-prename descclassname">dcar.</code><code class="sig-name descname">TransportError</code><a class="reference internal" href="_modules/dcar/errors.html#TransportError"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dcar.TransportError" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="modules.html#dcar.errors.Error" title="dcar.errors.Error"><code class="xref py py-class docutils literal notranslate"><span class="pre">dcar.errors.Error</span></code></a></p>
 <p>Raised for transport related errors.</p>
 </dd></dl>
 
-<dl class="exception">
+<dl class="py exception">
 <dt id="dcar.ValidationError">
 <em class="property">exception </em><code class="sig-prename descclassname">dcar.</code><code class="sig-name descname">ValidationError</code><a class="reference internal" href="_modules/dcar/errors.html#ValidationError"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dcar.ValidationError" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="modules.html#dcar.errors.Error" title="dcar.errors.Error"><code class="xref py py-class docutils literal notranslate"><span class="pre">dcar.errors.Error</span></code></a></p>
 <p>Raised when validation failed.</p>
 </dd></dl>
 
-<dl class="exception">
+<dl class="py exception">
 <dt id="dcar.RegisterError">
 <em class="property">exception </em><code class="sig-prename descclassname">dcar.</code><code class="sig-name descname">RegisterError</code><a class="reference internal" href="_modules/dcar/errors.html#RegisterError"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dcar.RegisterError" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="modules.html#dcar.errors.Error" title="dcar.errors.Error"><code class="xref py py-class docutils literal notranslate"><span class="pre">dcar.errors.Error</span></code></a></p>
 <p>Raised when a signal or method could not be registered.</p>
 </dd></dl>
 
-<dl class="exception">
+<dl class="py exception">
 <dt id="dcar.MessageError">
 <em class="property">exception </em><code class="sig-prename descclassname">dcar.</code><code class="sig-name descname">MessageError</code><a class="reference internal" href="_modules/dcar/errors.html#MessageError"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dcar.MessageError" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="modules.html#dcar.errors.Error" title="dcar.errors.Error"><code class="xref py py-class docutils literal notranslate"><span class="pre">dcar.errors.Error</span></code></a></p>
 <p>Raised for errors in messages.</p>
 </dd></dl>
 
-<dl class="exception">
+<dl class="py exception">
 <dt id="dcar.DBusError">
 <em class="property">exception </em><code class="sig-prename descclassname">dcar.</code><code class="sig-name descname">DBusError</code><a class="reference internal" href="_modules/dcar/errors.html#DBusError"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dcar.DBusError" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="modules.html#dcar.errors.MessageError" title="dcar.errors.MessageError"><code class="xref py py-class docutils literal notranslate"><span class="pre">dcar.errors.MessageError</span></code></a></p>
 <p>Raised for errors from ERROR messages.</p>
 </dd></dl>
 
-<dl class="exception">
+<dl class="py exception">
 <dt id="dcar.SignatureError">
 <em class="property">exception </em><code class="sig-prename descclassname">dcar.</code><code class="sig-name descname">SignatureError</code><a class="reference internal" href="_modules/dcar/errors.html#SignatureError"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dcar.SignatureError" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="modules.html#dcar.errors.MessageError" title="dcar.errors.MessageError"><code class="xref py py-class docutils literal notranslate"><span class="pre">dcar.errors.MessageError</span></code></a></p>
 <p>Raised for errors in signatures.</p>
 </dd></dl>
 
-<dl class="exception">
+<dl class="py exception">
 <dt id="dcar.TooLongError">
 <em class="property">exception </em><code class="sig-prename descclassname">dcar.</code><code class="sig-name descname">TooLongError</code><a class="reference internal" href="_modules/dcar/errors.html#TooLongError"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dcar.TooLongError" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="modules.html#dcar.errors.MessageError" title="dcar.errors.MessageError"><code class="xref py py-class docutils literal notranslate"><span class="pre">dcar.errors.MessageError</span></code></a></p>
@@ -578,7 +611,7 @@ closed after duplicating it</p></li>
       &copy;2019-2020, Andreas Suhre.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 2.2.2</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.0.3</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
     </div>

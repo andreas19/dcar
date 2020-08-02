@@ -102,14 +102,20 @@ class Bus:
         if self.connected:
             self._transport.disconnect()
 
-    def block(self):
-        """Blocks until ``send-loop`` and ``recv-loop`` are finished.
+    def block(self, timeout=None):
+        """Blocks until ``send-loop`` and ``recv-loop``\
+           are finished or timeout is reached.
 
         These threads are started with
         :meth:`dcar.transports.Transport.start_loops`.
+
+        :param float timeout: timeout value in seconds
+                              (``None`` means no timeout)
+
+        .. versionchanged:: 0.2.0 Add parameter ``timeout``
         """
         if self._transport:
-            self._transport.block()
+            self._transport.block(timeout)
 
     def send_message(self, msg, timeout=None):
         """Send a message.
@@ -120,6 +126,9 @@ class Bus:
         :param Message msg: the message
         :param float timeout: ``None`` = no timeout, ``0`` = no reply expected
                               and ``> 0`` = timeout in seconds
+        :returns: return values of the message call if a reply is expected
+                  else ``None``
+        :rtype: tuple or None
         :raises ~dcar.TransportError: if the message could not be sent
         """
         if not self.connected:
@@ -144,6 +153,9 @@ class Bus:
         :param float timeout: timeout in seconds
         :param bool no_auto_start: header flag
         :param bool allow_interactive_authorization: header flag
+        :returns: return values of the method call if a reply is expected
+                  else ``None``
+        :rtype: tuple or None
         :raises ~dcar.TransportError: if the message could not be sent
         """
         header_fields = HeaderFields()
@@ -237,8 +249,8 @@ class Bus:
 
         .. note::
 
-           The handler function will be executed in the same thread
-           as the 'recv-loop' so it should return quickly.
+           The handler functions for incoming method calls and signals will be
+           executed in a separate thread sequentially.
 
         :param ~dcar.MatchRule rule: the match rule
         :param callable handler: handler function for the signal
@@ -292,8 +304,8 @@ class Bus:
 
         .. note::
 
-           The handler function will be executed in the same thread
-           as the 'recv-loop' so it should return quickly.
+           The handler functions for incoming method calls and signals will be
+           executed in a separate thread sequentially.
 
         :param str object_path: object path
         :param str interface: interface name

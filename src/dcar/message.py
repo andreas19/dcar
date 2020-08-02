@@ -185,7 +185,7 @@ def _validate_type(obj, type_, name):
 MessageInfo = namedtuple('MessageInfo',
                          ['serial', 'args', 'path', 'interface', 'member',
                           'sender', 'no_reply_expected',
-                          'allow_interactive_authorization'])
+                          'allow_interactive_authorization', 'is_signal'])
 MessageInfo.__doc__ += ('\nObjects of this type will be passed to handler'
                         ' functions registered with'
                         ' :meth:`~dcar.Bus.register_signal` and'
@@ -198,6 +198,7 @@ MessageInfo.member.__doc__ = 'member (signal or method) name'
 MessageInfo.sender.__doc__ = "name of the sender's connection"
 MessageInfo.no_reply_expected.__doc__ = 'header flag'
 MessageInfo.allow_interactive_authorization.__doc__ = 'header flag'
+MessageInfo.is_signal.__doc__ = '``True`` if signal'
 
 
 class Message:
@@ -314,7 +315,8 @@ class Message:
                  fields[HeaderField.INTERFACE], fields[HeaderField.MEMBER],
                  fields[HeaderField.SENDER],
                  bool(flags & HeaderFlag.NO_REPLY_EXPECTED),
-                 bool(flags & HeaderFlag.ALLOW_INTERACTIVE_AUTHORIZATION))
+                 bool(flags & HeaderFlag.ALLOW_INTERACTIVE_AUTHORIZATION),
+                 message_type is MessageType.SIGNAL)
         return obj
 
     def to_bytes(self):

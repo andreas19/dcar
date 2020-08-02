@@ -6,7 +6,7 @@ from contextlib import suppress
 from dataclasses import dataclass, field, astuple
 from functools import partial
 from queue import SimpleQueue
-from threading import Condition, Lock
+from threading import Condition, Lock, Thread
 
 from . import validate
 from .const import MAX_MATCH_RULE_LEN, MAX_MATCH_RULE_ARG_NUM
@@ -38,6 +38,9 @@ class Router:
         self.signals = Signals()
         self.methods = Methods()
         self.out_queue = SimpleQueue()
+        self._handler_queue = SimpleQueue()
+        self._handler_thread = Thread(target=self._handle, daemon=True)
+        self._handler_thread.start()
         self._bus = bus
 
     def _check_replies(self, serial):
@@ -53,7 +56,7 @@ class Router:
 
         :param ~dcar.message.Message msg: the message
         :param float timeout: timeout in seconds
-        :returns: return values of a message call (if a reply is expected)
+        :returns: return values of a message call if a reply is expected
                   or ``None``
         :rtype: tuple or None
         :raises ~dcar.TransportError: if the message could not be sent
@@ -91,6 +94,7 @@ class Router:
         if msg is None:  # transport disconnected
             with self._cv:
                 self.out_queue.put((None, None))  # unblock send-loop
+                self._handler_queue.put((None, None))
                 self._cv.notify_all()
             return
         if msg.message_type is MessageType.INVALID:
@@ -101,14 +105,24 @@ class Router:
                     self._replies[msg.reply_serial] = msg
                     self._cv.notify_all()
         elif msg.message_type is MessageType.METHOD_CALL:
-            try:
-                method = self._find_method(msg)
-                method(self._bus, msg.info)
-            except DBusError as ex:
-                self._send_error(ex, msg.serial, msg.fields[HeaderField.SENDER])
+            method = self._find_method(msg)
+            self._handler_queue.put((method, msg.info))
         elif msg.message_type is MessageType.SIGNAL:
             for handler in self.signals.matches(msg, self._bus.unique_name):
-                handler(msg.info)
+                self._handler_queue.put((handler, msg.info))
+
+    def _handle(self):
+        while True:
+            func, info = self._handler_queue.get()
+            if func is None:
+                break
+            if info.is_signal:
+                func(info)
+            else:
+                try:
+                    func(self._bus, info)
+                except DBusError as ex:
+                    self._send_error(ex, info.serial, info.sender)
 
     def _find_method(self, msg):
         method, signature = self.methods.find(msg)

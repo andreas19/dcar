@@ -4,6 +4,7 @@ import array
 import logging
 import socket
 import threading
+import time
 from contextlib import suppress
 
 from .auth import authenticate
@@ -125,10 +126,23 @@ class Transport:
                                            name='send-loop', daemon=True)
         self._send_loop.start()
 
-    def block(self):
-        """Block until loop threads are finished."""
-        self._recv_loop.join()
-        self._send_loop.join()
+    def block(self, timeout=None):
+        """Block until loop threads are finished.
+
+        :param float timeout: timeout value in seconds
+                              (``None`` means no timeout)
+
+        .. versionchanged:: 0.2.0 Add parameter ``timeout``
+        """
+        if timeout is None:
+            self._recv_loop.join()
+            self._send_loop.join()
+        else:
+            t = time.time()
+            self._recv_loop.join(timeout)
+            r = timeout - (time.time() - t)
+            if r > 0:
+                self._send_loop.join(r)
 
     def _send_loop(self):
         while self.connected:
