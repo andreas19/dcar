@@ -1,4 +1,7 @@
-"""Introspection module."""
+"""Introspection module.
+
+.. versionadded:: 0.3.0
+"""
 
 import xml.etree.ElementTree as ET
 from collections import namedtuple, defaultdict

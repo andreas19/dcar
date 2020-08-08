@@ -1,4 +1,7 @@
-"""Remote module."""
+"""Remote module.
+
+.. versionadded:: 0.3.0
+"""
 
 from contextlib import suppress
 
