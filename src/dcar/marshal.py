@@ -1,30 +1,10 @@
 """Marshal/unmarshal D-Bus Messages.
 
-.. _ref-types-table:
-
-Types:
-
-=============  ===================  ==========
-D-Bus          Python IN            Python OUT
-=============  ===================  ==========
-a              list, array.array    list
-()             tuple                tuple
-a{}            dict                 dict
-v              bus.Variant,         value
-               2-tuple (sig,value)
-s,o,g          str                  str
-d              float                float
-b              bool                 bool
-y,n,q,i,u,x,t  int                  int
-h              bus.UnixFD,          file descriptor
-               obj with fileno(),
-               file descriptor
-=============  ===================  ==========
-
 See:
 
+* :ref:`ref-types-table`
 * `Summary of types
-  <https://dbus.freedesktop.org/doc/dbus-specification.html#idm487>`_
+  <https://dbus.freedesktop.org/doc/dbus-specification.html#idm495>`_
 * `Marshalling (Wire Format)
   <https://dbus.freedesktop.org/doc/dbus-specification.html
   #message-protocol-marshaling>`_
@@ -58,7 +38,7 @@ class Type:
         """Marshal an object of this type.
 
         The data must be of an appropriate type according
-        to the column *Python IN* in the :ref:`table above <ref-types-table>`.
+        to the column *Python IN* in the :ref:`types summary <ref-types-table>`.
 
         The ``signature`` parameter is only used in the classes
         :class:`Array`, :class:`Struct`, and :class:`DictEntry`.
@@ -74,7 +54,8 @@ class Type:
         """Unmarshal an object of this type.
 
         The returned data will be of a type according
-        to the column *Python OUT* in the :ref:`table above <ref-types-table>`.
+        to the column *Python OUT* in the
+        :ref:`types summary <ref-types-table>`.
 
         The ``signature`` parameter is only used in the classes
         :class:`Array`, :class:`Struct`, and :class:`DictEntry`.
@@ -366,7 +347,7 @@ def marshal(raw, data, signature):
     """Marshal objects.
 
     The elements of the data tuple must be of appropriate types according
-    to the column *Python IN* in the :ref:`table above <ref-types-table>`.
+    to the column *Python IN* in the :ref:`types summary <ref-types-table>`.
 
     :param RawData raw: raw message data
     :param tuple data: tuple of data to be marshalled
@@ -386,7 +367,7 @@ def unmarshal(raw, signature):
     """Unmarshal objects.
 
     The elements of the returned tuple will be of types according
-    to the column *Python OUT* in the :ref:`table above <ref-types-table>`.
+    to the column *Python OUT* in the :ref:`types summary <ref-types-table>`.
 
     :param RawData raw: raw message data
     :param signature: see :class:`~dcar.signature.Signature`

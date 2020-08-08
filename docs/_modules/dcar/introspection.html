@@ -1,0 +1,248 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>dcar.introspection &#8212; D-Car 0.2.0 documentation</title>
+    <link rel="stylesheet" href="../../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/language_data.js"></script>
+    <link rel="shortcut icon" href="../../_static/favicon.ico"/>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+   
+  <link rel="stylesheet" href="../../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  <div class="document">
+    
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../../index.html">D-Car</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../overview.html">Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../examples.html">Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../mod_api.html">API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../license.html">License</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../index.html">Documentation overview</a><ul>
+  <li><a href="../index.html">Module code</a><ul>
+  <li><a href="../dcar.html">dcar</a><ul>
+  </ul></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <h1>Source code for dcar.introspection</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;Introspection module.&quot;&quot;&quot;</span>
+
+<span class="kn">import</span> <span class="nn">xml.etree.ElementTree</span> <span class="k">as</span> <span class="nn">ET</span>
+<span class="kn">from</span> <span class="nn">collections</span> <span class="kn">import</span> <span class="n">namedtuple</span><span class="p">,</span> <span class="n">defaultdict</span>
+
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="s1">&#39;Data&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;Method&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;Property&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;Signal&#39;</span><span class="p">,</span>
+    <span class="p">]</span>
+
+<span class="n">Method</span> <span class="o">=</span> <span class="n">namedtuple</span><span class="p">(</span><span class="s1">&#39;Method&#39;</span><span class="p">,</span>
+                    <span class="s1">&#39;name interface in_signature out_signature no_reply&#39;</span><span class="p">)</span>
+<span class="n">Method</span><span class="o">.</span><span class="vm">__doc__</span> <span class="o">=</span> <span class="s1">&#39;Representation of an interface member of type `method`.&#39;</span>
+<span class="n">Signal</span> <span class="o">=</span> <span class="n">namedtuple</span><span class="p">(</span><span class="s1">&#39;Signal&#39;</span><span class="p">,</span> <span class="s1">&#39;name interface signature&#39;</span><span class="p">)</span>
+<span class="n">Signal</span><span class="o">.</span><span class="vm">__doc__</span> <span class="o">=</span> <span class="s1">&#39;Representation of an interface member of type `signal`.&#39;</span>
+<span class="n">Property</span> <span class="o">=</span> <span class="n">namedtuple</span><span class="p">(</span><span class="s1">&#39;Property&#39;</span><span class="p">,</span>
+                      <span class="s1">&#39;name interface signature read write changed_signal&#39;</span><span class="p">)</span>
+<span class="n">Property</span><span class="o">.</span><span class="vm">__doc__</span> <span class="o">=</span> <span class="s1">&#39;Representation of an interface member of type `property`.&#39;</span>
+
+
+<div class="viewcode-block" id="Data"><a class="viewcode-back" href="../../modules.html#dcar.introspection.Data">[docs]</a><span class="k">class</span> <span class="nc">Data</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;Introspection data.</span>
+
+<span class="sd">    If not provided, an instance of this class gets the XML data by calling</span>
+<span class="sd">    `org.freedesktop.DBus.Introspectable.Introspect`.</span>
+
+<span class="sd">    The XML data is parsed and a data structure is created with a mapping from</span>
+<span class="sd">    the names of members of the interfaces to a list of objects of type</span>
+<span class="sd">    :class:`Method`, :class:`Signal`, or :class:`Property`.</span>
+
+<span class="sd">    Access to objects:</span>
+<span class="sd">      * ``data[&#39;member name&#39;]``</span>
+<span class="sd">      * ``data[&#39;interface name&#39;, &#39;member name&#39;]``</span>
+
+<span class="sd">    :param dcar.Bus bus: a connected bus object</span>
+<span class="sd">    :param str name: bus name</span>
+<span class="sd">    :param str path: object path</span>
+<span class="sd">    :param str xml: introspection data (will be loaded from D-Bus if ``None``)</span>
+<span class="sd">    :raises RuntimeError: if ``bus`` is not a connected :class:`dcar.Bus` object</span>
+<span class="sd">    :raises ~dcar.ValidationError: if ``name`` or ``path`` are not valid</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">bus</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="n">xml</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_bus</span> <span class="o">=</span> <span class="n">bus</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_name</span> <span class="o">=</span> <span class="n">name</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_path</span> <span class="o">=</span> <span class="n">path</span>
+        <span class="k">if</span> <span class="n">xml</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_xml</span> <span class="o">=</span> <span class="n">xml</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_xml</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_introspect</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_data</span> <span class="o">=</span> <span class="n">_interfaces</span><span class="p">(</span><span class="n">ET</span><span class="o">.</span><span class="n">fromstring</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_xml</span><span class="p">))</span>
+
+    <span class="k">def</span> <span class="nf">_introspect</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">reply</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_bus</span><span class="o">.</span><span class="n">method_call</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_path</span><span class="p">,</span>
+                                      <span class="s1">&#39;org.freedesktop.DBus.Introspectable&#39;</span><span class="p">,</span>
+                                      <span class="s1">&#39;Introspect&#39;</span><span class="p">,</span>
+                                      <span class="bp">self</span><span class="o">.</span><span class="n">_name</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">reply</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">xml</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Return XML data.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_xml</span>
+
+    <span class="k">def</span> <span class="fm">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">):</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_data</span><span class="p">[</span><span class="n">key</span><span class="p">][</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">key</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+            <span class="n">interface</span><span class="p">,</span> <span class="n">member</span> <span class="o">=</span> <span class="n">key</span>
+            <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_data</span><span class="p">[</span><span class="n">member</span><span class="p">]:</span>
+                <span class="k">if</span> <span class="n">x</span><span class="o">.</span><span class="n">interface</span> <span class="o">==</span> <span class="n">interface</span><span class="p">:</span>
+                    <span class="k">return</span> <span class="n">x</span>
+        <span class="k">raise</span> <span class="ne">KeyError</span><span class="p">(</span><span class="n">key</span><span class="p">)</span></div>
+
+
+<span class="k">def</span> <span class="nf">_interfaces</span><span class="p">(</span><span class="n">root</span><span class="p">):</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="n">defaultdict</span><span class="p">(</span><span class="nb">list</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">iface</span> <span class="ow">in</span> <span class="p">(</span><span class="n">elem</span> <span class="k">for</span> <span class="n">elem</span> <span class="ow">in</span> <span class="n">_sort</span><span class="p">(</span><span class="n">root</span><span class="p">)</span> <span class="k">if</span> <span class="n">elem</span><span class="o">.</span><span class="n">tag</span> <span class="o">==</span> <span class="s1">&#39;interface&#39;</span><span class="p">):</span>
+        <span class="n">elem</span> <span class="o">=</span> <span class="n">iface</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s1">&#39;annotation[@name=&quot;org.freedesktop.DBus.Property&#39;</span>
+                          <span class="s1">&#39;.EmitsChangedSignal&quot;]&#39;</span><span class="p">)</span>
+        <span class="n">changed_signal</span> <span class="o">=</span> <span class="s1">&#39;true&#39;</span> <span class="k">if</span> <span class="n">elem</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">elem</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;value&#39;</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">elem</span> <span class="ow">in</span> <span class="n">iface</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">elem</span><span class="o">.</span><span class="n">tag</span> <span class="o">==</span> <span class="s1">&#39;method&#39;</span><span class="p">:</span>
+                <span class="n">member</span> <span class="o">=</span> <span class="n">_method</span><span class="p">(</span><span class="n">elem</span><span class="p">,</span> <span class="n">iface</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;name&#39;</span><span class="p">))</span>
+            <span class="k">elif</span> <span class="n">elem</span><span class="o">.</span><span class="n">tag</span> <span class="o">==</span> <span class="s1">&#39;signal&#39;</span><span class="p">:</span>
+                <span class="n">member</span> <span class="o">=</span> <span class="n">_signal</span><span class="p">(</span><span class="n">elem</span><span class="p">,</span> <span class="n">iface</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;name&#39;</span><span class="p">))</span>
+            <span class="k">elif</span> <span class="n">elem</span><span class="o">.</span><span class="n">tag</span> <span class="o">==</span> <span class="s1">&#39;property&#39;</span><span class="p">:</span>
+                <span class="n">member</span> <span class="o">=</span> <span class="n">_property</span><span class="p">(</span><span class="n">elem</span><span class="p">,</span> <span class="n">iface</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;name&#39;</span><span class="p">),</span> <span class="n">changed_signal</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">member</span> <span class="o">=</span> <span class="kc">None</span>
+            <span class="k">if</span> <span class="n">member</span><span class="p">:</span>
+                <span class="n">data</span><span class="p">[</span><span class="n">member</span><span class="o">.</span><span class="n">name</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">member</span><span class="p">)</span>
+    <span class="n">data</span><span class="o">.</span><span class="n">default_factory</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="k">return</span> <span class="n">data</span>
+
+
+<span class="k">def</span> <span class="nf">_method</span><span class="p">(</span><span class="n">root</span><span class="p">,</span> <span class="n">interface</span><span class="p">):</span>
+    <span class="n">in_signature</span> <span class="o">=</span> <span class="n">out_signature</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+    <span class="n">no_reply</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="k">for</span> <span class="n">elem</span> <span class="ow">in</span> <span class="n">root</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">elem</span><span class="o">.</span><span class="n">tag</span> <span class="o">==</span> <span class="s1">&#39;arg&#39;</span><span class="p">:</span>
+            <span class="n">direction</span> <span class="o">=</span> <span class="n">elem</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;direction&#39;</span><span class="p">,</span> <span class="s1">&#39;in&#39;</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">direction</span> <span class="o">==</span> <span class="s1">&#39;in&#39;</span><span class="p">:</span>
+                <span class="n">in_signature</span> <span class="o">+=</span> <span class="n">elem</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;type&#39;</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="n">direction</span> <span class="o">==</span> <span class="s1">&#39;out&#39;</span><span class="p">:</span>
+                <span class="n">out_signature</span> <span class="o">+=</span> <span class="n">elem</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;type&#39;</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="p">(</span><span class="n">elem</span><span class="o">.</span><span class="n">tag</span> <span class="o">==</span> <span class="s1">&#39;annotation&#39;</span> <span class="ow">and</span>
+              <span class="n">elem</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;name&#39;</span><span class="p">)</span> <span class="o">==</span> <span class="s1">&#39;org.freedesktop.DBus.Method.NoReply&#39;</span><span class="p">):</span>
+            <span class="n">no_reply</span> <span class="o">=</span> <span class="n">elem</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;value&#39;</span><span class="p">)</span> <span class="o">==</span> <span class="s1">&#39;true&#39;</span>
+    <span class="k">return</span> <span class="n">Method</span><span class="p">(</span><span class="n">root</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;name&#39;</span><span class="p">),</span> <span class="n">interface</span><span class="p">,</span> <span class="n">in_signature</span><span class="p">,</span>
+                  <span class="n">out_signature</span><span class="p">,</span> <span class="n">no_reply</span><span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">_signal</span><span class="p">(</span><span class="n">root</span><span class="p">,</span> <span class="n">interface</span><span class="p">):</span>
+    <span class="n">signature</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+    <span class="k">for</span> <span class="n">elem</span> <span class="ow">in</span> <span class="n">root</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">elem</span><span class="o">.</span><span class="n">tag</span> <span class="o">==</span> <span class="s1">&#39;arg&#39;</span> <span class="ow">and</span> <span class="n">elem</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;direction&#39;</span><span class="p">,</span> <span class="s1">&#39;out&#39;</span><span class="p">)</span> <span class="o">==</span> <span class="s1">&#39;out&#39;</span><span class="p">:</span>
+            <span class="n">signature</span> <span class="o">+=</span> <span class="n">elem</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;type&#39;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">Signal</span><span class="p">(</span><span class="n">root</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;name&#39;</span><span class="p">),</span> <span class="n">interface</span><span class="p">,</span> <span class="n">signature</span><span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">_property</span><span class="p">(</span><span class="n">root</span><span class="p">,</span> <span class="n">interface</span><span class="p">,</span> <span class="n">changed_signal</span><span class="p">):</span>
+    <span class="n">signature</span> <span class="o">=</span> <span class="n">root</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;type&#39;</span><span class="p">)</span>
+    <span class="n">access</span> <span class="o">=</span> <span class="n">root</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;access&#39;</span><span class="p">)</span>
+    <span class="n">elem</span> <span class="o">=</span> <span class="n">root</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s1">&#39;annotation[@name=&quot;org.freedesktop.DBus.Property&#39;</span>
+                     <span class="s1">&#39;.EmitsChangedSignal&quot;]&#39;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">Property</span><span class="p">(</span><span class="n">root</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;name&#39;</span><span class="p">),</span> <span class="n">interface</span><span class="p">,</span> <span class="n">signature</span><span class="p">,</span>
+                    <span class="s1">&#39;read&#39;</span> <span class="ow">in</span> <span class="n">access</span><span class="p">,</span> <span class="s1">&#39;write&#39;</span> <span class="ow">in</span> <span class="n">access</span><span class="p">,</span>
+                    <span class="n">changed_signal</span> <span class="k">if</span> <span class="n">elem</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">elem</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;value&#39;</span><span class="p">))</span>
+
+
+<span class="k">def</span> <span class="nf">_sort</span><span class="p">(</span><span class="n">root</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">f</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">x</span><span class="o">.</span><span class="n">tag</span> <span class="o">==</span> <span class="s1">&#39;interface&#39;</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">x</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;name&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s1">&#39;org.freedesktop.DBus.&#39;</span><span class="p">):</span>
+                <span class="k">return</span> <span class="p">(</span><span class="mi">0</span><span class="p">,)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">return</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">x</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;name&#39;</span><span class="p">))</span>
+        <span class="k">return</span> <span class="p">(</span><span class="mi">2</span><span class="p">,)</span>
+    <span class="k">return</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">root</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="n">f</span><span class="p">)</span>
+</pre></div>
+
+          </div>
+          
+        </div>
+      </div>
+    <div class="clearer"></div>
+  </div>
+    <div class="footer">
+      &copy;2019-2020, Andreas Suhre.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.0.3</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+    </div>
+
+    
+
+    
+  </body>
+</html>

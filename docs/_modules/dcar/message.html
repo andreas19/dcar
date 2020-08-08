@@ -39,7 +39,8 @@
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../overview.html">Overview</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../introduction.html">Introduction</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../api.html">API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../examples.html">Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../mod_api.html">API Reference</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../license.html">License</a></li>
 </ul>
 
@@ -433,8 +434,8 @@
         <span class="n">args</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__dict__</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
         <span class="n">args</span><span class="p">[</span><span class="s1">&#39;class_name&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span>
         <span class="k">return</span> <span class="p">(</span><span class="s1">&#39;&lt;</span><span class="si">%(class_name)s</span><span class="s1">: </span><span class="si">%(byteorder)r</span><span class="s1">, </span><span class="si">%(message_type)r</span><span class="s1">, </span><span class="si">%(flags)r</span><span class="s1">, &#39;</span>
-                <span class="s1">&#39;</span><span class="si">%(protocol)r</span><span class="s1">, </span><span class="si">%(length)r</span><span class="s1">, </span><span class="si">%(serial)r</span><span class="s1">, </span><span class="si">%(fields)r</span><span class="s1">, &#39;</span>
-                <span class="s1">&#39;</span><span class="si">%(body)r</span><span class="s1">, </span><span class="si">%(unix_fds_cnt)s</span><span class="s1">&gt;&#39;</span><span class="p">)</span> <span class="o">%</span> <span class="n">args</span></div>
+                <span class="s1">&#39;</span><span class="si">%(protocol)r</span><span class="s1">, length=</span><span class="si">%(length)r</span><span class="s1">, serial=</span><span class="si">%(serial)r</span><span class="s1">, &#39;</span>
+                <span class="s1">&#39;</span><span class="si">%(fields)r</span><span class="s1">, </span><span class="si">%(body)r</span><span class="s1">, </span><span class="si">%(unix_fds_cnt)s</span><span class="s1">&gt;&#39;</span><span class="p">)</span> <span class="o">%</span> <span class="n">args</span></div>
 
 
 <span class="k">def</span> <span class="nf">get_sizes</span><span class="p">(</span><span class="n">raw</span><span class="p">):</span>

@@ -39,7 +39,8 @@
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../overview.html">Overview</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../introduction.html">Introduction</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../api.html">API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../examples.html">Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../mod_api.html">API Reference</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../license.html">License</a></li>
 </ul>
 
@@ -95,6 +96,7 @@
 <span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">errors</span>
 <span class="kn">from</span> <span class="nn">.bus</span> <span class="kn">import</span> <span class="n">Bus</span>
 <span class="kn">from</span> <span class="nn">.errors</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">.remote</span> <span class="kn">import</span> <span class="n">RemoteObject</span>
 <span class="kn">from</span> <span class="nn">.router</span> <span class="kn">import</span> <span class="n">MatchRule</span>
 
 <span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span>
@@ -102,6 +104,7 @@
     <span class="s1">&#39;MatchRule&#39;</span><span class="p">,</span>
     <span class="s1">&#39;Variant&#39;</span><span class="p">,</span>
     <span class="s1">&#39;UnixFD&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;RemoteObject&#39;</span><span class="p">,</span>
 <span class="p">]</span> <span class="o">+</span> <span class="n">errors</span><span class="o">.</span><span class="n">__all__</span>
 
 <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span><span class="o">.</span><span class="n">addHandler</span><span class="p">(</span><span class="n">logging</span><span class="o">.</span><span class="n">NullHandler</span><span class="p">())</span>
@@ -112,7 +115,7 @@
 <span class="n">Variant</span><span class="o">.</span><span class="n">value</span><span class="o">.</span><span class="vm">__doc__</span> <span class="o">=</span> <span class="s1">&#39;value of the Variant&#39;</span>
 
 
-<div class="viewcode-block" id="UnixFD"><a class="viewcode-back" href="../api.html#dcar.UnixFD">[docs]</a><span class="k">class</span> <span class="nc">UnixFD</span><span class="p">:</span>
+<div class="viewcode-block" id="UnixFD"><a class="viewcode-back" href="../mod_api.html#dcar.UnixFD">[docs]</a><span class="k">class</span> <span class="nc">UnixFD</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;Wrapper for a unix file descriptor.</span>
 
 <span class="sd">    The file descriptor will be :func:`duplicated &lt;os.dup&gt;`. The caller is</span>
@@ -135,7 +138,7 @@
             <span class="k">if</span> <span class="n">close</span><span class="p">:</span>
                 <span class="n">f</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
 
-<div class="viewcode-block" id="UnixFD.fileno"><a class="viewcode-back" href="../api.html#dcar.UnixFD.fileno">[docs]</a>    <span class="k">def</span> <span class="nf">fileno</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="UnixFD.fileno"><a class="viewcode-back" href="../mod_api.html#dcar.UnixFD.fileno">[docs]</a>    <span class="k">def</span> <span class="nf">fileno</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Return the file descriptor.</span>
 
 <span class="sd">        :returns: file descriptor</span>

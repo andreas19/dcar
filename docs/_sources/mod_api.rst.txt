@@ -1,0 +1,32 @@
+API Reference
+=============
+
+.. automodule:: dcar
+
+   Overview
+   --------
+
+   .. autosummary::
+      :nosignatures:
+
+      Bus
+      MatchRule
+      Variant
+      UnixFD
+      RemoteObject
+      Error
+      AddressError
+      AuthenticationError
+      TransportError
+      ValidationError
+      RegisterError
+      MessageError
+      DBusError
+      SignatureError
+      TooLongError
+
+
+
+.. toctree::
+
+   modules

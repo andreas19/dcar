@@ -47,7 +47,8 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="introduction.html">Introduction</a></li>
-<li class="toctree-l1"><a class="reference internal" href="api.html">API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="examples.html">Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="mod_api.html">API Reference</a></li>
 <li class="toctree-l1"><a class="reference internal" href="license.html">License</a></li>
 </ul>
 
@@ -110,13 +111,19 @@
 </div>
 <div class="section" id="history">
 <h2>History<a class="headerlink" href="#history" title="Permalink to this headline">¶</a></h2>
+<blockquote>
+<div><ul class="simple">
+<li><p>Add property bus_type to class Bus</p></li>
+<li><p>Add module remote</p></li>
+<li><p>Bugfix: UnknownMethod and InvalidArgs errors for incoming method calls are now handled</p></li>
+</ul>
+</div></blockquote>
 <dl class="simple">
 <dt><strong>2020-08-02 (0.2.0)</strong></dt><dd><ul class="simple">
 <li><p>Add parameter timeout to Bus.block()</p></li>
-<li><p>Add field is_signal to MessageInfo</p></li>
+<li><p>Add field is_signal to class MessageInfo</p></li>
 <li><p>The handler functions for incoming method calls and signals are not executed
-in the same thread as the recv-loop any more but in a separate thread
-sequentially</p></li>
+in the same thread as the recv-loop any more but in a separate thread sequentially</p></li>
 </ul>
 </dd>
 <dt><strong>2019-06-03 (0.1.0)</strong></dt><dd><ul class="simple">

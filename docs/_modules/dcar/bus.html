@@ -39,7 +39,8 @@
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../overview.html">Overview</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../introduction.html">Introduction</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../api.html">API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../examples.html">Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../mod_api.html">API Reference</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../license.html">License</a></li>
 </ul>
 
@@ -122,6 +123,14 @@
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_address</span>
 
     <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">bus_type</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Return the bus type: ``&#39;system&#39;``, ``&#39;session&#39;`` , or ``None``.</span>
+
+<span class="sd">        .. versionadded:: 0.3.0</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_addr</span><span class="o">.</span><span class="n">bus_type</span>
+
+    <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">connected</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Return whether the client is connected.&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_transport</span><span class="o">.</span><span class="n">connected</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_transport</span> <span class="k">else</span> <span class="kc">False</span>
@@ -189,8 +198,8 @@
         <span class="sd">&quot;&quot;&quot;Blocks until ``send-loop`` and ``recv-loop``\</span>
 <span class="sd">           are finished or timeout is reached.</span>
 
-<span class="sd">        These threads are started with</span>
-<span class="sd">        :meth:`dcar.transports.Transport.start_loops`.</span>
+<span class="sd">        The ``send-loop`` and ``recv-loop`` threads are started when connecting</span>
+<span class="sd">        to the D-Bus.</span>
 
 <span class="sd">        :param float timeout: timeout value in seconds</span>
 <span class="sd">                              (``None`` means no timeout)</span>
@@ -231,9 +240,10 @@
 <span class="sd">        :param str method_name: method name (required)</span>
 <span class="sd">        :param str destination: name of the destination&#39;s connection</span>
 <span class="sd">        :param str sender: name of the sender&#39;s connection</span>
-<span class="sd">        :param str signature: D-Bus type signatures of the IN arguments</span>
+<span class="sd">        :param str signature: D-Bus types signature of the IN arguments</span>
 <span class="sd">        :param tuple args: the IN arguments</span>
-<span class="sd">        :param float timeout: timeout in seconds</span>
+<span class="sd">        :param float timeout: ``None`` = no timeout, ``0`` = no reply expected</span>
+<span class="sd">                              and ``&gt; 0`` = timeout in seconds</span>
 <span class="sd">        :param bool no_auto_start: header flag</span>
 <span class="sd">        :param bool allow_interactive_authorization: header flag</span>
 <span class="sd">        :returns: return values of the method call if a reply is expected</span>
@@ -264,7 +274,7 @@
 <span class="sd">                                 a reply (required)</span>
 <span class="sd">        :param str destination: name of the destination&#39;s connection</span>
 <span class="sd">        :param str sender: name of the sender&#39;s connection</span>
-<span class="sd">        :param str signature: D-Bus type signatures of the OUT arguments of</span>
+<span class="sd">        :param str signature: D-Bus types signature of the OUT arguments of</span>
 <span class="sd">                              the called method</span>
 <span class="sd">        :param tuple args: the OUT arguments of the called method</span>
 <span class="sd">        :raises ~dcar.TransportError: if the message could not be sent</span>
@@ -287,7 +297,7 @@
 <span class="sd">                                 a reply (required)</span>
 <span class="sd">        :param str destination: name of the destination&#39;s connection</span>
 <span class="sd">        :param str sender: name of the sender&#39;s connection</span>
-<span class="sd">        :param str signature: D-Bus type signatures of the arguments</span>
+<span class="sd">        :param str signature: D-Bus types signature of the arguments</span>
 <span class="sd">        :param tuple args: the arguments</span>
 <span class="sd">        :raises ~dcar.TransportError: if the message could not be sent</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -309,7 +319,7 @@
 <span class="sd">        :param str signal_name: signal name (required)</span>
 <span class="sd">        :param str destination: name of the destination&#39;s connection</span>
 <span class="sd">        :param str sender: name of the sender&#39;s connection</span>
-<span class="sd">        :param str signature: D-Bus type signatures of the arguments</span>
+<span class="sd">        :param str signature: D-Bus types signature of the arguments</span>
 <span class="sd">        :param tuple args: the arguments</span>
 <span class="sd">        :raises ~dcar.TransportError: if the message could not be sent</span>
 <span class="sd">        &quot;&quot;&quot;</span>

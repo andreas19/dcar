@@ -11,6 +11,11 @@ dcar.auth
 
 .. automodule:: dcar.auth
 
+dcar.introspection
+------------------
+
+.. automodule:: dcar.introspection
+
 dcar.bus
 --------
 
@@ -25,6 +30,7 @@ dcar.errors
 -----------
 
 .. automodule:: dcar.errors
+
 
 dcar.marshal
 ------------
@@ -41,10 +47,16 @@ dcar.message
 
 .. automodule:: dcar.message
 
+
 dcar.raw
 --------
 
 .. automodule:: dcar.raw
+
+dcar.remote
+-----------
+
+.. automodule:: dcar.remote
 
 dcar.router
 -----------

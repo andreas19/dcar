@@ -14,6 +14,7 @@ from collections import namedtuple
 from . import errors
 from .bus import Bus
 from .errors import *
+from .remote import RemoteObject
 from .router import MatchRule
 
 __all__ = [
@@ -21,6 +22,7 @@ __all__ = [
     'MatchRule',
     'Variant',
     'UnixFD',
+    'RemoteObject',
 ] + errors.__all__
 
 logging.getLogger(__name__).addHandler(logging.NullHandler())

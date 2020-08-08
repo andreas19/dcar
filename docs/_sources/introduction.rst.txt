@@ -36,82 +36,28 @@ D-Bus type code ``'h'``. The file descriptors should be :func:`duplicated <os.du
 before passing them as arguments. For convinience the :class:`dcar.UnixFD` class
 should be used.
 
+.. _ref-types-table:
 
-Examples
---------
+Types summary
+^^^^^^^^^^^^^
 
-Calling a method
-^^^^^^^^^^^^^^^^
+=============  ===================  ==========
+D-Bus          Python IN            Python OUT
+=============  ===================  ==========
+a              list, array.array    list
+()             tuple                tuple
+a{}            dict                 dict
+v              bus.Variant,         value
+               2-tuple (sig,value)
+s,o,g          str                  str
+d              float                float
+b              bool                 bool
+y,n,q,i,u,x,t  int                  int
+h              bus.UnixFD,          file descriptor
+               obj with fileno(),
+               file descriptor
+=============  ===================  ==========
 
-.. code-block:: python3
+Python IN: arguments of methods and signals; values assigned to properties
 
-   import dcar
-
-   with dcar.Bus() as bus:
-       reply = bus.method_call('/org/freedesktop/DBus',
-                               'org.freedesktop.DBus',
-                               'GetId',
-                               'org.freedesktop.DBus')
-       print(reply[0])
-
-
-Subscribing to a signal
-^^^^^^^^^^^^^^^^^^^^^^^
-
-.. code-block:: python3
-
-   import dcar
-   
-   bus = dcar.Bus()
-   bus.register_signal(dcar.MatchRule(interface='org.freedesktop.DBus',
-                                      signal_name='NameAcquired'),
-                       lambda x: print('NameAcquired:', x.args[0]),
-                       unicast=True)
-   with bus:
-       bus.register_signal(dcar.MatchRule(interface='org.freedesktop.DBus',
-                                          signal_name='NameOwnerChanged'),
-                           lambda x: print('NameOwnerChanged:', x.args))
-       reply = bus.method_call('/org/freedesktop/DBus',
-                               'org.freedesktop.DBus',
-                               'RequestName',
-                               'org.freedesktop.DBus',
-                               signature='su',
-                               args=('test.Dummy', 0))
-       print(reply[0])
-       bus.block()
-
-
-Export a method
-^^^^^^^^^^^^^^^
-
-.. code-block:: python3
-
-   import dcar
-   
-   def echo(bus, msginfo):
-       bus.method_return(msginfo.serial, msginfo.sender,
-                         signature='s', args=msginfo.args)
-   
-   bus = dcar.Bus()
-   bus.register_method('/test/Dummy', 'test.Dummy', 'Echo', echo, 's')
-   with bus:
-       reply = bus.method_call('/org/freedesktop/DBus',
-                               'org.freedesktop.DBus',
-                               'RequestName',
-                               'org.freedesktop.DBus',
-                               signature='su',
-                               args=('test.Dummy', 0))
-       print(reply[0])  # should be 1
-       bus.block()
-
-This method can be called like this:
-
-.. code-block:: python3
-
-   import dcar
-   
-   with dcar.Bus() as bus:
-       reply = bus.method_call('/test/Dummy', 'test.Dummy',
-                               'Echo', 'test.Dummy',
-                               signature='s', args=('Hei',))
-       print(reply[0])
+Python OUT: return values of methods; values returned from properties

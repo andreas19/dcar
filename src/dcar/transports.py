@@ -198,9 +198,10 @@ class Transport:
                     raise TransportError()
                 self._router.incoming(Message.from_bytes(raw))
         except Exception as ex:
-            _logger.debug('recv loop', exc_info=True)
-            self._set_error(ex)
-            self.disconnect()
+            if self.connected:
+                _logger.debug('recv loop', exc_info=True)
+                self._set_error(ex)
+                self.disconnect()
         _logger.debug('EXIT recv loop')
 
 

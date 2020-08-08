@@ -11,7 +11,8 @@ Contents
 
    overview
    introduction
-   api
+   examples
+   mod_api
    license
 
 

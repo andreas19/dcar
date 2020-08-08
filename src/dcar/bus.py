@@ -39,6 +39,14 @@ class Bus:
         return self._address
 
     @property
+    def bus_type(self):
+        """Return the bus type: ``'system'``, ``'session'`` , or ``None``.
+
+        .. versionadded:: 0.3.0
+        """
+        return self._addr.bus_type
+
+    @property
     def connected(self):
         """Return whether the client is connected."""
         return self._transport.connected if self._transport else False
@@ -106,8 +114,8 @@ class Bus:
         """Blocks until ``send-loop`` and ``recv-loop``\
            are finished or timeout is reached.
 
-        These threads are started with
-        :meth:`dcar.transports.Transport.start_loops`.
+        The ``send-loop`` and ``recv-loop`` threads are started when connecting
+        to the D-Bus.
 
         :param float timeout: timeout value in seconds
                               (``None`` means no timeout)
@@ -148,9 +156,10 @@ class Bus:
         :param str method_name: method name (required)
         :param str destination: name of the destination's connection
         :param str sender: name of the sender's connection
-        :param str signature: D-Bus type signatures of the IN arguments
+        :param str signature: D-Bus types signature of the IN arguments
         :param tuple args: the IN arguments
-        :param float timeout: timeout in seconds
+        :param float timeout: ``None`` = no timeout, ``0`` = no reply expected
+                              and ``> 0`` = timeout in seconds
         :param bool no_auto_start: header flag
         :param bool allow_interactive_authorization: header flag
         :returns: return values of the method call if a reply is expected
@@ -181,7 +190,7 @@ class Bus:
                                  a reply (required)
         :param str destination: name of the destination's connection
         :param str sender: name of the sender's connection
-        :param str signature: D-Bus type signatures of the OUT arguments of
+        :param str signature: D-Bus types signature of the OUT arguments of
                               the called method
         :param tuple args: the OUT arguments of the called method
         :raises ~dcar.TransportError: if the message could not be sent
@@ -204,7 +213,7 @@ class Bus:
                                  a reply (required)
         :param str destination: name of the destination's connection
         :param str sender: name of the sender's connection
-        :param str signature: D-Bus type signatures of the arguments
+        :param str signature: D-Bus types signature of the arguments
         :param tuple args: the arguments
         :raises ~dcar.TransportError: if the message could not be sent
         """
@@ -226,7 +235,7 @@ class Bus:
         :param str signal_name: signal name (required)
         :param str destination: name of the destination's connection
         :param str sender: name of the sender's connection
-        :param str signature: D-Bus type signatures of the arguments
+        :param str signature: D-Bus types signature of the arguments
         :param tuple args: the arguments
         :raises ~dcar.TransportError: if the message could not be sent
         """

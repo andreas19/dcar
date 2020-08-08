@@ -350,8 +350,8 @@ class Message:
         args = self.__dict__.copy()
         args['class_name'] = self.__class__.__name__
         return ('<%(class_name)s: %(byteorder)r, %(message_type)r, %(flags)r, '
-                '%(protocol)r, %(length)r, %(serial)r, %(fields)r, '
-                '%(body)r, %(unix_fds_cnt)s>') % args
+                '%(protocol)r, length=%(length)r, serial=%(serial)r, '
+                '%(fields)r, %(body)r, %(unix_fds_cnt)s>') % args
 
 
 def get_sizes(raw):

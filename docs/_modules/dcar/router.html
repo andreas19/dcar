@@ -39,7 +39,8 @@
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../overview.html">Overview</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../introduction.html">Introduction</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../api.html">API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../examples.html">Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../mod_api.html">API Reference</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../license.html">License</a></li>
 </ul>
 
@@ -188,8 +189,11 @@
                     <span class="bp">self</span><span class="o">.</span><span class="n">_replies</span><span class="p">[</span><span class="n">msg</span><span class="o">.</span><span class="n">reply_serial</span><span class="p">]</span> <span class="o">=</span> <span class="n">msg</span>
                     <span class="bp">self</span><span class="o">.</span><span class="n">_cv</span><span class="o">.</span><span class="n">notify_all</span><span class="p">()</span>
         <span class="k">elif</span> <span class="n">msg</span><span class="o">.</span><span class="n">message_type</span> <span class="ow">is</span> <span class="n">MessageType</span><span class="o">.</span><span class="n">METHOD_CALL</span><span class="p">:</span>
-            <span class="n">method</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_find_method</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_handler_queue</span><span class="o">.</span><span class="n">put</span><span class="p">((</span><span class="n">method</span><span class="p">,</span> <span class="n">msg</span><span class="o">.</span><span class="n">info</span><span class="p">))</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">method</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_find_method</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_handler_queue</span><span class="o">.</span><span class="n">put</span><span class="p">((</span><span class="n">method</span><span class="p">,</span> <span class="n">msg</span><span class="o">.</span><span class="n">info</span><span class="p">))</span>
+            <span class="k">except</span> <span class="n">DBusError</span> <span class="k">as</span> <span class="n">ex</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_send_error</span><span class="p">(</span><span class="n">ex</span><span class="p">,</span> <span class="n">msg</span><span class="o">.</span><span class="n">info</span><span class="o">.</span><span class="n">serial</span><span class="p">,</span> <span class="n">msg</span><span class="o">.</span><span class="n">info</span><span class="o">.</span><span class="n">sender</span><span class="p">)</span>
         <span class="k">elif</span> <span class="n">msg</span><span class="o">.</span><span class="n">message_type</span> <span class="ow">is</span> <span class="n">MessageType</span><span class="o">.</span><span class="n">SIGNAL</span><span class="p">:</span>
             <span class="k">for</span> <span class="n">handler</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">signals</span><span class="o">.</span><span class="n">matches</span><span class="p">(</span><span class="n">msg</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_bus</span><span class="o">.</span><span class="n">unique_name</span><span class="p">):</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">_handler_queue</span><span class="o">.</span><span class="n">put</span><span class="p">((</span><span class="n">handler</span><span class="p">,</span> <span class="n">msg</span><span class="o">.</span><span class="n">info</span><span class="p">))</span></div>
@@ -225,8 +229,11 @@
                              <span class="n">signature</span> <span class="ow">or</span> <span class="s1">&#39;&#39;</span><span class="p">))</span>
         <span class="k">return</span> <span class="n">method</span>
 
-    <span class="k">def</span> <span class="nf">_send_error</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ex</span><span class="p">,</span> <span class="n">serial</span><span class="p">,</span> <span class="n">sender</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_bus</span><span class="o">.</span><span class="n">send_error</span><span class="p">(</span><span class="n">ex</span><span class="o">.</span><span class="n">args</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">serial</span><span class="p">,</span> <span class="n">sender</span><span class="p">,</span> <span class="n">signature</span><span class="o">=</span><span class="s1">&#39;s&#39;</span><span class="p">,</span>
+    <span class="k">def</span> <span class="nf">_send_error</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ex</span><span class="p">,</span> <span class="n">serial</span><span class="p">,</span> <span class="n">destination</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_bus</span><span class="o">.</span><span class="n">send_error</span><span class="p">(</span><span class="n">ex</span><span class="o">.</span><span class="n">args</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+                             <span class="n">serial</span><span class="p">,</span>
+                             <span class="n">destination</span><span class="p">,</span>
+                             <span class="n">signature</span><span class="o">=</span><span class="s1">&#39;s&#39;</span><span class="p">,</span>
                              <span class="n">args</span><span class="o">=</span><span class="n">ex</span><span class="o">.</span><span class="n">args</span><span class="p">[</span><span class="mi">1</span><span class="p">:])</span></div>
 
 

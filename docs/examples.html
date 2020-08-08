@@ -1,0 +1,182 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>Examples &#8212; D-Car 0.2.0 documentation</title>
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/language_data.js"></script>
+    <link rel="shortcut icon" href="_static/favicon.ico"/>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="API Reference" href="mod_api.html" />
+    <link rel="prev" title="Introduction" href="introduction.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  <div class="document">
+    
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="index.html">D-Car</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="overview.html">Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="introduction.html">Introduction</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Examples</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#calling-a-method">Calling a method</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#subscribing-to-a-signal">Subscribing to a signal</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#export-a-method">Export a method</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="mod_api.html">API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="license.html">License</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="introduction.html" title="previous chapter">Introduction</a></li>
+      <li>Next: <a href="mod_api.html" title="next chapter">API Reference</a></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="examples">
+<h1>Examples<a class="headerlink" href="#examples" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="calling-a-method">
+<h2>Calling a method<a class="headerlink" href="#calling-a-method" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">dcar</span>
+
+<span class="k">with</span> <span class="n">dcar</span><span class="o">.</span><span class="n">Bus</span><span class="p">()</span> <span class="k">as</span> <span class="n">bus</span><span class="p">:</span>
+    <span class="n">reply</span> <span class="o">=</span> <span class="n">bus</span><span class="o">.</span><span class="n">method_call</span><span class="p">(</span><span class="s1">&#39;/org/freedesktop/DBus&#39;</span><span class="p">,</span>
+                            <span class="s1">&#39;org.freedesktop.DBus&#39;</span><span class="p">,</span>
+                            <span class="s1">&#39;GetId&#39;</span><span class="p">,</span>
+                            <span class="s1">&#39;org.freedesktop.DBus&#39;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">reply</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="subscribing-to-a-signal">
+<h2>Subscribing to a signal<a class="headerlink" href="#subscribing-to-a-signal" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">dcar</span>
+
+<span class="n">bus</span> <span class="o">=</span> <span class="n">dcar</span><span class="o">.</span><span class="n">Bus</span><span class="p">()</span>
+<span class="n">bus</span><span class="o">.</span><span class="n">register_signal</span><span class="p">(</span><span class="n">dcar</span><span class="o">.</span><span class="n">MatchRule</span><span class="p">(</span><span class="n">interface</span><span class="o">=</span><span class="s1">&#39;org.freedesktop.DBus&#39;</span><span class="p">,</span>
+                                   <span class="n">signal_name</span><span class="o">=</span><span class="s1">&#39;NameAcquired&#39;</span><span class="p">),</span>
+                    <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;NameAcquired:&#39;</span><span class="p">,</span> <span class="n">x</span><span class="o">.</span><span class="n">args</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span>
+                    <span class="n">unicast</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="k">with</span> <span class="n">bus</span><span class="p">:</span>
+    <span class="n">bus</span><span class="o">.</span><span class="n">register_signal</span><span class="p">(</span><span class="n">dcar</span><span class="o">.</span><span class="n">MatchRule</span><span class="p">(</span><span class="n">interface</span><span class="o">=</span><span class="s1">&#39;org.freedesktop.DBus&#39;</span><span class="p">,</span>
+                                       <span class="n">signal_name</span><span class="o">=</span><span class="s1">&#39;NameOwnerChanged&#39;</span><span class="p">),</span>
+                        <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;NameOwnerChanged:&#39;</span><span class="p">,</span> <span class="n">x</span><span class="o">.</span><span class="n">args</span><span class="p">))</span>
+    <span class="n">reply</span> <span class="o">=</span> <span class="n">bus</span><span class="o">.</span><span class="n">method_call</span><span class="p">(</span><span class="s1">&#39;/org/freedesktop/DBus&#39;</span><span class="p">,</span>
+                            <span class="s1">&#39;org.freedesktop.DBus&#39;</span><span class="p">,</span>
+                            <span class="s1">&#39;RequestName&#39;</span><span class="p">,</span>
+                            <span class="s1">&#39;org.freedesktop.DBus&#39;</span><span class="p">,</span>
+                            <span class="n">signature</span><span class="o">=</span><span class="s1">&#39;su&#39;</span><span class="p">,</span>
+                            <span class="n">args</span><span class="o">=</span><span class="p">(</span><span class="s1">&#39;test.Dummy&#39;</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">reply</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+    <span class="n">bus</span><span class="o">.</span><span class="n">block</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="export-a-method">
+<h2>Export a method<a class="headerlink" href="#export-a-method" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">dcar</span>
+
+<span class="k">def</span> <span class="nf">echo</span><span class="p">(</span><span class="n">bus</span><span class="p">,</span> <span class="n">msginfo</span><span class="p">):</span>
+    <span class="n">bus</span><span class="o">.</span><span class="n">method_return</span><span class="p">(</span><span class="n">msginfo</span><span class="o">.</span><span class="n">serial</span><span class="p">,</span> <span class="n">msginfo</span><span class="o">.</span><span class="n">sender</span><span class="p">,</span>
+                      <span class="n">signature</span><span class="o">=</span><span class="s1">&#39;s&#39;</span><span class="p">,</span> <span class="n">args</span><span class="o">=</span><span class="n">msginfo</span><span class="o">.</span><span class="n">args</span><span class="p">)</span>
+
+<span class="n">bus</span> <span class="o">=</span> <span class="n">dcar</span><span class="o">.</span><span class="n">Bus</span><span class="p">()</span>
+<span class="n">bus</span><span class="o">.</span><span class="n">register_method</span><span class="p">(</span><span class="s1">&#39;/test/Dummy&#39;</span><span class="p">,</span> <span class="s1">&#39;test.Dummy&#39;</span><span class="p">,</span> <span class="s1">&#39;Echo&#39;</span><span class="p">,</span> <span class="n">echo</span><span class="p">,</span> <span class="s1">&#39;s&#39;</span><span class="p">)</span>
+<span class="k">with</span> <span class="n">bus</span><span class="p">:</span>
+    <span class="n">reply</span> <span class="o">=</span> <span class="n">bus</span><span class="o">.</span><span class="n">method_call</span><span class="p">(</span><span class="s1">&#39;/org/freedesktop/DBus&#39;</span><span class="p">,</span>
+                            <span class="s1">&#39;org.freedesktop.DBus&#39;</span><span class="p">,</span>
+                            <span class="s1">&#39;RequestName&#39;</span><span class="p">,</span>
+                            <span class="s1">&#39;org.freedesktop.DBus&#39;</span><span class="p">,</span>
+                            <span class="n">signature</span><span class="o">=</span><span class="s1">&#39;su&#39;</span><span class="p">,</span>
+                            <span class="n">args</span><span class="o">=</span><span class="p">(</span><span class="s1">&#39;test.Dummy&#39;</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">reply</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>  <span class="c1"># should be 1</span>
+    <span class="n">bus</span><span class="o">.</span><span class="n">block</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>This method can be called like this:</p>
+<div class="highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">dcar</span>
+
+<span class="k">with</span> <span class="n">dcar</span><span class="o">.</span><span class="n">Bus</span><span class="p">()</span> <span class="k">as</span> <span class="n">bus</span><span class="p">:</span>
+    <span class="n">reply</span> <span class="o">=</span> <span class="n">bus</span><span class="o">.</span><span class="n">method_call</span><span class="p">(</span><span class="s1">&#39;/test/Dummy&#39;</span><span class="p">,</span> <span class="s1">&#39;test.Dummy&#39;</span><span class="p">,</span>
+                            <span class="s1">&#39;Echo&#39;</span><span class="p">,</span> <span class="s1">&#39;test.Dummy&#39;</span><span class="p">,</span>
+                            <span class="n">signature</span><span class="o">=</span><span class="s1">&#39;s&#39;</span><span class="p">,</span> <span class="n">args</span><span class="o">=</span><span class="p">(</span><span class="s1">&#39;Hei&#39;</span><span class="p">,))</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">reply</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+    <div class="clearer"></div>
+  </div>
+    <div class="footer">
+      &copy;2019-2020, Andreas Suhre.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.0.3</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+    </div>
+
+    
+
+    
+  </body>
+</html>

@@ -105,8 +105,11 @@ class Router:
                     self._replies[msg.reply_serial] = msg
                     self._cv.notify_all()
         elif msg.message_type is MessageType.METHOD_CALL:
-            method = self._find_method(msg)
-            self._handler_queue.put((method, msg.info))
+            try:
+                method = self._find_method(msg)
+                self._handler_queue.put((method, msg.info))
+            except DBusError as ex:
+                self._send_error(ex, msg.info.serial, msg.info.sender)
         elif msg.message_type is MessageType.SIGNAL:
             for handler in self.signals.matches(msg, self._bus.unique_name):
                 self._handler_queue.put((handler, msg.info))
@@ -142,8 +145,11 @@ class Router:
                              signature or ''))
         return method
 
-    def _send_error(self, ex, serial, sender):
-        self._bus.send_error(ex.args[0], serial, sender, signature='s',
+    def _send_error(self, ex, serial, destination):
+        self._bus.send_error(ex.args[0],
+                             serial,
+                             destination,
+                             signature='s',
                              args=ex.args[1:])
 
 

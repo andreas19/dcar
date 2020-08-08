@@ -39,7 +39,8 @@
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../overview.html">Overview</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../introduction.html">Introduction</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../api.html">API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../examples.html">Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../mod_api.html">API Reference</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../license.html">License</a></li>
 </ul>
 
@@ -83,31 +84,11 @@
   <h1>Source code for dcar.marshal</h1><div class="highlight"><pre>
 <span></span><span class="sd">&quot;&quot;&quot;Marshal/unmarshal D-Bus Messages.</span>
 
-<span class="sd">.. _ref-types-table:</span>
-
-<span class="sd">Types:</span>
-
-<span class="sd">=============  ===================  ==========</span>
-<span class="sd">D-Bus          Python IN            Python OUT</span>
-<span class="sd">=============  ===================  ==========</span>
-<span class="sd">a              list, array.array    list</span>
-<span class="sd">()             tuple                tuple</span>
-<span class="sd">a{}            dict                 dict</span>
-<span class="sd">v              bus.Variant,         value</span>
-<span class="sd">               2-tuple (sig,value)</span>
-<span class="sd">s,o,g          str                  str</span>
-<span class="sd">d              float                float</span>
-<span class="sd">b              bool                 bool</span>
-<span class="sd">y,n,q,i,u,x,t  int                  int</span>
-<span class="sd">h              bus.UnixFD,          file descriptor</span>
-<span class="sd">               obj with fileno(),</span>
-<span class="sd">               file descriptor</span>
-<span class="sd">=============  ===================  ==========</span>
-
 <span class="sd">See:</span>
 
+<span class="sd">* :ref:`ref-types-table`</span>
 <span class="sd">* `Summary of types</span>
-<span class="sd">  &lt;https://dbus.freedesktop.org/doc/dbus-specification.html#idm487&gt;`_</span>
+<span class="sd">  &lt;https://dbus.freedesktop.org/doc/dbus-specification.html#idm495&gt;`_</span>
 <span class="sd">* `Marshalling (Wire Format)</span>
 <span class="sd">  &lt;https://dbus.freedesktop.org/doc/dbus-specification.html</span>
 <span class="sd">  #message-protocol-marshaling&gt;`_</span>
@@ -141,7 +122,7 @@
         <span class="sd">&quot;&quot;&quot;Marshal an object of this type.</span>
 
 <span class="sd">        The data must be of an appropriate type according</span>
-<span class="sd">        to the column *Python IN* in the :ref:`table above &lt;ref-types-table&gt;`.</span>
+<span class="sd">        to the column *Python IN* in the :ref:`types summary &lt;ref-types-table&gt;`.</span>
 
 <span class="sd">        The ``signature`` parameter is only used in the classes</span>
 <span class="sd">        :class:`Array`, :class:`Struct`, and :class:`DictEntry`.</span>
@@ -157,7 +138,8 @@
         <span class="sd">&quot;&quot;&quot;Unmarshal an object of this type.</span>
 
 <span class="sd">        The returned data will be of a type according</span>
-<span class="sd">        to the column *Python OUT* in the :ref:`table above &lt;ref-types-table&gt;`.</span>
+<span class="sd">        to the column *Python OUT* in the</span>
+<span class="sd">        :ref:`types summary &lt;ref-types-table&gt;`.</span>
 
 <span class="sd">        The ``signature`` parameter is only used in the classes</span>
 <span class="sd">        :class:`Array`, :class:`Struct`, and :class:`DictEntry`.</span>
@@ -449,7 +431,7 @@
     <span class="sd">&quot;&quot;&quot;Marshal objects.</span>
 
 <span class="sd">    The elements of the data tuple must be of appropriate types according</span>
-<span class="sd">    to the column *Python IN* in the :ref:`table above &lt;ref-types-table&gt;`.</span>
+<span class="sd">    to the column *Python IN* in the :ref:`types summary &lt;ref-types-table&gt;`.</span>
 
 <span class="sd">    :param RawData raw: raw message data</span>
 <span class="sd">    :param tuple data: tuple of data to be marshalled</span>
@@ -469,7 +451,7 @@
     <span class="sd">&quot;&quot;&quot;Unmarshal objects.</span>
 
 <span class="sd">    The elements of the returned tuple will be of types according</span>
-<span class="sd">    to the column *Python OUT* in the :ref:`table above &lt;ref-types-table&gt;`.</span>
+<span class="sd">    to the column *Python OUT* in the :ref:`types summary &lt;ref-types-table&gt;`.</span>
 
 <span class="sd">    :param RawData raw: raw message data</span>
 <span class="sd">    :param signature: see :class:`~dcar.signature.Signature`</span>

@@ -16,7 +16,7 @@
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="Modules" href="modules.html" />
-    <link rel="prev" title="Introduction" href="introduction.html" />
+    <link rel="prev" title="Examples" href="examples.html" />
    
   <link rel="stylesheet" href="_static/custom.css" type="text/css" />
   
@@ -41,7 +41,9 @@
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="overview.html">Overview</a></li>
 <li class="toctree-l1"><a class="reference internal" href="introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="examples.html">Examples</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">API Reference</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#overview">Overview</a></li>
 <li class="toctree-l2"><a class="reference internal" href="modules.html">Modules</a></li>
 </ul>
 </li>
@@ -52,7 +54,7 @@
 <h3>Related Topics</h3>
 <ul>
   <li><a href="index.html">Documentation overview</a><ul>
-      <li>Previous: <a href="introduction.html" title="previous chapter">Introduction</a></li>
+      <li>Previous: <a href="examples.html" title="previous chapter">Examples</a></li>
       <li>Next: <a href="modules.html" title="next chapter">Modules</a></li>
   </ul></li>
 </ul>
@@ -87,6 +89,61 @@
 <span id="api-reference"></span><h1>API Reference<a class="headerlink" href="#module-dcar" title="Permalink to this headline">¶</a></h1>
 <p>D-Car main API.</p>
 <p>This should normally be enough for implementing message bus clients.</p>
+<div class="section" id="overview">
+<h2>Overview<a class="headerlink" href="#overview" title="Permalink to this headline">¶</a></h2>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#dcar.Bus" title="dcar.Bus"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Bus</span></code></a></p></td>
+<td><p>Representation of a client’s connection to a message bus.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#dcar.MatchRule" title="dcar.MatchRule"><code class="xref py py-obj docutils literal notranslate"><span class="pre">MatchRule</span></code></a></p></td>
+<td><p>Match rule for signals.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#dcar.Variant" title="dcar.Variant"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Variant</span></code></a></p></td>
+<td><p>A D-Bus Variant.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#dcar.UnixFD" title="dcar.UnixFD"><code class="xref py py-obj docutils literal notranslate"><span class="pre">UnixFD</span></code></a></p></td>
+<td><p>Wrapper for a unix file descriptor.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#dcar.RemoteObject" title="dcar.RemoteObject"><code class="xref py py-obj docutils literal notranslate"><span class="pre">RemoteObject</span></code></a></p></td>
+<td><p>An instance of this class is a proxy for an object on the D-Bus.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#dcar.Error" title="dcar.Error"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Error</span></code></a></p></td>
+<td><p>Base class.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#dcar.AddressError" title="dcar.AddressError"><code class="xref py py-obj docutils literal notranslate"><span class="pre">AddressError</span></code></a></p></td>
+<td><p>Raised for errors in server addresses.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#dcar.AuthenticationError" title="dcar.AuthenticationError"><code class="xref py py-obj docutils literal notranslate"><span class="pre">AuthenticationError</span></code></a></p></td>
+<td><p>Raised when authentication failed.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#dcar.TransportError" title="dcar.TransportError"><code class="xref py py-obj docutils literal notranslate"><span class="pre">TransportError</span></code></a></p></td>
+<td><p>Raised for transport related errors.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#dcar.ValidationError" title="dcar.ValidationError"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ValidationError</span></code></a></p></td>
+<td><p>Raised when validation failed.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#dcar.RegisterError" title="dcar.RegisterError"><code class="xref py py-obj docutils literal notranslate"><span class="pre">RegisterError</span></code></a></p></td>
+<td><p>Raised when a signal or method could not be registered.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#dcar.MessageError" title="dcar.MessageError"><code class="xref py py-obj docutils literal notranslate"><span class="pre">MessageError</span></code></a></p></td>
+<td><p>Raised for errors in messages.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#dcar.DBusError" title="dcar.DBusError"><code class="xref py py-obj docutils literal notranslate"><span class="pre">DBusError</span></code></a></p></td>
+<td><p>Raised for errors from ERROR messages.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#dcar.SignatureError" title="dcar.SignatureError"><code class="xref py py-obj docutils literal notranslate"><span class="pre">SignatureError</span></code></a></p></td>
+<td><p>Raised for errors in signatures.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#dcar.TooLongError" title="dcar.TooLongError"><code class="xref py py-obj docutils literal notranslate"><span class="pre">TooLongError</span></code></a></p></td>
+<td><p>Raised when a message, an array, a name etc.</p></td>
+</tr>
+</tbody>
+</table>
 <dl class="py class">
 <dt id="dcar.Bus">
 <em class="property">class </em><code class="sig-prename descclassname">dcar.</code><code class="sig-name descname">Bus</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">address</span><span class="o">=</span><span class="default_value">'session'</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dcar/bus.html#Bus"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dcar.Bus" title="Permalink to this definition">¶</a></dt>
@@ -106,6 +163,15 @@ runtime context the <a class="reference internal" href="#dcar.Bus.connect" title
 <dt id="dcar.Bus.address">
 <em class="property">property </em><code class="sig-name descname">address</code><a class="headerlink" href="#dcar.Bus.address" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return the actual address the client is connected to.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="dcar.Bus.bus_type">
+<em class="property">property </em><code class="sig-name descname">bus_type</code><a class="headerlink" href="#dcar.Bus.bus_type" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the bus type: <code class="docutils literal notranslate"><span class="pre">'system'</span></code>, <code class="docutils literal notranslate"><span class="pre">'session'</span></code> , or <code class="docutils literal notranslate"><span class="pre">None</span></code>.</p>
+<div class="versionadded">
+<p><span class="versionmodified added">New in version 0.3.0.</span></p>
+</div>
 </dd></dl>
 
 <dl class="py method">
@@ -170,8 +236,8 @@ bus because of this error.</p>
 <dt id="dcar.Bus.block">
 <code class="sig-name descname">block</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">timeout</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dcar/bus.html#Bus.block"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dcar.Bus.block" title="Permalink to this definition">¶</a></dt>
 <dd><p>Blocks until <code class="docutils literal notranslate"><span class="pre">send-loop</span></code> and <code class="docutils literal notranslate"><span class="pre">recv-loop</span></code>           are finished or timeout is reached.</p>
-<p>These threads are started with
-<a class="reference internal" href="modules.html#dcar.transports.Transport.start_loops" title="dcar.transports.Transport.start_loops"><code class="xref py py-meth docutils literal notranslate"><span class="pre">dcar.transports.Transport.start_loops()</span></code></a>.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">send-loop</span></code> and <code class="docutils literal notranslate"><span class="pre">recv-loop</span></code> threads are started when connecting
+to the D-Bus.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><p><strong>timeout</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.8)"><em>float</em></a>) – timeout value in seconds
@@ -222,9 +288,10 @@ else <code class="docutils literal notranslate"><span class="pre">None</span></c
 <li><p><strong>method_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a>) – method name (required)</p></li>
 <li><p><strong>destination</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a>) – name of the destination’s connection</p></li>
 <li><p><strong>sender</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a>) – name of the sender’s connection</p></li>
-<li><p><strong>signature</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a>) – D-Bus type signatures of the IN arguments</p></li>
+<li><p><strong>signature</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a>) – D-Bus types signature of the IN arguments</p></li>
 <li><p><strong>args</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.8)"><em>tuple</em></a>) – the IN arguments</p></li>
-<li><p><strong>timeout</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.8)"><em>float</em></a>) – timeout in seconds</p></li>
+<li><p><strong>timeout</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.8)"><em>float</em></a>) – <code class="docutils literal notranslate"><span class="pre">None</span></code> = no timeout, <code class="docutils literal notranslate"><span class="pre">0</span></code> = no reply expected
+and <code class="docutils literal notranslate"><span class="pre">&gt;</span> <span class="pre">0</span></code> = timeout in seconds</p></li>
 <li><p><strong>no_auto_start</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.8)"><em>bool</em></a>) – header flag</p></li>
 <li><p><strong>allow_interactive_authorization</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.8)"><em>bool</em></a>) – header flag</p></li>
 </ul>
@@ -253,7 +320,7 @@ else <code class="docutils literal notranslate"><span class="pre">None</span></c
 a reply (required)</p></li>
 <li><p><strong>destination</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a>) – name of the destination’s connection</p></li>
 <li><p><strong>sender</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a>) – name of the sender’s connection</p></li>
-<li><p><strong>signature</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a>) – D-Bus type signatures of the OUT arguments of
+<li><p><strong>signature</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a>) – D-Bus types signature of the OUT arguments of
 the called method</p></li>
 <li><p><strong>args</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.8)"><em>tuple</em></a>) – the OUT arguments of the called method</p></li>
 </ul>
@@ -276,7 +343,7 @@ the called method</p></li>
 a reply (required)</p></li>
 <li><p><strong>destination</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a>) – name of the destination’s connection</p></li>
 <li><p><strong>sender</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a>) – name of the sender’s connection</p></li>
-<li><p><strong>signature</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a>) – D-Bus type signatures of the arguments</p></li>
+<li><p><strong>signature</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a>) – D-Bus types signature of the arguments</p></li>
 <li><p><strong>args</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.8)"><em>tuple</em></a>) – the arguments</p></li>
 </ul>
 </dd>
@@ -298,7 +365,7 @@ a reply (required)</p></li>
 <li><p><strong>signal_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a>) – signal name (required)</p></li>
 <li><p><strong>destination</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a>) – name of the destination’s connection</p></li>
 <li><p><strong>sender</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a>) – name of the sender’s connection</p></li>
-<li><p><strong>signature</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a>) – D-Bus type signatures of the arguments</p></li>
+<li><p><strong>signature</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a>) – D-Bus types signature of the arguments</p></li>
 <li><p><strong>args</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.8)"><em>tuple</em></a>) – the arguments</p></li>
 </ul>
 </dd>
@@ -405,6 +472,54 @@ executed in a separate thread sequentially.</p>
 <dd class="field-odd"><p><strong>meth_id</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><em>int</em></a>) – ID returned by <a class="reference internal" href="#dcar.Bus.register_method" title="dcar.Bus.register_method"><code class="xref py py-meth docutils literal notranslate"><span class="pre">register_method()</span></code></a></p>
 </dd>
 </dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="dcar.RemoteObject">
+<em class="property">class </em><code class="sig-prename descclassname">dcar.</code><code class="sig-name descname">RemoteObject</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">bus</span></em>, <em class="sig-param"><span class="n">name</span></em>, <em class="sig-param"><span class="n">path</span></em>, <em class="sig-param"><span class="n">xml</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dcar/remote.html#RemoteObject"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dcar.RemoteObject" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<p>An instance of this class is a proxy for an object on the D-Bus.</p>
+<p>Methods, signals, and properties can be accessed as attributes with the
+same names as on the D-Bus. If a name occurs in more than one interface,
+only one  method, signal, or property can be accessed as an attribute.
+To access the shadowed names subscription syntax must be used:
+<code class="docutils literal notranslate"><span class="pre">obj['interface</span> <span class="pre">name',</span> <span class="pre">'member</span> <span class="pre">name']</span></code>.</p>
+<p>Calling methods and accessing properties (depending on the <cite>access</cite>
+attribute) is done in the normal way:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">obj.SomeMethod()</span></code> (returns a single value, a tuple or <code class="docutils literal notranslate"><span class="pre">None</span></code>)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">obj.SomeProperty</span></code> (only with <cite>read</cite> access)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">obj.SomeProperty</span> <span class="pre">=</span> <span class="pre">value</span></code> (only with <cite>write</cite> access)</p></li>
+</ul>
+</div></blockquote>
+<p>Signal handlers can be set by assigning a function that takes a
+<a class="reference internal" href="modules.html#dcar.message.MessageInfo" title="dcar.message.MessageInfo"><code class="xref py py-class docutils literal notranslate"><span class="pre">MessageInfo</span></code></a> object as its only argument:
+<code class="docutils literal notranslate"><span class="pre">obj.SomeSignal</span> <span class="pre">=</span> <span class="pre">function</span></code>. The handler can be removed by assigning
+<code class="docutils literal notranslate"><span class="pre">None</span></code>.</p>
+<p>See also: <a class="reference internal" href="introduction.html#ref-types-table"><span class="std std-ref">Types summary</span></a></p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>bus</strong> (<a class="reference internal" href="#dcar.Bus" title="dcar.Bus"><em>dcar.Bus</em></a>) – a connected bus object</p></li>
+<li><p><strong>name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a>) – bus name</p></li>
+<li><p><strong>path</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a>) – object path</p></li>
+<li><p><strong>xml</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a>) – introspection data (will be loaded from D-Bus if <code class="docutils literal notranslate"><span class="pre">None</span></code>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><ul class="simple">
+<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#RuntimeError" title="(in Python v3.8)"><strong>RuntimeError</strong></a> – if <code class="docutils literal notranslate"><span class="pre">bus</span></code> is not a connected <a class="reference internal" href="#dcar.Bus" title="dcar.Bus"><code class="xref py py-class docutils literal notranslate"><span class="pre">dcar.Bus</span></code></a> object</p></li>
+<li><p><a class="reference internal" href="#dcar.ValidationError" title="dcar.ValidationError"><strong>ValidationError</strong></a> – if <code class="docutils literal notranslate"><span class="pre">name</span></code> or <code class="docutils literal notranslate"><span class="pre">path</span></code> are not valid</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt id="dcar.RemoteObject.xml">
+<em class="property">property </em><code class="sig-name descname">xml</code><a class="headerlink" href="#dcar.RemoteObject.xml" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return XML data.</p>
 </dd></dl>
 
 </dd></dl>
@@ -596,7 +711,27 @@ closed after duplicating it</p></li>
 <p>Raised when a message, an array, a name etc. is too long.</p>
 </dd></dl>
 
+</div>
 <div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="modules.html">Modules</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="modules.html#module-dcar.address">dcar.address</a></li>
+<li class="toctree-l2"><a class="reference internal" href="modules.html#module-dcar.auth">dcar.auth</a></li>
+<li class="toctree-l2"><a class="reference internal" href="modules.html#module-dcar.introspection">dcar.introspection</a></li>
+<li class="toctree-l2"><a class="reference internal" href="modules.html#module-dcar.bus">dcar.bus</a></li>
+<li class="toctree-l2"><a class="reference internal" href="modules.html#module-dcar.const">dcar.const</a></li>
+<li class="toctree-l2"><a class="reference internal" href="modules.html#module-dcar.errors">dcar.errors</a></li>
+<li class="toctree-l2"><a class="reference internal" href="modules.html#module-dcar.marshal">dcar.marshal</a></li>
+<li class="toctree-l2"><a class="reference internal" href="modules.html#module-dcar.message">dcar.message</a></li>
+<li class="toctree-l2"><a class="reference internal" href="modules.html#module-dcar.raw">dcar.raw</a></li>
+<li class="toctree-l2"><a class="reference internal" href="modules.html#module-dcar.remote">dcar.remote</a></li>
+<li class="toctree-l2"><a class="reference internal" href="modules.html#module-dcar.router">dcar.router</a></li>
+<li class="toctree-l2"><a class="reference internal" href="modules.html#module-dcar.signature">dcar.signature</a></li>
+<li class="toctree-l2"><a class="reference internal" href="modules.html#module-dcar.transports">dcar.transports</a></li>
+<li class="toctree-l2"><a class="reference internal" href="modules.html#module-dcar.validate">dcar.validate</a></li>
+</ul>
+</li>
+</ul>
 </div>
 </div>
 
