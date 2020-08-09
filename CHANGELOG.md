@@ -3,7 +3,7 @@ History
 
 **2020-08-08 (0.3.0)**
  - Add property bus_type to class Bus
- - Add module remote
+ - Add modules remote and introspection
  - Bugfix: UnknownMethod and InvalidArgs errors for incoming method calls are now handled
 
 **2020-08-02 (0.2.0)**

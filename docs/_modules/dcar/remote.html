@@ -4,6 +4,7 @@
 <html>
   <head>
     <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>dcar.remote &#8212; D-Car 0.3.0 documentation</title>
     <link rel="stylesheet" href="../../_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
@@ -244,6 +245,9 @@
 <span class="sd">    Parameters:</span>
 <span class="sd">      * name = &#39;org.freedesktop.DBus&#39;</span>
 <span class="sd">      * path = &#39;/org/freedesktop/DBus&#39;</span>
+
+<span class="sd">    See: Section `Message Bus Messages &lt;https://dbus.freedesktop.org/doc/</span>
+<span class="sd">    dbus-specification.html#message-bus-messages&gt;`_ in the D-Bus specification.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">bus</span><span class="p">):</span>
@@ -258,6 +262,10 @@
 <span class="sd">    Parameters:</span>
 <span class="sd">      * name = &#39;org.freedesktop.Notifications&#39;</span>
 <span class="sd">      * path = &#39;/org/freedesktop/Notifications&#39;</span>
+
+<span class="sd">    See: `Desktop Notifications Specification</span>
+<span class="sd">    &lt;https://developer.gnome.org/notification-spec/&gt;`_</span>
+<span class="sd">    and `Kitsiso &lt;https://andreas19.github.io/kitsiso/&gt;`_.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">bus</span><span class="p">):</span>
@@ -289,6 +297,10 @@
 <span class="sd">    Parameters:</span>
 <span class="sd">      * name = &#39;org.freedesktop.login1&#39;</span>
 <span class="sd">      * path = &#39;/org/freedesktop/login1&#39;</span>
+
+<span class="sd">    See: Section `The Manager Object</span>
+<span class="sd">    &lt;https://freedesktop.org/wiki/Software/systemd/logind/&gt;`_</span>
+<span class="sd">    in the logind documentation.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">bus</span><span class="p">):</span>
@@ -307,7 +319,7 @@
       &copy;2019-2020, Andreas Suhre.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.0.3</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.2.0</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
     </div>

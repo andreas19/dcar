@@ -4,6 +4,7 @@
 <html>
   <head>
     <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Modules &#8212; D-Car 0.3.0 documentation</title>
     <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -185,8 +186,49 @@ or not (<code class="docutils literal notranslate"><span class="pre">False</span
 <p><span class="versionmodified added">New in version 0.3.0.</span></p>
 </div>
 <dl class="py class">
+<dt id="dcar.introspection.Data">
+<em class="property">class </em><code class="sig-prename descclassname">dcar.introspection.</code><code class="sig-name descname">Data</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">bus</span></em>, <em class="sig-param"><span class="n">name</span></em>, <em class="sig-param"><span class="n">path</span></em>, <em class="sig-param"><span class="n">xml</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dcar/introspection.html#Data"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dcar.introspection.Data" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<p>Introspection data.</p>
+<p>If not provided, an instance of this class gets the XML data by calling
+<cite>org.freedesktop.DBus.Introspectable.Introspect</cite>.</p>
+<p>The XML data is parsed and a data structure is created with a mapping from
+the names of members of the interfaces to a list of objects of type
+<a class="reference internal" href="#dcar.introspection.Method" title="dcar.introspection.Method"><code class="xref py py-class docutils literal notranslate"><span class="pre">Method</span></code></a>, <a class="reference internal" href="#dcar.introspection.Signal" title="dcar.introspection.Signal"><code class="xref py py-class docutils literal notranslate"><span class="pre">Signal</span></code></a>, or <a class="reference internal" href="#dcar.introspection.Property" title="dcar.introspection.Property"><code class="xref py py-class docutils literal notranslate"><span class="pre">Property</span></code></a>.</p>
+<dl class="simple">
+<dt>Access to objects:</dt><dd><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">data['member</span> <span class="pre">name']</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">data['interface</span> <span class="pre">name',</span> <span class="pre">'member</span> <span class="pre">name']</span></code></p></li>
+</ul>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>bus</strong> (<a class="reference internal" href="mod_api.html#dcar.Bus" title="dcar.Bus"><em>dcar.Bus</em></a>) – a connected bus object</p></li>
+<li><p><strong>name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a>) – bus name</p></li>
+<li><p><strong>path</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a>) – object path</p></li>
+<li><p><strong>xml</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a>) – introspection data (will be loaded from D-Bus if <code class="docutils literal notranslate"><span class="pre">None</span></code>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><ul class="simple">
+<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#RuntimeError" title="(in Python v3.8)"><strong>RuntimeError</strong></a> – if <code class="docutils literal notranslate"><span class="pre">bus</span></code> is not a connected <a class="reference internal" href="mod_api.html#dcar.Bus" title="dcar.Bus"><code class="xref py py-class docutils literal notranslate"><span class="pre">dcar.Bus</span></code></a> object</p></li>
+<li><p><a class="reference internal" href="mod_api.html#dcar.ValidationError" title="dcar.ValidationError"><strong>ValidationError</strong></a> – if <code class="docutils literal notranslate"><span class="pre">name</span></code> or <code class="docutils literal notranslate"><span class="pre">path</span></code> are not valid</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt id="dcar.introspection.Data.xml">
+<em class="property">property </em><code class="sig-name descname">xml</code><a class="headerlink" href="#dcar.introspection.Data.xml" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return XML data.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
 <dt id="dcar.introspection.Method">
-<em class="property">class </em><code class="sig-prename descclassname">dcar.introspection.</code><code class="sig-name descname">Method</code><a class="headerlink" href="#dcar.introspection.Method" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">dcar.introspection.</code><code class="sig-name descname">Method</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">name</span></em>, <em class="sig-param"><span class="n">interface</span></em>, <em class="sig-param"><span class="n">in_signature</span></em>, <em class="sig-param"><span class="n">out_signature</span></em>, <em class="sig-param"><span class="n">no_reply</span></em><span class="sig-paren">)</span><a class="headerlink" href="#dcar.introspection.Method" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">tuple</span></code></a></p>
 <p>Representation of an interface member of type <cite>method</cite>.</p>
 <dl class="py attribute">
@@ -222,33 +264,8 @@ or not (<code class="docutils literal notranslate"><span class="pre">False</span
 </dd></dl>
 
 <dl class="py class">
-<dt id="dcar.introspection.Signal">
-<em class="property">class </em><code class="sig-prename descclassname">dcar.introspection.</code><code class="sig-name descname">Signal</code><a class="headerlink" href="#dcar.introspection.Signal" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">tuple</span></code></a></p>
-<p>Representation of an interface member of type <cite>signal</cite>.</p>
-<dl class="py attribute">
-<dt id="dcar.introspection.Signal.interface">
-<code class="sig-name descname">interface</code><a class="headerlink" href="#dcar.introspection.Signal.interface" title="Permalink to this definition">¶</a></dt>
-<dd><p>Alias for field number 1</p>
-</dd></dl>
-
-<dl class="py attribute">
-<dt id="dcar.introspection.Signal.name">
-<code class="sig-name descname">name</code><a class="headerlink" href="#dcar.introspection.Signal.name" title="Permalink to this definition">¶</a></dt>
-<dd><p>Alias for field number 0</p>
-</dd></dl>
-
-<dl class="py attribute">
-<dt id="dcar.introspection.Signal.signature">
-<code class="sig-name descname">signature</code><a class="headerlink" href="#dcar.introspection.Signal.signature" title="Permalink to this definition">¶</a></dt>
-<dd><p>Alias for field number 2</p>
-</dd></dl>
-
-</dd></dl>
-
-<dl class="py class">
 <dt id="dcar.introspection.Property">
-<em class="property">class </em><code class="sig-prename descclassname">dcar.introspection.</code><code class="sig-name descname">Property</code><a class="headerlink" href="#dcar.introspection.Property" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">dcar.introspection.</code><code class="sig-name descname">Property</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">name</span></em>, <em class="sig-param"><span class="n">interface</span></em>, <em class="sig-param"><span class="n">signature</span></em>, <em class="sig-param"><span class="n">read</span></em>, <em class="sig-param"><span class="n">write</span></em>, <em class="sig-param"><span class="n">changed_signal</span></em><span class="sig-paren">)</span><a class="headerlink" href="#dcar.introspection.Property" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">tuple</span></code></a></p>
 <p>Representation of an interface member of type <cite>property</cite>.</p>
 <dl class="py attribute">
@@ -290,42 +307,26 @@ or not (<code class="docutils literal notranslate"><span class="pre">False</span
 </dd></dl>
 
 <dl class="py class">
-<dt id="dcar.introspection.Data">
-<em class="property">class </em><code class="sig-prename descclassname">dcar.introspection.</code><code class="sig-name descname">Data</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">bus</span></em>, <em class="sig-param"><span class="n">name</span></em>, <em class="sig-param"><span class="n">path</span></em>, <em class="sig-param"><span class="n">xml</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dcar/introspection.html#Data"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dcar.introspection.Data" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
-<p>Introspection data.</p>
-<p>If not provided, an instance of this class gets the XML data by calling
-<cite>org.freedesktop.DBus.Introspectable.Introspect</cite>.</p>
-<p>The XML data is parsed and a data structure is created with a mapping from
-the names of members of the interfaces to a list of objects of type
-<a class="reference internal" href="#dcar.introspection.Method" title="dcar.introspection.Method"><code class="xref py py-class docutils literal notranslate"><span class="pre">Method</span></code></a>, <a class="reference internal" href="#dcar.introspection.Signal" title="dcar.introspection.Signal"><code class="xref py py-class docutils literal notranslate"><span class="pre">Signal</span></code></a>, or <a class="reference internal" href="#dcar.introspection.Property" title="dcar.introspection.Property"><code class="xref py py-class docutils literal notranslate"><span class="pre">Property</span></code></a>.</p>
-<dl class="simple">
-<dt>Access to objects:</dt><dd><ul class="simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">data['member</span> <span class="pre">name']</span></code></p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">data['interface</span> <span class="pre">name',</span> <span class="pre">'member</span> <span class="pre">name']</span></code></p></li>
-</ul>
-</dd>
-</dl>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>bus</strong> (<a class="reference internal" href="mod_api.html#dcar.Bus" title="dcar.Bus"><em>dcar.Bus</em></a>) – a connected bus object</p></li>
-<li><p><strong>name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a>) – bus name</p></li>
-<li><p><strong>path</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a>) – object path</p></li>
-<li><p><strong>xml</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a>) – introspection data (will be loaded from D-Bus if <code class="docutils literal notranslate"><span class="pre">None</span></code>)</p></li>
-</ul>
-</dd>
-<dt class="field-even">Raises</dt>
-<dd class="field-even"><ul class="simple">
-<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#RuntimeError" title="(in Python v3.8)"><strong>RuntimeError</strong></a> – if <code class="docutils literal notranslate"><span class="pre">bus</span></code> is not a connected <a class="reference internal" href="mod_api.html#dcar.Bus" title="dcar.Bus"><code class="xref py py-class docutils literal notranslate"><span class="pre">dcar.Bus</span></code></a> object</p></li>
-<li><p><a class="reference internal" href="mod_api.html#dcar.ValidationError" title="dcar.ValidationError"><strong>ValidationError</strong></a> – if <code class="docutils literal notranslate"><span class="pre">name</span></code> or <code class="docutils literal notranslate"><span class="pre">path</span></code> are not valid</p></li>
-</ul>
-</dd>
-</dl>
-<dl class="py method">
-<dt id="dcar.introspection.Data.xml">
-<em class="property">property </em><code class="sig-name descname">xml</code><a class="headerlink" href="#dcar.introspection.Data.xml" title="Permalink to this definition">¶</a></dt>
-<dd><p>Return XML data.</p>
+<dt id="dcar.introspection.Signal">
+<em class="property">class </em><code class="sig-prename descclassname">dcar.introspection.</code><code class="sig-name descname">Signal</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">name</span></em>, <em class="sig-param"><span class="n">interface</span></em>, <em class="sig-param"><span class="n">signature</span></em><span class="sig-paren">)</span><a class="headerlink" href="#dcar.introspection.Signal" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">tuple</span></code></a></p>
+<p>Representation of an interface member of type <cite>signal</cite>.</p>
+<dl class="py attribute">
+<dt id="dcar.introspection.Signal.interface">
+<code class="sig-name descname">interface</code><a class="headerlink" href="#dcar.introspection.Signal.interface" title="Permalink to this definition">¶</a></dt>
+<dd><p>Alias for field number 1</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="dcar.introspection.Signal.name">
+<code class="sig-name descname">name</code><a class="headerlink" href="#dcar.introspection.Signal.name" title="Permalink to this definition">¶</a></dt>
+<dd><p>Alias for field number 0</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="dcar.introspection.Signal.signature">
+<code class="sig-name descname">signature</code><a class="headerlink" href="#dcar.introspection.Signal.signature" title="Permalink to this definition">¶</a></dt>
+<dd><p>Alias for field number 2</p>
 </dd></dl>
 
 </dd></dl>
@@ -1378,7 +1379,7 @@ to the column <em>Python OUT</em> in the <a class="reference internal" href="int
 <p>See: <a class="reference external" href="https://dbus.freedesktop.org/doc/dbus-specification.html#message-protocol">Message Protocol</a></p>
 <dl class="py class">
 <dt id="dcar.message.Byteorder">
-<em class="property">class </em><code class="sig-prename descclassname">dcar.message.</code><code class="sig-name descname">Byteorder</code><a class="reference internal" href="_modules/dcar/message.html#Byteorder"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dcar.message.Byteorder" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">dcar.message.</code><code class="sig-name descname">Byteorder</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">value</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dcar/message.html#Byteorder"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dcar.message.Byteorder" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">dcar.message.EnumReprMixin</span></code>, <a class="reference external" href="https://docs.python.org/3/library/enum.html#enum.Enum" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">enum.Enum</span></code></a></p>
 <p>Enumeration of byteorders.</p>
 <dl class="py attribute">
@@ -1400,7 +1401,7 @@ to the column <em>Python OUT</em> in the <a class="reference internal" href="int
 
 <dl class="py class">
 <dt id="dcar.message.MessageType">
-<em class="property">class </em><code class="sig-prename descclassname">dcar.message.</code><code class="sig-name descname">MessageType</code><a class="reference internal" href="_modules/dcar/message.html#MessageType"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dcar.message.MessageType" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">dcar.message.</code><code class="sig-name descname">MessageType</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">value</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dcar/message.html#MessageType"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dcar.message.MessageType" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">dcar.message.EnumReprMixin</span></code>, <a class="reference external" href="https://docs.python.org/3/library/enum.html#enum.Enum" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">enum.Enum</span></code></a></p>
 <p>Enumeration of message types.</p>
 <dl class="py attribute">
@@ -1432,7 +1433,7 @@ to the column <em>Python OUT</em> in the <a class="reference internal" href="int
 
 <dl class="py class">
 <dt id="dcar.message.HeaderFlag">
-<em class="property">class </em><code class="sig-prename descclassname">dcar.message.</code><code class="sig-name descname">HeaderFlag</code><a class="reference internal" href="_modules/dcar/message.html#HeaderFlag"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dcar.message.HeaderFlag" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">dcar.message.</code><code class="sig-name descname">HeaderFlag</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">value</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dcar/message.html#HeaderFlag"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dcar.message.HeaderFlag" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/enum.html#enum.IntFlag" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">enum.IntFlag</span></code></a></p>
 <p>Enumeration of header flags.</p>
 <dl class="py attribute">
@@ -1471,7 +1472,7 @@ to the column <em>Python OUT</em> in the <a class="reference internal" href="int
 
 <dl class="py class">
 <dt id="dcar.message.HeaderField">
-<em class="property">class </em><code class="sig-prename descclassname">dcar.message.</code><code class="sig-name descname">HeaderField</code><a class="reference internal" href="_modules/dcar/message.html#HeaderField"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dcar.message.HeaderField" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">dcar.message.</code><code class="sig-name descname">HeaderField</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">value</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dcar/message.html#HeaderField"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dcar.message.HeaderField" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">dcar.message.EnumReprMixin</span></code>, <a class="reference external" href="https://docs.python.org/3/library/enum.html#enum.Enum" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">enum.Enum</span></code></a></p>
 <p>Enumeration of header fields.</p>
 <dl class="py attribute">
@@ -1563,67 +1564,6 @@ to the column <em>Python OUT</em> in the <a class="reference internal" href="int
 </dd></dl>
 
 <dl class="py class">
-<dt id="dcar.message.MessageInfo">
-<em class="property">class </em><code class="sig-prename descclassname">dcar.message.</code><code class="sig-name descname">MessageInfo</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">serial</span></em>, <em class="sig-param"><span class="n">args</span></em>, <em class="sig-param"><span class="n">path</span></em>, <em class="sig-param"><span class="n">interface</span></em>, <em class="sig-param"><span class="n">member</span></em>, <em class="sig-param"><span class="n">sender</span></em>, <em class="sig-param"><span class="n">no_reply_expected</span></em>, <em class="sig-param"><span class="n">allow_interactive_authorization</span></em>, <em class="sig-param"><span class="n">is_signal</span></em><span class="sig-paren">)</span><a class="headerlink" href="#dcar.message.MessageInfo" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">tuple</span></code></a></p>
-<p>Objects of this type will be passed to handler functions registered with <a class="reference internal" href="mod_api.html#dcar.Bus.register_signal" title="dcar.Bus.register_signal"><code class="xref py py-meth docutils literal notranslate"><span class="pre">register_signal()</span></code></a> and <a class="reference internal" href="mod_api.html#dcar.Bus.register_method" title="dcar.Bus.register_method"><code class="xref py py-meth docutils literal notranslate"><span class="pre">register_method()</span></code></a>.</p>
-<dl class="py attribute">
-<dt id="dcar.message.MessageInfo.allow_interactive_authorization">
-<code class="sig-name descname">allow_interactive_authorization</code><a class="headerlink" href="#dcar.message.MessageInfo.allow_interactive_authorization" title="Permalink to this definition">¶</a></dt>
-<dd><p>header flag</p>
-</dd></dl>
-
-<dl class="py attribute">
-<dt id="dcar.message.MessageInfo.args">
-<code class="sig-name descname">args</code><a class="headerlink" href="#dcar.message.MessageInfo.args" title="Permalink to this definition">¶</a></dt>
-<dd><p>arguments as a tuple</p>
-</dd></dl>
-
-<dl class="py attribute">
-<dt id="dcar.message.MessageInfo.interface">
-<code class="sig-name descname">interface</code><a class="headerlink" href="#dcar.message.MessageInfo.interface" title="Permalink to this definition">¶</a></dt>
-<dd><p>interface name</p>
-</dd></dl>
-
-<dl class="py attribute">
-<dt id="dcar.message.MessageInfo.is_signal">
-<code class="sig-name descname">is_signal</code><a class="headerlink" href="#dcar.message.MessageInfo.is_signal" title="Permalink to this definition">¶</a></dt>
-<dd><p><code class="docutils literal notranslate"><span class="pre">True</span></code> if signal</p>
-</dd></dl>
-
-<dl class="py attribute">
-<dt id="dcar.message.MessageInfo.member">
-<code class="sig-name descname">member</code><a class="headerlink" href="#dcar.message.MessageInfo.member" title="Permalink to this definition">¶</a></dt>
-<dd><p>member (signal or method) name</p>
-</dd></dl>
-
-<dl class="py attribute">
-<dt id="dcar.message.MessageInfo.no_reply_expected">
-<code class="sig-name descname">no_reply_expected</code><a class="headerlink" href="#dcar.message.MessageInfo.no_reply_expected" title="Permalink to this definition">¶</a></dt>
-<dd><p>header flag</p>
-</dd></dl>
-
-<dl class="py attribute">
-<dt id="dcar.message.MessageInfo.path">
-<code class="sig-name descname">path</code><a class="headerlink" href="#dcar.message.MessageInfo.path" title="Permalink to this definition">¶</a></dt>
-<dd><p>object path</p>
-</dd></dl>
-
-<dl class="py attribute">
-<dt id="dcar.message.MessageInfo.sender">
-<code class="sig-name descname">sender</code><a class="headerlink" href="#dcar.message.MessageInfo.sender" title="Permalink to this definition">¶</a></dt>
-<dd><p>name of the sender’s connection</p>
-</dd></dl>
-
-<dl class="py attribute">
-<dt id="dcar.message.MessageInfo.serial">
-<code class="sig-name descname">serial</code><a class="headerlink" href="#dcar.message.MessageInfo.serial" title="Permalink to this definition">¶</a></dt>
-<dd><p>message serial</p>
-</dd></dl>
-
-</dd></dl>
-
-<dl class="py class">
 <dt id="dcar.message.Message">
 <em class="property">class </em><code class="sig-prename descclassname">dcar.message.</code><code class="sig-name descname">Message</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">message_type</span></em>, <em class="sig-param"><span class="n">flags</span></em>, <em class="sig-param"><span class="n">fields</span></em>, <em class="sig-param"><span class="n">body</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dcar/message.html#Message"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dcar.message.Message" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
@@ -1699,6 +1639,67 @@ to the column <em>Python OUT</em> in the <a class="reference internal" href="int
 <dd class="field-odd"><p><a class="reference internal" href="mod_api.html#dcar.MessageError" title="dcar.MessageError"><strong>MessageError</strong></a> – if the message could not be converted</p>
 </dd>
 </dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="dcar.message.MessageInfo">
+<em class="property">class </em><code class="sig-prename descclassname">dcar.message.</code><code class="sig-name descname">MessageInfo</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">serial</span></em>, <em class="sig-param"><span class="n">args</span></em>, <em class="sig-param"><span class="n">path</span></em>, <em class="sig-param"><span class="n">interface</span></em>, <em class="sig-param"><span class="n">member</span></em>, <em class="sig-param"><span class="n">sender</span></em>, <em class="sig-param"><span class="n">no_reply_expected</span></em>, <em class="sig-param"><span class="n">allow_interactive_authorization</span></em>, <em class="sig-param"><span class="n">is_signal</span></em><span class="sig-paren">)</span><a class="headerlink" href="#dcar.message.MessageInfo" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">tuple</span></code></a></p>
+<p>Objects of this type will be passed to handler functions registered with <a class="reference internal" href="mod_api.html#dcar.Bus.register_signal" title="dcar.Bus.register_signal"><code class="xref py py-meth docutils literal notranslate"><span class="pre">register_signal()</span></code></a> and <a class="reference internal" href="mod_api.html#dcar.Bus.register_method" title="dcar.Bus.register_method"><code class="xref py py-meth docutils literal notranslate"><span class="pre">register_method()</span></code></a>.</p>
+<dl class="py attribute">
+<dt id="dcar.message.MessageInfo.allow_interactive_authorization">
+<code class="sig-name descname">allow_interactive_authorization</code><a class="headerlink" href="#dcar.message.MessageInfo.allow_interactive_authorization" title="Permalink to this definition">¶</a></dt>
+<dd><p>header flag</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="dcar.message.MessageInfo.args">
+<code class="sig-name descname">args</code><a class="headerlink" href="#dcar.message.MessageInfo.args" title="Permalink to this definition">¶</a></dt>
+<dd><p>arguments as a tuple</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="dcar.message.MessageInfo.interface">
+<code class="sig-name descname">interface</code><a class="headerlink" href="#dcar.message.MessageInfo.interface" title="Permalink to this definition">¶</a></dt>
+<dd><p>interface name</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="dcar.message.MessageInfo.is_signal">
+<code class="sig-name descname">is_signal</code><a class="headerlink" href="#dcar.message.MessageInfo.is_signal" title="Permalink to this definition">¶</a></dt>
+<dd><p><code class="docutils literal notranslate"><span class="pre">True</span></code> if signal</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="dcar.message.MessageInfo.member">
+<code class="sig-name descname">member</code><a class="headerlink" href="#dcar.message.MessageInfo.member" title="Permalink to this definition">¶</a></dt>
+<dd><p>member (signal or method) name</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="dcar.message.MessageInfo.no_reply_expected">
+<code class="sig-name descname">no_reply_expected</code><a class="headerlink" href="#dcar.message.MessageInfo.no_reply_expected" title="Permalink to this definition">¶</a></dt>
+<dd><p>header flag</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="dcar.message.MessageInfo.path">
+<code class="sig-name descname">path</code><a class="headerlink" href="#dcar.message.MessageInfo.path" title="Permalink to this definition">¶</a></dt>
+<dd><p>object path</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="dcar.message.MessageInfo.sender">
+<code class="sig-name descname">sender</code><a class="headerlink" href="#dcar.message.MessageInfo.sender" title="Permalink to this definition">¶</a></dt>
+<dd><p>name of the sender’s connection</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="dcar.message.MessageInfo.serial">
+<code class="sig-name descname">serial</code><a class="headerlink" href="#dcar.message.MessageInfo.serial" title="Permalink to this definition">¶</a></dt>
+<dd><p>message serial</p>
 </dd></dl>
 
 </dd></dl>
@@ -1829,6 +1830,7 @@ attribute) is done in the normal way:</p>
 </ul>
 </dd>
 </dl>
+<p>See: Section <a class="reference external" href="https://dbus.freedesktop.org/doc/dbus-specification.html#message-bus-messages">Message Bus Messages</a> in the D-Bus specification.</p>
 </dd></dl>
 
 <dl class="py class">
@@ -1843,6 +1845,8 @@ attribute) is done in the normal way:</p>
 </ul>
 </dd>
 </dl>
+<p>See: <a class="reference external" href="https://developer.gnome.org/notification-spec/">Desktop Notifications Specification</a>
+and <a class="reference external" href="https://andreas19.github.io/kitsiso/">Kitsiso</a>.</p>
 </dd></dl>
 
 <dl class="py class">
@@ -1871,6 +1875,8 @@ attribute) is done in the normal way:</p>
 </ul>
 </dd>
 </dl>
+<p>See: Section <a class="reference external" href="https://freedesktop.org/wiki/Software/systemd/logind/">The Manager Object</a>
+in the logind documentation.</p>
 </dd></dl>
 
 </div>
@@ -1930,47 +1936,47 @@ or <code class="docutils literal notranslate"><span class="pre">None</span></cod
 <p>All parameters are explained in the <a class="reference external" href="https://dbus.freedesktop.org/doc/dbus-specification.html#message-bus-routing-match-rules">D-Bus specification</a>.</p>
 <dl class="py attribute">
 <dt id="dcar.router.MatchRule.object_path">
-<code class="sig-name descname">object_path</code><em class="property">: str</em><em class="property"> = None</em><a class="headerlink" href="#dcar.router.MatchRule.object_path" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">object_path</code><em class="property">: <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)">str</a></em><em class="property"> = None</em><a class="headerlink" href="#dcar.router.MatchRule.object_path" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
 <dt id="dcar.router.MatchRule.interface">
-<code class="sig-name descname">interface</code><em class="property">: str</em><em class="property"> = None</em><a class="headerlink" href="#dcar.router.MatchRule.interface" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">interface</code><em class="property">: <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)">str</a></em><em class="property"> = None</em><a class="headerlink" href="#dcar.router.MatchRule.interface" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
 <dt id="dcar.router.MatchRule.signal_name">
-<code class="sig-name descname">signal_name</code><em class="property">: str</em><em class="property"> = None</em><a class="headerlink" href="#dcar.router.MatchRule.signal_name" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">signal_name</code><em class="property">: <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)">str</a></em><em class="property"> = None</em><a class="headerlink" href="#dcar.router.MatchRule.signal_name" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
 <dt id="dcar.router.MatchRule.sender">
-<code class="sig-name descname">sender</code><em class="property">: str</em><em class="property"> = None</em><a class="headerlink" href="#dcar.router.MatchRule.sender" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">sender</code><em class="property">: <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)">str</a></em><em class="property"> = None</em><a class="headerlink" href="#dcar.router.MatchRule.sender" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
 <dt id="dcar.router.MatchRule.path_namespace">
-<code class="sig-name descname">path_namespace</code><em class="property">: str</em><em class="property"> = None</em><a class="headerlink" href="#dcar.router.MatchRule.path_namespace" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">path_namespace</code><em class="property">: <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)">str</a></em><em class="property"> = None</em><a class="headerlink" href="#dcar.router.MatchRule.path_namespace" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
 <dt id="dcar.router.MatchRule.destination">
-<code class="sig-name descname">destination</code><em class="property">: str</em><em class="property"> = None</em><a class="headerlink" href="#dcar.router.MatchRule.destination" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">destination</code><em class="property">: <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)">str</a></em><em class="property"> = None</em><a class="headerlink" href="#dcar.router.MatchRule.destination" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
 <dt id="dcar.router.MatchRule.arg0namespace">
-<code class="sig-name descname">arg0namespace</code><em class="property">: str</em><em class="property"> = None</em><a class="headerlink" href="#dcar.router.MatchRule.arg0namespace" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">arg0namespace</code><em class="property">: <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)">str</a></em><em class="property"> = None</em><a class="headerlink" href="#dcar.router.MatchRule.arg0namespace" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
 <dt id="dcar.router.MatchRule.args">
-<code class="sig-name descname">args</code><em class="property">: dict</em><em class="property"> = None</em><a class="headerlink" href="#dcar.router.MatchRule.args" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">args</code><em class="property">: <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.8)">dict</a></em><a class="headerlink" href="#dcar.router.MatchRule.args" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
 <dt id="dcar.router.MatchRule.argpaths">
-<code class="sig-name descname">argpaths</code><em class="property">: dict</em><em class="property"> = None</em><a class="headerlink" href="#dcar.router.MatchRule.argpaths" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">argpaths</code><em class="property">: <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.8)">dict</a></em><a class="headerlink" href="#dcar.router.MatchRule.argpaths" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
@@ -2187,28 +2193,8 @@ otherwise <code class="docutils literal notranslate"><span class="pre">False</sp
 <p>The <code class="docutils literal notranslate"><span class="pre">validate_*</span></code> functions raise a <a class="reference internal" href="mod_api.html#dcar.ValidationError" title="dcar.ValidationError"><code class="xref py py-class docutils literal notranslate"><span class="pre">ValidationError</span></code></a> if
 validation failed or else return the argument unchanged.</p>
 <dl class="py function">
-<dt id="dcar.validate.is_valid_object_path">
-<code class="sig-prename descclassname">dcar.validate.</code><code class="sig-name descname">is_valid_object_path</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">s</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dcar/validate.html#is_valid_object_path"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dcar.validate.is_valid_object_path" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py function">
-<dt id="dcar.validate.is_valid_signature">
-<code class="sig-prename descclassname">dcar.validate.</code><code class="sig-name descname">is_valid_signature</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">s</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dcar/validate.html#is_valid_signature"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dcar.validate.is_valid_signature" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py function">
-<dt id="dcar.validate.is_valid_interface_name">
-<code class="sig-prename descclassname">dcar.validate.</code><code class="sig-name descname">is_valid_interface_name</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">s</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dcar/validate.html#is_valid_interface_name"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dcar.validate.is_valid_interface_name" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py function">
 <dt id="dcar.validate.is_valid_bus_name">
 <code class="sig-prename descclassname">dcar.validate.</code><code class="sig-name descname">is_valid_bus_name</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">s</span></em>, <em class="sig-param"><span class="n">unique</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">strict</span><span class="o">=</span><span class="default_value">True</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dcar/validate.html#is_valid_bus_name"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dcar.validate.is_valid_bus_name" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py function">
-<dt id="dcar.validate.is_valid_member_name">
-<code class="sig-prename descclassname">dcar.validate.</code><code class="sig-name descname">is_valid_member_name</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">s</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dcar/validate.html#is_valid_member_name"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dcar.validate.is_valid_member_name" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py function">
@@ -2217,8 +2203,28 @@ validation failed or else return the argument unchanged.</p>
 <dd></dd></dl>
 
 <dl class="py function">
+<dt id="dcar.validate.is_valid_interface_name">
+<code class="sig-prename descclassname">dcar.validate.</code><code class="sig-name descname">is_valid_interface_name</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">s</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dcar/validate.html#is_valid_interface_name"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dcar.validate.is_valid_interface_name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt id="dcar.validate.is_valid_member_name">
+<code class="sig-prename descclassname">dcar.validate.</code><code class="sig-name descname">is_valid_member_name</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">s</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dcar/validate.html#is_valid_member_name"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dcar.validate.is_valid_member_name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt id="dcar.validate.is_valid_object_path">
+<code class="sig-prename descclassname">dcar.validate.</code><code class="sig-name descname">is_valid_object_path</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">s</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dcar/validate.html#is_valid_object_path"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dcar.validate.is_valid_object_path" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
 <dt id="dcar.validate.is_valid_serial">
 <code class="sig-prename descclassname">dcar.validate.</code><code class="sig-name descname">is_valid_serial</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">i</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dcar/validate.html#is_valid_serial"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dcar.validate.is_valid_serial" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt id="dcar.validate.is_valid_signature">
+<code class="sig-prename descclassname">dcar.validate.</code><code class="sig-name descname">is_valid_signature</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">s</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dcar/validate.html#is_valid_signature"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dcar.validate.is_valid_signature" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py function">
@@ -2227,28 +2233,8 @@ validation failed or else return the argument unchanged.</p>
 <dd></dd></dl>
 
 <dl class="py function">
-<dt id="dcar.validate.validate_object_path">
-<code class="sig-prename descclassname">dcar.validate.</code><code class="sig-name descname">validate_object_path</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">s</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dcar/validate.html#validate_object_path"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dcar.validate.validate_object_path" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py function">
-<dt id="dcar.validate.validate_signature">
-<code class="sig-prename descclassname">dcar.validate.</code><code class="sig-name descname">validate_signature</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">s</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dcar/validate.html#validate_signature"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dcar.validate.validate_signature" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py function">
-<dt id="dcar.validate.validate_interface_name">
-<code class="sig-prename descclassname">dcar.validate.</code><code class="sig-name descname">validate_interface_name</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">s</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dcar/validate.html#validate_interface_name"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dcar.validate.validate_interface_name" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py function">
 <dt id="dcar.validate.validate_bus_name">
 <code class="sig-prename descclassname">dcar.validate.</code><code class="sig-name descname">validate_bus_name</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">s</span></em>, <em class="sig-param"><span class="n">unique</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">strict</span><span class="o">=</span><span class="default_value">True</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dcar/validate.html#validate_bus_name"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dcar.validate.validate_bus_name" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py function">
-<dt id="dcar.validate.validate_member_name">
-<code class="sig-prename descclassname">dcar.validate.</code><code class="sig-name descname">validate_member_name</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">s</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dcar/validate.html#validate_member_name"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dcar.validate.validate_member_name" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py function">
@@ -2257,8 +2243,28 @@ validation failed or else return the argument unchanged.</p>
 <dd></dd></dl>
 
 <dl class="py function">
+<dt id="dcar.validate.validate_interface_name">
+<code class="sig-prename descclassname">dcar.validate.</code><code class="sig-name descname">validate_interface_name</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">s</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dcar/validate.html#validate_interface_name"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dcar.validate.validate_interface_name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt id="dcar.validate.validate_member_name">
+<code class="sig-prename descclassname">dcar.validate.</code><code class="sig-name descname">validate_member_name</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">s</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dcar/validate.html#validate_member_name"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dcar.validate.validate_member_name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt id="dcar.validate.validate_object_path">
+<code class="sig-prename descclassname">dcar.validate.</code><code class="sig-name descname">validate_object_path</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">s</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dcar/validate.html#validate_object_path"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dcar.validate.validate_object_path" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
 <dt id="dcar.validate.validate_serial">
 <code class="sig-prename descclassname">dcar.validate.</code><code class="sig-name descname">validate_serial</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">i</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dcar/validate.html#validate_serial"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dcar.validate.validate_serial" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt id="dcar.validate.validate_signature">
+<code class="sig-prename descclassname">dcar.validate.</code><code class="sig-name descname">validate_signature</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">s</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dcar/validate.html#validate_signature"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dcar.validate.validate_signature" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py function">
@@ -2280,7 +2286,7 @@ validation failed or else return the argument unchanged.</p>
       &copy;2019-2020, Andreas Suhre.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.0.3</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.2.0</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
     </div>

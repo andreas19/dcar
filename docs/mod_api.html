@@ -4,6 +4,7 @@
 <html>
   <head>
     <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>API Reference &#8212; D-Car 0.3.0 documentation</title>
     <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -477,54 +478,6 @@ executed in a separate thread sequentially.</p>
 </dd></dl>
 
 <dl class="py class">
-<dt id="dcar.RemoteObject">
-<em class="property">class </em><code class="sig-prename descclassname">dcar.</code><code class="sig-name descname">RemoteObject</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">bus</span></em>, <em class="sig-param"><span class="n">name</span></em>, <em class="sig-param"><span class="n">path</span></em>, <em class="sig-param"><span class="n">xml</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dcar/remote.html#RemoteObject"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dcar.RemoteObject" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
-<p>An instance of this class is a proxy for an object on the D-Bus.</p>
-<p>Methods, signals, and properties can be accessed as attributes with the
-same names as on the D-Bus. If a name occurs in more than one interface,
-only one  method, signal, or property can be accessed as an attribute.
-To access the shadowed names subscription syntax must be used:
-<code class="docutils literal notranslate"><span class="pre">obj['interface</span> <span class="pre">name',</span> <span class="pre">'member</span> <span class="pre">name']</span></code>.</p>
-<p>Calling methods and accessing properties (depending on the <cite>access</cite>
-attribute) is done in the normal way:</p>
-<blockquote>
-<div><ul class="simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">obj.SomeMethod()</span></code> (returns a single value, a tuple or <code class="docutils literal notranslate"><span class="pre">None</span></code>)</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">obj.SomeProperty</span></code> (only with <cite>read</cite> access)</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">obj.SomeProperty</span> <span class="pre">=</span> <span class="pre">value</span></code> (only with <cite>write</cite> access)</p></li>
-</ul>
-</div></blockquote>
-<p>Signal handlers can be set by assigning a function that takes a
-<a class="reference internal" href="modules.html#dcar.message.MessageInfo" title="dcar.message.MessageInfo"><code class="xref py py-class docutils literal notranslate"><span class="pre">MessageInfo</span></code></a> object as its only argument:
-<code class="docutils literal notranslate"><span class="pre">obj.SomeSignal</span> <span class="pre">=</span> <span class="pre">function</span></code>. The handler can be removed by assigning
-<code class="docutils literal notranslate"><span class="pre">None</span></code>.</p>
-<p>See also: <a class="reference internal" href="introduction.html#ref-types-table"><span class="std std-ref">Types summary</span></a></p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>bus</strong> (<a class="reference internal" href="#dcar.Bus" title="dcar.Bus"><em>dcar.Bus</em></a>) – a connected bus object</p></li>
-<li><p><strong>name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a>) – bus name</p></li>
-<li><p><strong>path</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a>) – object path</p></li>
-<li><p><strong>xml</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a>) – introspection data (will be loaded from D-Bus if <code class="docutils literal notranslate"><span class="pre">None</span></code>)</p></li>
-</ul>
-</dd>
-<dt class="field-even">Raises</dt>
-<dd class="field-even"><ul class="simple">
-<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#RuntimeError" title="(in Python v3.8)"><strong>RuntimeError</strong></a> – if <code class="docutils literal notranslate"><span class="pre">bus</span></code> is not a connected <a class="reference internal" href="#dcar.Bus" title="dcar.Bus"><code class="xref py py-class docutils literal notranslate"><span class="pre">dcar.Bus</span></code></a> object</p></li>
-<li><p><a class="reference internal" href="#dcar.ValidationError" title="dcar.ValidationError"><strong>ValidationError</strong></a> – if <code class="docutils literal notranslate"><span class="pre">name</span></code> or <code class="docutils literal notranslate"><span class="pre">path</span></code> are not valid</p></li>
-</ul>
-</dd>
-</dl>
-<dl class="py method">
-<dt id="dcar.RemoteObject.xml">
-<em class="property">property </em><code class="sig-name descname">xml</code><a class="headerlink" href="#dcar.RemoteObject.xml" title="Permalink to this definition">¶</a></dt>
-<dd><p>Return XML data.</p>
-</dd></dl>
-
-</dd></dl>
-
-<dl class="py class">
 <dt id="dcar.MatchRule">
 <em class="property">class </em><code class="sig-prename descclassname">dcar.</code><code class="sig-name descname">MatchRule</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">object_path</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)">str</a></span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">interface</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)">str</a></span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">signal_name</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)">str</a></span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">sender</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)">str</a></span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">path_namespace</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)">str</a></span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">destination</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)">str</a></span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">arg0namespace</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)">str</a></span> <span class="o">=</span> <span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dcar/router.html#MatchRule"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dcar.MatchRule" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
@@ -532,47 +485,47 @@ attribute) is done in the normal way:</p>
 <p>All parameters are explained in the <a class="reference external" href="https://dbus.freedesktop.org/doc/dbus-specification.html#message-bus-routing-match-rules">D-Bus specification</a>.</p>
 <dl class="py attribute">
 <dt id="dcar.MatchRule.object_path">
-<code class="sig-name descname">object_path</code><em class="property">: str</em><em class="property"> = None</em><a class="headerlink" href="#dcar.MatchRule.object_path" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">object_path</code><em class="property">: <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)">str</a></em><em class="property"> = None</em><a class="headerlink" href="#dcar.MatchRule.object_path" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
 <dt id="dcar.MatchRule.interface">
-<code class="sig-name descname">interface</code><em class="property">: str</em><em class="property"> = None</em><a class="headerlink" href="#dcar.MatchRule.interface" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">interface</code><em class="property">: <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)">str</a></em><em class="property"> = None</em><a class="headerlink" href="#dcar.MatchRule.interface" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
 <dt id="dcar.MatchRule.signal_name">
-<code class="sig-name descname">signal_name</code><em class="property">: str</em><em class="property"> = None</em><a class="headerlink" href="#dcar.MatchRule.signal_name" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">signal_name</code><em class="property">: <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)">str</a></em><em class="property"> = None</em><a class="headerlink" href="#dcar.MatchRule.signal_name" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
 <dt id="dcar.MatchRule.sender">
-<code class="sig-name descname">sender</code><em class="property">: str</em><em class="property"> = None</em><a class="headerlink" href="#dcar.MatchRule.sender" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">sender</code><em class="property">: <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)">str</a></em><em class="property"> = None</em><a class="headerlink" href="#dcar.MatchRule.sender" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
 <dt id="dcar.MatchRule.path_namespace">
-<code class="sig-name descname">path_namespace</code><em class="property">: str</em><em class="property"> = None</em><a class="headerlink" href="#dcar.MatchRule.path_namespace" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">path_namespace</code><em class="property">: <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)">str</a></em><em class="property"> = None</em><a class="headerlink" href="#dcar.MatchRule.path_namespace" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
 <dt id="dcar.MatchRule.destination">
-<code class="sig-name descname">destination</code><em class="property">: str</em><em class="property"> = None</em><a class="headerlink" href="#dcar.MatchRule.destination" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">destination</code><em class="property">: <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)">str</a></em><em class="property"> = None</em><a class="headerlink" href="#dcar.MatchRule.destination" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
 <dt id="dcar.MatchRule.arg0namespace">
-<code class="sig-name descname">arg0namespace</code><em class="property">: str</em><em class="property"> = None</em><a class="headerlink" href="#dcar.MatchRule.arg0namespace" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">arg0namespace</code><em class="property">: <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)">str</a></em><em class="property"> = None</em><a class="headerlink" href="#dcar.MatchRule.arg0namespace" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
 <dt id="dcar.MatchRule.args">
-<code class="sig-name descname">args</code><em class="property">: dict</em><em class="property"> = None</em><a class="headerlink" href="#dcar.MatchRule.args" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">args</code><em class="property">: <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.8)">dict</a></em><a class="headerlink" href="#dcar.MatchRule.args" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
 <dt id="dcar.MatchRule.argpaths">
-<code class="sig-name descname">argpaths</code><em class="property">: dict</em><em class="property"> = None</em><a class="headerlink" href="#dcar.MatchRule.argpaths" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">argpaths</code><em class="property">: <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.8)">dict</a></em><a class="headerlink" href="#dcar.MatchRule.argpaths" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
@@ -637,6 +590,54 @@ closed after duplicating it</p></li>
 <dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)">int</a></p>
 </dd>
 </dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="dcar.RemoteObject">
+<em class="property">class </em><code class="sig-prename descclassname">dcar.</code><code class="sig-name descname">RemoteObject</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">bus</span></em>, <em class="sig-param"><span class="n">name</span></em>, <em class="sig-param"><span class="n">path</span></em>, <em class="sig-param"><span class="n">xml</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dcar/remote.html#RemoteObject"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dcar.RemoteObject" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<p>An instance of this class is a proxy for an object on the D-Bus.</p>
+<p>Methods, signals, and properties can be accessed as attributes with the
+same names as on the D-Bus. If a name occurs in more than one interface,
+only one  method, signal, or property can be accessed as an attribute.
+To access the shadowed names subscription syntax must be used:
+<code class="docutils literal notranslate"><span class="pre">obj['interface</span> <span class="pre">name',</span> <span class="pre">'member</span> <span class="pre">name']</span></code>.</p>
+<p>Calling methods and accessing properties (depending on the <cite>access</cite>
+attribute) is done in the normal way:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">obj.SomeMethod()</span></code> (returns a single value, a tuple or <code class="docutils literal notranslate"><span class="pre">None</span></code>)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">obj.SomeProperty</span></code> (only with <cite>read</cite> access)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">obj.SomeProperty</span> <span class="pre">=</span> <span class="pre">value</span></code> (only with <cite>write</cite> access)</p></li>
+</ul>
+</div></blockquote>
+<p>Signal handlers can be set by assigning a function that takes a
+<a class="reference internal" href="modules.html#dcar.message.MessageInfo" title="dcar.message.MessageInfo"><code class="xref py py-class docutils literal notranslate"><span class="pre">MessageInfo</span></code></a> object as its only argument:
+<code class="docutils literal notranslate"><span class="pre">obj.SomeSignal</span> <span class="pre">=</span> <span class="pre">function</span></code>. The handler can be removed by assigning
+<code class="docutils literal notranslate"><span class="pre">None</span></code>.</p>
+<p>See also: <a class="reference internal" href="introduction.html#ref-types-table"><span class="std std-ref">Types summary</span></a></p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>bus</strong> (<a class="reference internal" href="#dcar.Bus" title="dcar.Bus"><em>dcar.Bus</em></a>) – a connected bus object</p></li>
+<li><p><strong>name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a>) – bus name</p></li>
+<li><p><strong>path</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a>) – object path</p></li>
+<li><p><strong>xml</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a>) – introspection data (will be loaded from D-Bus if <code class="docutils literal notranslate"><span class="pre">None</span></code>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><ul class="simple">
+<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#RuntimeError" title="(in Python v3.8)"><strong>RuntimeError</strong></a> – if <code class="docutils literal notranslate"><span class="pre">bus</span></code> is not a connected <a class="reference internal" href="#dcar.Bus" title="dcar.Bus"><code class="xref py py-class docutils literal notranslate"><span class="pre">dcar.Bus</span></code></a> object</p></li>
+<li><p><a class="reference internal" href="#dcar.ValidationError" title="dcar.ValidationError"><strong>ValidationError</strong></a> – if <code class="docutils literal notranslate"><span class="pre">name</span></code> or <code class="docutils literal notranslate"><span class="pre">path</span></code> are not valid</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt id="dcar.RemoteObject.xml">
+<em class="property">property </em><code class="sig-name descname">xml</code><a class="headerlink" href="#dcar.RemoteObject.xml" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return XML data.</p>
 </dd></dl>
 
 </dd></dl>
@@ -746,7 +747,7 @@ closed after duplicating it</p></li>
       &copy;2019-2020, Andreas Suhre.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.0.3</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.2.0</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
     </div>

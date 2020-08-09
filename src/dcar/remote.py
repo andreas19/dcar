@@ -160,6 +160,9 @@ class DBus(RemoteObject):
     Parameters:
       * name = 'org.freedesktop.DBus'
       * path = '/org/freedesktop/DBus'
+
+    See: Section `Message Bus Messages <https://dbus.freedesktop.org/doc/
+    dbus-specification.html#message-bus-messages>`_ in the D-Bus specification.
     """
 
     def __init__(self, bus):
@@ -174,6 +177,10 @@ class Notifications(RemoteObject):
     Parameters:
       * name = 'org.freedesktop.Notifications'
       * path = '/org/freedesktop/Notifications'
+
+    See: `Desktop Notifications Specification
+    <https://developer.gnome.org/notification-spec/>`_
+    and `Kitsiso <https://andreas19.github.io/kitsiso/>`_.
     """
 
     def __init__(self, bus):
@@ -205,6 +212,10 @@ class Login1(RemoteObject):
     Parameters:
       * name = 'org.freedesktop.login1'
       * path = '/org/freedesktop/login1'
+
+    See: Section `The Manager Object
+    <https://freedesktop.org/wiki/Software/systemd/logind/>`_
+    in the logind documentation.
     """
 
     def __init__(self, bus):
